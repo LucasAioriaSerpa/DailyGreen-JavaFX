@@ -8,7 +8,7 @@
 [![Issues][issues-shield]][issues-url]
 [![Unlicense License][license-shield]][license-url]
 
-![Logo do projeto](DOCUMENT/README/doc/logo.png)
+![Logo do projeto](DOCUMENT/README/DOC/logo.png)
 
 **DailyGreen é uma plataforma colaborativa para promover práticas sustentáveis, conectar pessoas e divulgar eventos relacionados ao meio ambiente.**
 
