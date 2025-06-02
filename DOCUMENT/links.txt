@@ -1,0 +1,4 @@
+
+GITHUB: https://github.com/LucasAioriaSerpa/DailyGreen-JavaFX
+TRELLO: https://trello.com/b/0R5s9Dat/javafx-dailygreen
+DOCX: https://pucpredu-my.sharepoint.com/:w:/g/personal/fagundes_cristina_pucpr_edu_br/Ef1FVU6a-XBDtQCrSdKo_dMBD30hTjbto_YGhqNVIMrm9Q?e=LT7iEi
