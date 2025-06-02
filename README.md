@@ -72,7 +72,7 @@ DailyGreen é um projeto open source que visa criar uma comunidade engajada em s
 
 <!-- ## Licença
 
-Este projeto está sob a licença Unlicense. Veja mais em [LICENSE.txt](https://github.com/Garudaakuma/DailyGreen-Project/blob/master/LICENSE.txt).
+Este projeto está sob a licença Unlicense. Veja mais em [LICENSE.txt](https://github.com/LucasAioriaSerpa/DailyGreen-JavaFX/blob/master/LICENSE.txt).
 
 ---
 
@@ -85,13 +85,13 @@ Para dúvidas, sugestões ou contribuições, abra uma issue ou entre em contato
 <!-- Shields e links -->
 [contributors-shield]: https://img.shields.io/github/contributors/LucasAioriaSerpa/DailyGreen-JavaFX.svg?style=for-the-badge
 [contributors-url]: https://github.com/LucasAioriaSerpa/DailyGreen-JavaFX/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Garudaakuma/DailyGreen-Project.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/LucasAioriaSerpa/DailyGreen-JavaFX.svg?style=for-the-badge
 [forks-url]: https://github.com/LucasAioriaSerpa/DailyGreen-JavaFX/network/members
-[stars-shield]: https://img.shields.io/github/stars/Garudaakuma/DailyGreen-Project.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/LucasAioriaSerpa/DailyGreen-JavaFX.svg?style=for-the-badge
 [stars-url]: https://github.com/LucasAioriaSerpa/DailyGreen-JavaFX/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Garudaakuma/DailyGreen-Project.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/LucasAioriaSerpa/DailyGreen-JavaFX.svg?style=for-the-badge
 [issues-url]: https://github.com/LucasAioriaSerpa/DailyGreen-JavaFX/issues
-[license-shield]: https://img.shields.io/github/license/Garudaakuma/DailyGreen-Project.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/LucasAioriaSerpa/DailyGreen-JavaFX.svg?style=for-the-badge
 [license-url]: https://github.com/LucasAioriaSerpa/DailyGreen-JavaFX/blob/master/LICENSE.txt
 
 [GITHUB]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
