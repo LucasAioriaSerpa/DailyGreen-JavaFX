@@ -20,10 +20,11 @@ DailyGreen é um projeto open source que visa criar uma comunidade engajada em s
 
 ---
 
-### Controlador de verção e Editor
+### Controlador de verção e Editores
 
 - [![GITHUB][GITHUB]][GITHUB-url] [![GIT][GIT]][GIT-url]
 - [![INTELLIJ][INTELLIJ IDEA]][INTELLIJ IDEA-url]
+- [![CLIP STUDIO PAINT][CSP.clip]][CSP-url]
 
 ---
 
@@ -32,6 +33,7 @@ DailyGreen é um projeto open source que visa criar uma comunidade engajada em s
 - [![Java][JAVA.java]][JAVA-url]
 - [![JavaFX][JavaFX.java]][JavaFX-url]
 - [![Maven][MAVEN.xml]][Maven-url]
+- [![SQLite][SQLite.sqlite]][SQLite-url]
 
 ---
 
@@ -103,6 +105,8 @@ Para dúvidas, sugestões ou contribuições, abra uma issue ou entre em contato
 [INTELLIJ IDEA]: https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white
 [INTELLIJ IDEA-url]: https://www.jetbrains.com/idea/
 
+
+
 [JAVA.java]: https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white
 [JAVA-url]: https://docs.oracle.com/en/java/javase/23/index.html
 
@@ -111,3 +115,9 @@ Para dúvidas, sugestões ou contribuições, abra uma issue ou entre em contato
 
 [MAVEN.xml]: https://img.shields.io/badge/MAVEN-C71A36?logo=apache-maven
 [Maven-url]: https://maven.apache.org/guides/index.html
+
+[SQLite.sqlite]: https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white
+[SQLite-url]: https://www.sqlite.org/docs.html
+
+[CSP.clip]: https://img.shields.io/badge/ClipStudioPaint-%23CFD3D3.svg?style=for-the-badge&logo=ClipStudioPaint&logoColor=white
+[CSP-url]: https://www.clipstudio.net/en/manuals/
