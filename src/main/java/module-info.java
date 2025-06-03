@@ -8,4 +8,6 @@ module org.dailygreen.dailygreen {
 
     opens org.dailygreen.dailygreen to javafx.fxml;
     exports org.dailygreen.dailygreen;
+    exports org.dailygreen.dailygreen.Users.Administrador;
+    exports org.dailygreen.dailygreen.Users.Participante;
 }
