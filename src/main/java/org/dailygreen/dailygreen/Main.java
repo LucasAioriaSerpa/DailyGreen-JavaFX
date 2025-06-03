@@ -7,7 +7,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Main extends Application {
+import java.sql.*;
+
+//extends Application
+public class Main extends Application{
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -17,7 +20,17 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    public static void main(String[] args) {
-        launch(args);
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+
+        Class.forName("org.sqlite.JDBC");
+        Connection connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/DATABASE/db_dailygreen.sqlite");
+        Statement statement = connection.createStatement();
+        statement.execute("SELECT * FROM participante");
+        ResultSet resultSet = statement.getResultSet();
+        while (resultSet.next()) {
+            System.out.println(resultSet.getString("username"));
+        }
+
+//        launch(args);
     }
 }
