@@ -5,7 +5,7 @@ module org.dailygreen.dailygreen {
     requires java.sql;
     requires org.xerial.sqlitejdbc;
 
-
+    opens org.dailygreen.dailygreen.Users.Participante to javafx.fxml;
     opens org.dailygreen.dailygreen to javafx.fxml;
     exports org.dailygreen.dailygreen;
     exports org.dailygreen.dailygreen.Users.Administrador;
