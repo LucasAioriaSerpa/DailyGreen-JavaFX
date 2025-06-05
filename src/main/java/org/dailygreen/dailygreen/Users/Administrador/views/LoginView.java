@@ -1,0 +1,72 @@
+package org.dailygreen.dailygreen.Users.Administrador.views;
+
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import org.dailygreen.dailygreen.Users.Administrador.views.CadastroView;
+import org.dailygreen.dailygreen.Users.Administrador.controller.AdmController;
+
+public class LoginView {
+    private VBox layout;
+    private Stage stage;
+
+    public LoginView(Stage stage) {
+        this.stage = stage;
+        this.layout = new VBox();
+        layout.getStyleClass().add("main-screen");
+        showComponents();
+    }
+
+    private void showComponents() {
+        GridPane grid = new GridPane();
+        grid.getStyleClass().add("screen");
+
+        Text title = new Text("LOGIN");
+        title.getStyleClass().add("title");
+        grid.add(title, 0, 0,2,1);
+
+        Label emailLabel = new Label("Digite seu email:");
+        emailLabel.getStyleClass().add("label-email");
+        grid.add(emailLabel, 0, 1);
+
+        TextField emailField = new TextField();
+        grid.add(emailField, 0, 2);
+
+        Label passwordLabel = new Label("Digite sua senha:");
+        passwordLabel.getStyleClass().add("label-password");
+        grid.add(passwordLabel, 0, 3);
+
+        PasswordField passwordField = new PasswordField();
+        grid.add(passwordField, 0, 4);
+
+        Hyperlink linkToCadastro = new Hyperlink("Ainda não possui login? Cadastre-se aqui!");
+        linkToCadastro.setOnAction(e -> {
+            CadastroView cadastroView = new CadastroView(stage);
+            Scene scene = new Scene(cadastroView.getView(), 800, 500);
+            scene.getStylesheets().add(getClass().getResource("/CSS/classAdm.css").toExternalForm());
+            stage.setScene(scene);
+        });
+
+        HBox linkToCadastroBox = new HBox(linkToCadastro);
+        linkToCadastroBox.getStyleClass().add("box-link");
+        grid.add(linkToCadastroBox, 0, 5);
+
+        Button loginButton = new Button("ENTRAR");
+        loginButton.setOnAction(event -> {
+            AdmController.login(emailField.getText(), passwordField.getText(), stage);
+        });
+        HBox buttonBox = new HBox(loginButton);
+        buttonBox.getStyleClass().add("button-box");
+        grid.add(buttonBox, 0, 6);
+
+        layout.getChildren().add(grid);
+    }
+
+    public VBox getView(){
+        return layout;
+    }
+}

@@ -1,0 +1,43 @@
+.main-screen{
+    -fx-alignment: center;
+    -fx-padding: 25;
+    -fx-spacing: 10;
+}
+
+.screen{
+    -fx-alignment: center;
+    -fx-background-color: #ABD1B5;
+    -fx-border-radius: 20;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+.title{
+    -fx-font-family: "Tahoma";
+    -fx-font-size: 20px;
+    -fx-font-weight: normal;
+}
+
+.label-email{
+    -fx-padding: 10 0 0 0;
+}
+
+.label-password{
+    -fx-padding: 5 0 0 0;
+}
+
+.link{
+    -fx-font-family: "Arial";
+    -fx-font-size: 10px;
+    -fx-font-weight: normal;
+    -fx-border: empty;
+    -fx-padding: 0 10 20 10;
+}
+
+.box-link{
+    -fx-alignment: center;
+}
+
+.button-box{
+    -fx-alignment: center;
+}
