@@ -18,6 +18,7 @@ public class LoginView {
         this.stage = stage;
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
+        stage.setTitle("Login Administrador");
         showComponents();
     }
 

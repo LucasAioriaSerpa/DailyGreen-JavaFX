@@ -14,7 +14,7 @@ public class MainAdm extends Application{
         Scene scene = new Scene(loginView.getView(),800,500);
         scene.getStylesheets().add(getClass().getResource("/CSS/classAdm.css").toExternalForm());
         stage.setScene(scene);
-        stage.setTitle("Administrador");
+        stage.setTitle("Login Administrador");
         stage.show();
     }
     public static void main(String[] args) {

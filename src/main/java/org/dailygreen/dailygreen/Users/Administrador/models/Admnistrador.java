@@ -11,6 +11,7 @@ public class Admnistrador implements Serializable {
         this.password = password;
     }
 
+    // METODOS GETTERS E SETTERS
     public String getEmail() {
         return email;
     }

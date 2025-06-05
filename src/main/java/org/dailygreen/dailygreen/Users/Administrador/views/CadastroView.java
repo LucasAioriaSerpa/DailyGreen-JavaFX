@@ -21,6 +21,7 @@ public class CadastroView {
         this.stage = stage;
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
+        stage.setTitle("Cadastro Administrador");
         showComponents();
     }
 

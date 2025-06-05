@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.models.AdmValidacao;
+import org.dailygreen.dailygreen.Users.Administrador.views.DenunciaView;
 import org.dailygreen.dailygreen.Users.Administrador.views.LoginView;
 
 public class AdmController {
@@ -11,6 +12,11 @@ public class AdmController {
     public static void login(String email, String password, Stage stage) {
         if (AdmValidacao.validarLogin(email, password)){
             showAlert("Login realizado com sucesso!", Alert.AlertType.INFORMATION);
+
+            DenunciaView denunciaView = new DenunciaView(stage);
+            Scene scene = new Scene(denunciaView.getDenunciaView(), 800, 500);
+            scene.getStylesheets().add(AdmController.class.getResource("/CSS/classAdm.css").toExternalForm());
+            stage.setScene(scene);
         } else {
             showAlert("Email ou senha inválidos!", Alert.AlertType.ERROR);
         }
@@ -24,10 +30,6 @@ public class AdmController {
         boolean success = AdmValidacao.salvarNovoAdm(email,password1);
         if (success) {
             showAlert("Cadastro realizado com sucesso!", Alert.AlertType.INFORMATION);
-            LoginView loginView = new LoginView(stage);
-            Scene scene = new Scene(loginView.getView(), 800, 500);
-            scene.getStylesheets().add(AdmController.class.getResource("/CSS/classAdm.css").toExternalForm());
-            stage.setScene(scene);
         } else {
             showAlert("Erro ao cadastrar!", Alert.AlertType.ERROR);
         }

@@ -6,8 +6,6 @@
 
 .screen{
     -fx-alignment: center;
-    -fx-background-color: #ABD1B5;
-    -fx-border-radius: 20;
     -fx-hgap: 10;
     -fx-vgap: 10;
 }
