@@ -2,11 +2,11 @@ package org.dailygreen.dailygreen.Users.Administrador.models;
 
 import java.io.Serializable;
 
-public class Admnistrador implements Serializable {
+public class Administrador implements Serializable {
     private String email;
     private String password;
 
-    public Admnistrador(String email, String password) {
+    public Administrador(String email, String password) {
         this.email = email;
         this.password = password;
     }
