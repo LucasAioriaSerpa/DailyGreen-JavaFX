@@ -49,6 +49,15 @@ public class ArquivoParticipante {
 
     public static void adicionarParticipante(Participante novaParticipante) {
         ArrayList<Participante> participantes = lerLista();
+
+        // Verificador se ja existe o email
+        boolean existe = participantes.stream()
+                .anyMatch(p -> p.getEmail().equals(novaParticipante.getEmail()));
+
+        if (existe) {
+            throw new IllegalArgumentException("Já existe um participante com este email");
+        }
+
         participantes.add(novaParticipante);
         salvarLista(participantes);
     }

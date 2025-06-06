@@ -45,7 +45,7 @@ public class Participante implements Serializable {
         return "Participante{" +
                 "nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
-                "Senha='" + password + '\'' +
+                ", Senha='" + password + '\'' +
                 '}';
     }
 }

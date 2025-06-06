@@ -31,17 +31,17 @@ public class ParticipanteMain extends Application {
 
     private static void inicializarDadosTeste() {
         try {
-            // Limpa dados existentes para teste (opcional)
+            // Limpa dados existentes para teste RETIRAR DEPOIS
             ArquivoParticipante.salvarLista(new ArrayList<>());
 
-            Participante p1 = new Participante("Abimael", "11111111111", "123");
-            Participante p2 = new Participante("Zé Grillo", "22222222222", "123");
-
-            ArquivoParticipante.adicionarParticipante(p1);
-            ArquivoParticipante.adicionarParticipante(p2);
+//            Participante p1 = new Participante("Abimael", "11111111111", "123");
+//            Participante p2 = new Participante("Zé Grillo", "22222222222", "123");
+//
+//            ArquivoParticipante.adicionarParticipante(p1);
+//            ArquivoParticipante.adicionarParticipante(p2);
 
             ArrayList<Participante> participantes = ArquivoParticipante.lerLista();
-            System.out.println("Participantes cadastradas:");
+            System.out.println("Participantes cadastrados:");
 
             for(Participante p : participantes) {
                 System.out.println(p);
@@ -53,7 +53,7 @@ public class ParticipanteMain extends Application {
     }
 
     public static void main(String[] args) {
-        // Só inicializa dados de teste em ambiente de desenvolvimento
+
         if (args.length > 0 && args[0].equals("--test")) {
             inicializarDadosTeste();
         }
