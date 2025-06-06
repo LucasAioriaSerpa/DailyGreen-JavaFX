@@ -16,7 +16,7 @@ public class ParticipanteMain extends Application {
         );
 
         primaryStage.setTitle("DailyGreen - Participante");
-        primaryStage.setScene(new Scene(root, 400, 300));
+        primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.show();
     }
 

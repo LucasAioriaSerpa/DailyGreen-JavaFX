@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="274.0" prefWidth="386.0" spacing="20" style="-fx-background-color: #f5f5f5; -fx-padding: 30;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dailygreen.dailygreen.Users.Participante.LoginController">
+<VBox alignment="CENTER" prefHeight="500" prefWidth="800" spacing="20" style="-fx-background-color: #f5f5f5; -fx-padding: 25; -fx-spacing: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dailygreen.dailygreen.Users.Participante.LoginController">
 
     <Label alignment="CENTER" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Login Participante" />
 
