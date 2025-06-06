@@ -1,32 +1,26 @@
 package org.dailygreen.dailygreen.Users.Administrador.models;
 
-import org.dailygreen.dailygreen.Users.Administrador.utils.datAdm;
+import org.dailygreen.dailygreen.Users.Administrador.utils.FileManager;
 
 import java.io.IOException;
 import java.util.List;
 
 
 public class AdmValidacao {
-    private static final datAdm adm;
-
-    static {
-        try {
-            adm = new datAdm();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public AdmValidacao() throws IOException {
-    }
+    private static final String FILE_PATH = "adm.dat";
 
     public static boolean validarLogin(String email, String password) {
-        List<Administrador> lista = adm.loadArray();
+        List<Administrador> lista = FileManager.carregar(FILE_PATH);
         return lista.stream().anyMatch(a -> a.getEmail().equals(email) && a.getPassword().equals(password));
     }
 
     public static boolean salvarNovoAdm(String email, String password) {
-        adm.addObject(new Administrador(email, password));
+        List<Administrador> lista = FileManager.carregar(FILE_PATH);
+        if (lista.stream().anyMatch(a -> a.getEmail().equals(email))) {
+            return false;
+        }
+        lista.add(new Administrador(email, password));
+        FileManager.salvar(FILE_PATH, lista);
         return true;
     }
 }
