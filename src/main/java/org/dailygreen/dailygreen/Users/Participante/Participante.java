@@ -1,8 +1,11 @@
 package org.dailygreen.dailygreen.Users.Participante;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class Participante implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String nome;
     private String email;
     private String password;
@@ -42,7 +45,7 @@ public class Participante implements Serializable {
         return "Participante{" +
                 "nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
-                ", password='[PROTEGIDO]'" + // Não exponha a senha em logs!
+                "Senha='" + password + '\'' +
                 '}';
     }
 }
