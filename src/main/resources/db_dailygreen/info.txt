@@ -1,0 +1,10 @@
+"
+            "participante.dat",
+            "organizacao.dat",
+            "administrador.dat",
+            "post.dat",
+            "evento.dat",
+            "denuncia.dat",
+            "banido.dat",
+            "suspenso.dat"
+"
