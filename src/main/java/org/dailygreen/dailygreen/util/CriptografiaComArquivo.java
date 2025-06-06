@@ -10,25 +10,21 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class CriptografiaComArquivo {
-
-    private static final String ARQUIVO_CHAVE = "chave.aes";
-
-    // Gera uma nova chave AES
+    private static final String ARQUIVO_CHAVE = "src/main/resources/key.aes";
+    // ? Gera uma nova chave AES
     public static SecretKey gerarChave() throws Exception {
         KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-        keyGen.init(128); // Pode ser 128, 192 ou 256 bits
+        keyGen.init(256);
         return keyGen.generateKey();
     }
-
-    // Salva a chave no arquivo
+    // ? Salva a chave no arquivo
     public static void salvarChaveEmArquivo(SecretKey chave, String caminho) throws IOException {
         String chaveBase64 = Base64.getEncoder().encodeToString(chave.getEncoded());
         try (FileWriter writer = new FileWriter(caminho)) {
             writer.write(chaveBase64);
         }
     }
-
-    // Lê a chave do arquivo
+    // ? Lê a chave do arquivo
     public static SecretKey lerChaveDeArquivo(String caminho) throws IOException {
         StringBuilder conteudo = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(caminho))) {
@@ -40,15 +36,13 @@ public class CriptografiaComArquivo {
         byte[] chaveBytes = Base64.getDecoder().decode(conteudo.toString());
         return new SecretKeySpec(chaveBytes, "AES");
     }
-
-    // Gera IV aleatório
+    // ? Gera IV aleatório
     public static byte[] gerarIV() {
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
         return iv;
     }
-
-    // Criptografa texto
+    // ? Criptografa string
     public static String criptografar(String texto, SecretKey chave) throws Exception {
         byte[] iv = gerarIV();
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
@@ -63,8 +57,7 @@ public class CriptografiaComArquivo {
         System.arraycopy(criptografado, 0, combinado, iv.length, criptografado.length);
         return Base64.getEncoder().encodeToString(combinado);
     }
-
-    // Descriptografa texto
+    // ? Descriptografa string
     public static String descriptografar(String criptografadoBase64, SecretKey chave) throws Exception {
         byte[] combinado = Base64.getDecoder().decode(criptografadoBase64);
 
@@ -81,7 +74,7 @@ public class CriptografiaComArquivo {
         return new String(texto, "UTF-8");
     }
 
-    // Exemplo de uso
+    // * Exemplo de uso
     public static void main(String[] args) {
         try {
             SecretKey chave;

@@ -6,16 +6,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.util.datManager;
+
+
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class CadastroController {
-
     @FXML private TextField txtNome;
     @FXML private TextField txtEmail;
     @FXML private PasswordField txtSenha;
@@ -23,64 +23,47 @@ public class CadastroController {
 
     @FXML
     private void cadastrarParticipante() {
-        String nome = txtNome.getText().trim();
-        String email = txtEmail.getText().trim();
-        String senha = txtSenha.getText().trim();
-
-        if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
-            lblStatus.setText("Preencha todos os campos!");
-            return;
-        }
-
-        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-            lblStatus.setText("Email inválido!");
-            return;
-        }
-
-        if (senha.length() < 6) {
-            lblStatus.setText("Senha deve ter 6+ caracteres!");
-            return;
-        }
-
         try {
-            ArrayList<Participante> participantes = datManager.loadArray("participante.dat");
-            if (participantes == null) participantes = new ArrayList<>();
 
-            for (Participante p : participantes) {
-                if (p.getEmail().equalsIgnoreCase(email)) {
-                    lblStatus.setText("Email já cadastrado!");
-                    return;
-                }
+            if (txtNome.getText().isEmpty() || txtEmail.getText().isEmpty() || txtSenha.getText().isEmpty()) {
+                lblStatus.setText("Por favor, preencha todos os campos!");
+                return;
             }
 
-            participantes.add(new Participante(nome, email, senha));
-            datManager.saveArray(participantes, "participante.dat");
+            Participante novoParticipante = new Participante(
+                    txtNome.getText(),
+                    txtEmail.getText(),  // Estou assumindo que você usa email como CPF
+                    txtSenha.getText()
+            );
+
+            ArquivoParticipante.adicionarParticipante(novoParticipante);
 
             lblStatus.setText("Cadastro realizado com sucesso!");
-            limparCampos();
+            lblStatus.setStyle("-fx-text-fill: green;");
+
+
+
         } catch (Exception e) {
-            lblStatus.setText("Erro ao cadastrar.");
-            e.printStackTrace();
+            lblStatus.setText("Erro ao cadastrar: " + e.getMessage());
+            lblStatus.setStyle("-fx-text-fill: red;");
         }
+
+        ArquivoParticipante.lerLista().forEach(System.out::println);
     }
 
     @FXML
     private void voltarParaLogin(ActionEvent event) {
         try {
-            Parent loginTela = FXMLLoader.load(Objects.requireNonNull(
-                    getClass().getResource("/org/dailygreen/dailygreen/participante_login_screen.fxml")
-            ));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(loginTela));
-        } catch (IOException e) {
-            lblStatus.setText("Erro ao carregar tela de login.");
-            e.printStackTrace();
-        }
-    }
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/dailygreen/dailygreen/participante_login_screen.fxml"));
+            Parent novaTela = fxmlLoader.load();
 
-    private void limparCampos() {
-        txtNome.clear();
-        txtEmail.clear();
-        txtSenha.clear();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(novaTela);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            lblStatus.setText("Erro ao abrir a tela de Login.");
+        }
     }
 }
