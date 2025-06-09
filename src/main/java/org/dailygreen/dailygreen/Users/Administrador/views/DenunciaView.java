@@ -68,13 +68,15 @@ public class DenunciaView {
         TableView<Denuncia> tableView = new TableView<>();
 
         TableColumn<Denuncia, Integer> id = new TableColumn<>("ID");
-        id.setCellValueFactory(new PropertyValueFactory<Denuncia, Integer>("id"));
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         TableColumn<Denuncia, String> titulo = new TableColumn<>("TITULO");
         titulo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getTitulo()));
 
         TableColumn<Denuncia, String> motivo = new TableColumn<>("MOTIVO");
         motivo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getMotivo()));
+
+        TableColumn<Denuncia, String> status = new TableColumn<>("STATUS");
 
         denuncias.addAll(DenunciaDAO.mostrar());
         tableView.setItems(denuncias);
@@ -94,7 +96,7 @@ public class DenunciaView {
             }
         });
 
-        tableView.getColumns().addAll(titulo, motivo, analise);
+        tableView.getColumns().addAll(id, titulo, motivo, status, analise);
         grid.add(tableView, 0, 5,5,10);
         layout.getChildren().add(grid);
     }

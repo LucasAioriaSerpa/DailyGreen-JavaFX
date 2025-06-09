@@ -29,4 +29,14 @@ public class DenunciaDAO {
             return new ArrayList<>();
         }
     }
+
+    public static int updateId(){
+        List<Denuncia> denuncias = mostrar();
+        if (denuncias.isEmpty()) return 1;
+        int maxId = denuncias.stream()
+                .mapToInt(Denuncia::getId)
+                .max()
+                .orElse(0);
+        return maxId + 1;
+    }
 }
