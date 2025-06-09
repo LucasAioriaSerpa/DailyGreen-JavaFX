@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Users.Administrador.dao.AdmDAO;
+import org.dailygreen.dailygreen.Users.Administrador.controller.AdmController;
 
 public class CadastroView {
     private VBox layout;
@@ -64,7 +64,7 @@ public class CadastroView {
 
         Button cadastrarButton = new Button("CADASTRAR");
         cadastrarButton.setOnAction(event -> {
-            AdmDAO.cadastrar(emailField.getText(), passwordField1.getText(), passwordField2.getText(), stage);
+            AdmController.cadastrar(emailField.getText(), passwordField1.getText(), passwordField2.getText(), stage);
         });
         HBox buttonBox = new HBox(cadastrarButton);
         buttonBox.getStyleClass().add("button-box");

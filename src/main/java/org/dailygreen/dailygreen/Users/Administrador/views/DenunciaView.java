@@ -11,7 +11,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.dao.DenunciaDAO;
 import org.dailygreen.dailygreen.Users.Administrador.models.Denuncia;
-import java.util.Date;
 import java.util.Optional;
 
 
@@ -30,6 +29,7 @@ public class DenunciaView {
     public void showComponents(){
         GridPane grid = new GridPane();
         grid.getStyleClass().add("denuncia-grid");
+
 
         // HEADER | INSERT DENÚNCIAS
 
@@ -87,6 +87,7 @@ public class DenunciaView {
         denuncias.addAll(DenunciaDAO.mostrar());
         tableView.setItems(denuncias);
 
+
         // HYPERLINK
 
         TableColumn<Denuncia, Void> analise = new TableColumn<>("AÇÃO");
@@ -104,6 +105,7 @@ public class DenunciaView {
             }
         });
 
+
         // BOTÕES
 
         TableColumn<Denuncia, Void> buttons = new TableColumn<>("DECISÃO");
@@ -114,6 +116,8 @@ public class DenunciaView {
             private final HBox buutonBox = new HBox(5, delete, suspend, ban);
 
             {
+                // BOTÃO EXCLUIR
+
                 delete.setOnAction(event -> {
                     Denuncia denuncia = getTableView().getItems().get(getIndex());
 
@@ -133,10 +137,16 @@ public class DenunciaView {
                     }
                 });
 
+
+                // BOTÃO SUSPENDER
+
                 suspend.setOnAction(event -> {
                     Denuncia denuncia = getTableView().getItems().get(getIndex());
                     System.out.println("Suspender Denúncia: " + denuncia);
                 });
+
+
+                // BOTÃO BANIR
 
                 ban.setOnAction(event -> {
                     Denuncia denuncia = getTableView().getItems().get(getIndex());

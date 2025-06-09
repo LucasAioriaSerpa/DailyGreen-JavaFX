@@ -1,26 +1,50 @@
 package org.dailygreen.dailygreen.Users.Administrador.controller;
 
-import org.dailygreen.dailygreen.Users.Administrador.models.Administrador;
-import org.dailygreen.dailygreen.Users.Administrador.utils.FileManager;
-
-import java.util.List;
-
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+import org.dailygreen.dailygreen.Users.Administrador.dao.AdmDAO;
+import org.dailygreen.dailygreen.Users.Administrador.views.DenunciaView;
+import org.dailygreen.dailygreen.Users.Administrador.views.LoginView;
 
 public class AdmController {
-    private static final String FILE_PATH = "src/main/resources/db_dailygreen/adm.dat";
 
-    public static boolean validarLogin(String email, String password) {
-        List<Administrador> lista = FileManager.carregar(FILE_PATH);
-        return lista.stream().anyMatch(a -> a.getEmail().equals(email) && a.getPassword().equals(password));
+    public static void login(String email, String password, Stage stage) {
+        if (AdmDAO.validarLogin(email, password)){
+            showAlert("Login realizado com sucesso!", Alert.AlertType.INFORMATION);
+
+            // APÓS O LOGIN, LEVA PARA A PÁGINA DE DENÚNCIA
+            DenunciaView denunciaView = new DenunciaView(stage);
+            Scene scene = new Scene(denunciaView.getDenunciaView(), 800, 500);
+            scene.getStylesheets().add(AdmController.class.getResource("/CSS/classAdm.css").toExternalForm());
+            stage.setScene(scene);
+        } else {
+            showAlert("Email ou senha inválidos!", Alert.AlertType.ERROR);
+        }
     }
 
-    public static boolean salvarNovoAdm(String email, String password) {
-        List<Administrador> lista = FileManager.carregar(FILE_PATH);
-        if (lista.stream().anyMatch(a -> a.getEmail().equals(email))) {
-            return false;
+    public static void cadastrar(String email, String password1, String password2, Stage stage) {
+        if (!password1.equals(password2)) {
+            showAlert("As senhas estão divergentes!", Alert.AlertType.ERROR);
+            return;
         }
-        lista.add(new Administrador(email, password));
-        FileManager.salvar(FILE_PATH, lista);
-        return true;
+        boolean success = AdmDAO.salvarNovoAdm(email,password1);
+        if (success) {
+            showAlert("Cadastro realizado com sucesso!", Alert.AlertType.INFORMATION);
+
+            // APÓS O CADASTRO, LEVA PARA A PÁGINA DE LOGIN
+            LoginView loginView = new LoginView(stage);
+            Scene scene = new Scene(loginView.getView(), 800, 500);
+            scene.getStylesheets().add(AdmController.class.getResource("/CSS/classAdm.css").toExternalForm());
+            stage.setScene(scene);
+        } else {
+            showAlert("Erro ao cadastrar!", Alert.AlertType.ERROR);
+        }
+    }
+
+    public static void showAlert(String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Users.Administrador.dao.AdmDAO;
+import org.dailygreen.dailygreen.Users.Administrador.controller.AdmController;
 
 public class LoginView {
     private VBox layout;
@@ -57,7 +57,7 @@ public class LoginView {
 
         Button loginButton = new Button("ENTRAR");
         loginButton.setOnAction(event -> {
-            AdmDAO.login(emailField.getText(), passwordField.getText(), stage);
+            AdmController.login(emailField.getText(), passwordField.getText(), stage);
         });
         HBox buttonBox = new HBox(loginButton);
         buttonBox.getStyleClass().add("button-box");
