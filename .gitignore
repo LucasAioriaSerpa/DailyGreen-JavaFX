@@ -36,5 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Arquivos sensíveis e temporários ###
 src/main/resources/key.aes
 *.dat
