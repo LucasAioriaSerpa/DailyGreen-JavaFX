@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class ArquivoParticipante {
-    private static final String CAMINHO_ARQUIVO = "participante.dat"; // Nome consistente
+    private static final String CAMINHO_ARQUIVO = "src/main/resources/db_dailygreen/participante.dat"; // Nome consistente
 
     public ArquivoParticipante() {
     }
