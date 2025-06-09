@@ -9,8 +9,16 @@ import java.io.*;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+/**
+ * <h1>CriptografiaComArquivo</h1>
+ * <p>Esta classe verifica se existe um arquivo `key.aes`.</p> <br>
+ * <p>- Para criptografar, recebe um texto do tipo String e chave em SecretKey.</p> <br>
+ * <p>- Para descriptografar, recebe a criptografia em String e chave em SecretKey.</p>
+ */
 public class CriptografiaComArquivo {
     private static final String ARQUIVO_CHAVE = "src/main/resources/key.aes";
+    // ? GETTER ARQUIVO_CHAVE
+    public String getARQUIVO_CHAVE() {return ARQUIVO_CHAVE;}
     // ? Gera uma nova chave AES
     public static SecretKey gerarChave() throws Exception {
         KeyGenerator keyGen = KeyGenerator.getInstance("AES");
@@ -20,18 +28,14 @@ public class CriptografiaComArquivo {
     // ? Salva a chave no arquivo
     public static void salvarChaveEmArquivo(SecretKey chave, String caminho) throws IOException {
         String chaveBase64 = Base64.getEncoder().encodeToString(chave.getEncoded());
-        try (FileWriter writer = new FileWriter(caminho)) {
-            writer.write(chaveBase64);
-        }
+        try (FileWriter writer = new FileWriter(caminho)) {writer.write(chaveBase64);}
     }
     // ? Lê a chave do arquivo
     public static SecretKey lerChaveDeArquivo(String caminho) throws IOException {
         StringBuilder conteudo = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(caminho))) {
             String linha;
-            while ((linha = reader.readLine()) != null) {
-                conteudo.append(linha);
-            }
+            while ((linha = reader.readLine()) != null) {conteudo.append(linha);}
         }
         byte[] chaveBytes = Base64.getDecoder().decode(conteudo.toString());
         return new SecretKeySpec(chaveBytes, "AES");
@@ -69,27 +73,27 @@ public class CriptografiaComArquivo {
     }
 
     // * teste *
-    public static void main(String[] args) {
-        try {
-            SecretKey chave;
-            File arquivoChave = new File(ARQUIVO_CHAVE);
-            if (arquivoChave.exists()) {
-                chave = lerChaveDeArquivo(ARQUIVO_CHAVE);
-                System.out.println("🔑 Chave lida do arquivo.");
-            } else {
-                chave = gerarChave();
-                salvarChaveEmArquivo(chave, ARQUIVO_CHAVE);
-                System.out.println("🆕 Chave gerada e salva no arquivo.");
-            }
-            String mensagem = "Informação confidencial!";
-            String criptografado = criptografar(mensagem, chave);
-            String descriptografado = descriptografar(criptografado, chave);
-            System.out.println("\n📦 Mensagem original:       " + mensagem);
-            System.out.println("🔒 Mensagem criptografada: " + criptografado);
-            System.out.println("🔓 Mensagem descriptografada: " + descriptografado);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            SecretKey chave;
+//            File arquivoChave = new File(ARQUIVO_CHAVE);
+//            if (arquivoChave.exists()) {
+//                chave = lerChaveDeArquivo(ARQUIVO_CHAVE);
+//                System.out.println("Chave lida do arquivo.");
+//            } else {
+//                chave = gerarChave();
+//                salvarChaveEmArquivo(chave, ARQUIVO_CHAVE);
+//                System.out.println("Chave gerada e salva no arquivo.");
+//            }
+//            String mensagem = "Informação confidencial!";
+//            String criptografado = criptografar(mensagem, chave);
+//            String descriptografado = descriptografar(criptografado, chave);
+//            System.out.println("\nMensagem original:       " + mensagem);
+//            System.out.println("Mensagem criptografada: " + criptografado);
+//            System.out.println("Mensagem descriptografada: " + descriptografado);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
 
