@@ -1,0 +1,24 @@
+
+.root {
+    -fx-alignment: center;
+}
+
+.btns {
+    -fx-alignment: center;
+}
+
+
+.btn {
+    -fx-text-fill: #EDF4ED;
+    -fx-background-color: #51291E;
+    -fx-background-radius: 8;
+    -fx-padding: 8 24;
+    -fx-font-size: 16px;
+    -fx-cursor: pointer;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 2);
+    transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+} .btn:hover {
+    -fx-text-fill: #51291E;
+    -fx-background-color: #79B791;
+    transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
