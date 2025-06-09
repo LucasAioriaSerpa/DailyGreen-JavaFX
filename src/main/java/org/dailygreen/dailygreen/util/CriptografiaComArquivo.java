@@ -46,12 +46,9 @@ public class CriptografiaComArquivo {
     public static String criptografar(String texto, SecretKey chave) throws Exception {
         byte[] iv = gerarIV();
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
-
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, chave, ivSpec);
         byte[] criptografado = cipher.doFinal(texto.getBytes("UTF-8"));
-
-        // Concatena IV com o resultado e codifica em Base64
         byte[] combinado = new byte[iv.length + criptografado.length];
         System.arraycopy(iv, 0, combinado, 0, iv.length);
         System.arraycopy(criptografado, 0, combinado, iv.length, criptografado.length);
@@ -60,26 +57,21 @@ public class CriptografiaComArquivo {
     // ? Descriptografa string
     public static String descriptografar(String criptografadoBase64, SecretKey chave) throws Exception {
         byte[] combinado = Base64.getDecoder().decode(criptografadoBase64);
-
         byte[] iv = new byte[16];
         byte[] dados = new byte[combinado.length - 16];
         System.arraycopy(combinado, 0, iv, 0, 16);
         System.arraycopy(combinado, 16, dados, 0, dados.length);
-
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, chave, ivSpec);
-
         byte[] texto = cipher.doFinal(dados);
         return new String(texto, "UTF-8");
     }
 
-    // * Exemplo de uso
+    // * teste *
     public static void main(String[] args) {
         try {
             SecretKey chave;
-
-            // Verifica se o arquivo da chave já existe
             File arquivoChave = new File(ARQUIVO_CHAVE);
             if (arquivoChave.exists()) {
                 chave = lerChaveDeArquivo(ARQUIVO_CHAVE);
@@ -89,15 +81,12 @@ public class CriptografiaComArquivo {
                 salvarChaveEmArquivo(chave, ARQUIVO_CHAVE);
                 System.out.println("🆕 Chave gerada e salva no arquivo.");
             }
-
             String mensagem = "Informação confidencial!";
             String criptografado = criptografar(mensagem, chave);
             String descriptografado = descriptografar(criptografado, chave);
-
             System.out.println("\n📦 Mensagem original:       " + mensagem);
             System.out.println("🔒 Mensagem criptografada: " + criptografado);
             System.out.println("🔓 Mensagem descriptografada: " + descriptografado);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
