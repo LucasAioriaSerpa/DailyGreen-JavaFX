@@ -1,6 +1,5 @@
 package org.dailygreen.dailygreen.Users.Administrador.views;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -8,10 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Users.Administrador.views.LoginView;
 import org.dailygreen.dailygreen.Users.Administrador.controller.AdmController;
-
-import javax.swing.text.View;
 
 public class CadastroView {
     private VBox layout;
@@ -68,7 +64,7 @@ public class CadastroView {
 
         Button cadastrarButton = new Button("CADASTRAR");
         cadastrarButton.setOnAction(event -> {
-                AdmController.cadastrar(emailField.getText(), passwordField1.getText(), passwordField2.getText(), stage);
+            AdmController.cadastrar(emailField.getText(), passwordField1.getText(), passwordField2.getText(), stage);
         });
         HBox buttonBox = new HBox(cadastrarButton);
         buttonBox.getStyleClass().add("button-box");

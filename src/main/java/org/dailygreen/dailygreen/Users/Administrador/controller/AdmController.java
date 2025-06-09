@@ -3,16 +3,17 @@ package org.dailygreen.dailygreen.Users.Administrador.controller;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Users.Administrador.models.AdmValidacao;
+import org.dailygreen.dailygreen.Users.Administrador.dao.AdmDAO;
 import org.dailygreen.dailygreen.Users.Administrador.views.DenunciaView;
 import org.dailygreen.dailygreen.Users.Administrador.views.LoginView;
 
 public class AdmController {
 
     public static void login(String email, String password, Stage stage) {
-        if (AdmValidacao.validarLogin(email, password)){
+        if (AdmDAO.validarLogin(email, password)){
             showAlert("Login realizado com sucesso!", Alert.AlertType.INFORMATION);
 
+            // APÓS O LOGIN, LEVA PARA A PÁGINA DE DENÚNCIA
             DenunciaView denunciaView = new DenunciaView(stage);
             Scene scene = new Scene(denunciaView.getDenunciaView(), 800, 500);
             scene.getStylesheets().add(AdmController.class.getResource("/CSS/classAdm.css").toExternalForm());
@@ -27,9 +28,15 @@ public class AdmController {
             showAlert("As senhas estão divergentes!", Alert.AlertType.ERROR);
             return;
         }
-        boolean success = AdmValidacao.salvarNovoAdm(email,password1);
+        boolean success = AdmDAO.salvarNovoAdm(email,password1);
         if (success) {
             showAlert("Cadastro realizado com sucesso!", Alert.AlertType.INFORMATION);
+
+            // APÓS O CADASTRO, LEVA PARA A PÁGINA DE LOGIN
+            LoginView loginView = new LoginView(stage);
+            Scene scene = new Scene(loginView.getView(), 800, 500);
+            scene.getStylesheets().add(AdmController.class.getResource("/CSS/classAdm.css").toExternalForm());
+            stage.setScene(scene);
         } else {
             showAlert("Erro ao cadastrar!", Alert.AlertType.ERROR);
         }

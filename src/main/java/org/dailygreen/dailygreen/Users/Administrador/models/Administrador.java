@@ -12,6 +12,7 @@ public class Administrador implements Serializable {
     }
 
     // METODOS GETTERS E SETTERS
+
     public String getEmail() {
         return email;
     }
@@ -27,4 +28,5 @@ public class Administrador implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

@@ -15,4 +15,6 @@ module org.dailygreen.dailygreen {
     exports org.dailygreen.dailygreen.Users.Participante;
     exports org.dailygreen.dailygreen.util;
     opens org.dailygreen.dailygreen.util to javafx.fxml;
+    opens org.dailygreen.dailygreen.Users.Administrador.controller to javafx.base;
+    opens org.dailygreen.dailygreen.Users.Administrador.dao to javafx.base;
 }

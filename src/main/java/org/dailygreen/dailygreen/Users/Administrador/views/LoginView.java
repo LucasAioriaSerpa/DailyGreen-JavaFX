@@ -7,7 +7,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Users.Administrador.views.CadastroView;
 import org.dailygreen.dailygreen.Users.Administrador.controller.AdmController;
 
 public class LoginView {

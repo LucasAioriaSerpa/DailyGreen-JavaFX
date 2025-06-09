@@ -7,7 +7,7 @@ import java.util.List;
 public class FileManager {
 
     @SuppressWarnings("unchecked")
-    public static <T> List<T> carregar(String path) {
+    public static <T>List<T> carregar(String path) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
             return (List<T>) ois.readObject();
         } catch (Exception e) {

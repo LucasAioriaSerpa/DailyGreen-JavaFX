@@ -36,3 +36,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Arquivos sensíveis e temporários ###
+src/main/resources/db_dailygreen/*.dat
+src/main/resources/db_dailygreen/*.txt
+src/main/resources/key.aes

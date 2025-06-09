@@ -1,6 +1,5 @@
 package org.dailygreen.dailygreen.util;
 
-import org.dailygreen.dailygreen.Users.Administrador.models.Administrador;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
@@ -19,12 +18,12 @@ public class datManager {
             "suspenso.dat"
     };
 
-    public datManager() throws IOException {
+    public datManager() {
         for (String fileName : FILES_DATAS) {
             FileOutputStream f;
             File file = new File(PATH_FOLDER + fileName);
             if (!file.exists()) {
-                file.createNewFile();
+                file.mkdir();
                 System.out.println("Arquivo .dat criado com Sucesso!\n"+fileName);
                 System.out.println(file.getAbsolutePath());
             } else {
@@ -32,13 +31,7 @@ public class datManager {
             }
         }
     }
-    public static String getPathFolder() {
-        return PATH_FOLDER;
-    }
-    public static String[] getFiles() {
-        return FILES_DATAS;
-    }
-    public static boolean _checkFileName(String fileName) {
+    private static boolean _checkFileName(String fileName) {
         File file = new File(PATH_FOLDER + fileName);
         if (!file.exists()) {
             System.out.println("Arquivo .dat invalido!\n"+fileName);
@@ -61,26 +54,23 @@ public class datManager {
             System.err.println("Erro ao ler o arquivo!\n"+fileName);
         }
     }
-    public static <T> ArrayList<T> loadArray(String fileName) {
-        if (_checkFileName(fileName)) { return new ArrayList<>(); }
+    public static @Nullable <T> ArrayList<T> loadArray(String fileName) {
+        if (_checkFileName(fileName)) { return null; }
         ArrayList<T> arrayList = new ArrayList<>();
-        File file = new File(PATH_FOLDER + fileName);
-        if (!file.exists()) { return arrayList; }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            Object obj = ois.readObject();
-            if (obj instanceof ArrayList<?>) {arrayList = (ArrayList<T>) obj;}
+        try {
+            File file = new File(PATH_FOLDER + fileName);
+            ObjectInputStream OIS = new ObjectInputStream(new FileInputStream(file));
+            arrayList = (ArrayList<T>) OIS.readObject();
+            OIS.close();
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Erro ao ler arquivo: " + e.getMessage());
+            System.err.println("Erro ao ler o arquivo!\n" + fileName);
+            e.printStackTrace();
         }
         return arrayList;
     }
-    public static void addObject(Object object, String fileName) {
-        ArrayList<Object> arrayList = loadArray(fileName);
-        if (arrayList == null) {
-            arrayList = new ArrayList<>();
-            arrayList.add(object);
-        }
-        arrayList.add(object);
+    public static <T> void addObject(Object object, String fileName) {
+        ArrayList<T> arrayList = loadArray(fileName);
+        arrayList.add((T) object);
         saveArray(arrayList, fileName);
     }
 }
