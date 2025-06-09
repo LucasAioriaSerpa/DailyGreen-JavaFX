@@ -1,30 +1,24 @@
 package org.dailygreen.dailygreen.Users.Administrador.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Denuncia {
-    private Integer id;
+public class Denuncia implements Serializable {
+    //private Integer id;
     private String titulo;
     private String motivo;
 
-    public Denuncia(int id, String titulo, String motivo) {
-        this.id = id;
+    public Denuncia(String titulo, String motivo) {
         this.titulo = titulo;
         this.motivo = motivo;
     }
 
     // METODOS GETTERS E SETTERS
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    //public Integer getId(){ return id};
 
     public String getTitulo() {
         return titulo;
     }
-
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
@@ -32,7 +26,6 @@ public class Denuncia {
     public String getMotivo() {
         return motivo;
     }
-
     public void setMotivo(String motivo) {
         this.motivo = motivo;
     }
