@@ -1,7 +1,7 @@
 package org.dailygreen.dailygreen.Users.Administrador.dao;
 
 import org.dailygreen.dailygreen.Users.Administrador.models.Denuncia;
-
+import org.dailygreen.dailygreen.Users.Administrador.views.DenunciaView;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,5 +38,16 @@ public class DenunciaDAO {
                 .max()
                 .orElse(0);
         return maxId + 1;
+    }
+
+    public static void removerPorId(Integer denuncia){
+        List<Denuncia> denuncias = mostrar();
+        denuncias.removeIf(d -> d.getId().equals(denuncia));
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(REPORT_FILE))){
+            oos.writeObject(denuncias);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

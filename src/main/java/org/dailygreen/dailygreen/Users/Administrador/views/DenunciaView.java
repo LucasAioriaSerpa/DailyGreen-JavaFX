@@ -5,14 +5,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.dao.DenunciaDAO;
 import org.dailygreen.dailygreen.Users.Administrador.models.Denuncia;
-
-
 import java.util.Date;
+import java.util.Optional;
 
 
 public class DenunciaView {
@@ -30,6 +30,8 @@ public class DenunciaView {
     public void showComponents(){
         GridPane grid = new GridPane();
         grid.getStyleClass().add("denuncia-grid");
+
+        // HEADER | INSERT DENÚNCIAS
 
         Text mainTitle = new Text("LISTA DE DENUNCIAS");
         mainTitle.getStyleClass().add("denuncia-title");
@@ -64,7 +66,10 @@ public class DenunciaView {
         });
         grid.add(registrarButton,6,2);
 
+
+
         // TABELA DE DENUNCIAS
+
         TableView<Denuncia> tableView = new TableView<>();
 
         TableColumn<Denuncia, Integer> id = new TableColumn<>("ID");
@@ -77,9 +82,12 @@ public class DenunciaView {
         motivo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getMotivo()));
 
         TableColumn<Denuncia, String> status = new TableColumn<>("STATUS");
+        status.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getStatus()));
 
         denuncias.addAll(DenunciaDAO.mostrar());
         tableView.setItems(denuncias);
+
+        // HYPERLINK
 
         TableColumn<Denuncia, Void> analise = new TableColumn<>("AÇÃO");
         analise.setCellFactory(coluna -> new javafx.scene.control.TableCell<Denuncia, Void>() {
@@ -96,8 +104,61 @@ public class DenunciaView {
             }
         });
 
-        tableView.getColumns().addAll(id, titulo, motivo, status, analise);
+        // BOTÕES
+
+        TableColumn<Denuncia, Void> buttons = new TableColumn<>("DECISÃO");
+        buttons.setCellFactory(coluna -> new javafx.scene.control.TableCell<Denuncia, Void>(){
+            private final Button delete = new Button("EXCLUIR");
+            private final Button suspend = new Button("SUSPENDER");
+            private final Button ban = new Button("BANIR");
+            private final HBox buutonBox = new HBox(5, delete, suspend, ban);
+
+            {
+                delete.setOnAction(event -> {
+                    Denuncia denuncia = getTableView().getItems().get(getIndex());
+
+                    // Alerta
+                    Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+                    alerta.setTitle("Confirmar Decisão");
+                    alerta.setHeaderText("Deseja realmente excluir essa denúncia?");
+                    ButtonType confirmar = new ButtonType("CONFIRMAR");
+                    ButtonType cancelar = new ButtonType("CANCELAR", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    alerta.getButtonTypes().setAll(cancelar, confirmar);
+
+                    // Se confirmar
+                    Optional<ButtonType> escolha = alerta.showAndWait();
+                    if (escolha.isPresent() && escolha.get() == confirmar){
+                        DenunciaDAO.removerPorId(denuncia.getId());
+                        denuncias.remove(denuncia);
+                    }
+                });
+
+                suspend.setOnAction(event -> {
+                    Denuncia denuncia = getTableView().getItems().get(getIndex());
+                    System.out.println("Suspender Denúncia: " + denuncia);
+                });
+
+                ban.setOnAction(event -> {
+                    Denuncia denuncia = getTableView().getItems().get(getIndex());
+                    System.out.println("Banir Denúncia: " + denuncia);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty){
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(buutonBox);
+                }
+            }
+        });
+
+        // ADICIONANDO ITENS A TABELA E COLOCANDO ELA NO GRID
+
+        tableView.getColumns().addAll(id, titulo, motivo, status, analise, buttons);
         grid.add(tableView, 0, 5,5,10);
+
         layout.getChildren().add(grid);
     }
 
