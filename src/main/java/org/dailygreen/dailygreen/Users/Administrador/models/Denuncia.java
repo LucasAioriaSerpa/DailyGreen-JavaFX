@@ -17,12 +17,19 @@ public class Denuncia implements Serializable {
     }
 
     // METODOS GETTERS E SETTERS
-    public Integer getId() {return id;}
-    public void setId(Integer id) {this.id = id;}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getTitulo() {
         return titulo;
     }
+
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
@@ -34,6 +41,10 @@ public class Denuncia implements Serializable {
         this.motivo = motivo;
     }
 
-    public String getStatus(){ return status;}
-    public void setStatus(String status) {this.status = status;}
+    public String getStatus(){
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SuspensoDAO {
-    public static final String SUSPEND_FILE = "suspend.dat";
+    public static final String SUSPEND_FILE = "src/main/resources/db_dailygreen/suspend.dat";
 
     public static void registrar(Denuncia denuncia) {
-        List<Denuncia> denuncias = mostrar();
+        List<Denuncia> denuncias = exibir();
         denuncias.add(denuncia);
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SUSPEND_FILE))){
             oos.writeObject(denuncias);
@@ -19,7 +19,7 @@ public class SuspensoDAO {
         }
     }
 
-    public static List<Denuncia> mostrar() {
+    public static List<Denuncia> exibir() {
         File file = new File(SUSPEND_FILE);
         if (!file.exists()) return new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SUSPEND_FILE))){
