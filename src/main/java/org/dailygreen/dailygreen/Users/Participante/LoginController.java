@@ -37,7 +37,13 @@ public class LoginController {
 
         var participantes = ArquivoParticipante.lerLista();
         Participante participanteLogado = participantes.stream()
-                .filter(p -> p.getEmail().equals(email) && p.getPassword().equals(senha))
+                .filter(p -> {
+                    try {
+                        return p.getEmail().equals(email) && p.getPassword().equals(senha);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .findFirst()
                 .orElse(null);
 

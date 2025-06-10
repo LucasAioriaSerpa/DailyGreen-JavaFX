@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
+import org.dailygreen.dailygreen.util.Criptografia;
 
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class CadastroController {
             Participante novoParticipante = new Participante(
                     txtNome.getText(),
                     txtEmail.getText(),
-                    txtSenha.getText()
+                    Criptografia.criptografar(txtSenha.getText(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()))
             );
 
             ArquivoParticipante.adicionarParticipante(novoParticipante);

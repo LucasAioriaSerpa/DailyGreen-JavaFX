@@ -15,10 +15,10 @@ import java.util.Base64;
  * <p>- Para criptografar, recebe um texto do tipo String e chave em SecretKey.</p> <br>
  * <p>- Para descriptografar, recebe a criptografia em String e chave em SecretKey.</p>
  */
-public class CriptografiaComArquivo {
+public class Criptografia {
     private static final String ARQUIVO_CHAVE = "src/main/resources/key.aes";
     // ? GETTER ARQUIVO_CHAVE
-    public String getARQUIVO_CHAVE() {return ARQUIVO_CHAVE;}
+    public static String getARQUIVO_CHAVE() {return ARQUIVO_CHAVE;}
     // ? Gera uma nova chave AES
     public static SecretKey gerarChave() throws Exception {
         KeyGenerator keyGen = KeyGenerator.getInstance("AES");

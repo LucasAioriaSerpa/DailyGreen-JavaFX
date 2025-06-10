@@ -1,10 +1,15 @@
 package org.dailygreen.dailygreen.Users.Administrador.models;
 
+import org.dailygreen.dailygreen.util.Criptografia;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 public class Administrador implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String email;
-    private String password;
+    private final String password;
 
     public Administrador(String email, String password) {
         this.email = email;
@@ -21,12 +26,6 @@ public class Administrador implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getPassword() throws Exception {return Criptografia.descriptografar(password, Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()));}
 
 }

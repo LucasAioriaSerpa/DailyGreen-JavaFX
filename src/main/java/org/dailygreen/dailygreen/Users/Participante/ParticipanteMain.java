@@ -42,8 +42,8 @@ public class ParticipanteMain extends Application {
 
     private static void inicializarDadosTeste() {
         try {
-            // limpa dados teste RETIRAR DEPOIS
-            ArquivoParticipante.salvarLista(new ArrayList<>());
+            // Limpa dados teste RETIRAR DEPOIS
+            //ArquivoParticipante.salvarLista(new ArrayList<>());
 
 //            Participante p1 = new Participante("Abimael", "11111111111", "123");
 //            Participante p2 = new Participante("Zé Grillo", "22222222222", "123");

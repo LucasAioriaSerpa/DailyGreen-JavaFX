@@ -23,12 +23,12 @@ public class AdmController {
         }
     }
 
-    public static void cadastrar(String email, String password1, String password2, Stage stage) {
+    public static void cadastrar(String email, String password1, String password2, Stage stage) throws Exception {
         if (!password1.equals(password2)) {
             showAlert("As senhas estão divergentes!", Alert.AlertType.ERROR);
             return;
         }
-        boolean success = AdmDAO.salvarNovoAdm(email,password1);
+        boolean success = AdmDAO.salvarNovoAdm(email, password1);
         if (success) {
             showAlert("Cadastro realizado com sucesso!", Alert.AlertType.INFORMATION);
 

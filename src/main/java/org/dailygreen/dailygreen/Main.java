@@ -8,7 +8,7 @@ import javax.crypto.SecretKey;
 
 import org.dailygreen.dailygreen.Users.Administrador.MainAdm;
 import org.dailygreen.dailygreen.Users.Participante.ParticipanteMain;
-import org.dailygreen.dailygreen.util.CriptografiaComArquivo;
+import org.dailygreen.dailygreen.util.Criptografia;
 
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
@@ -45,17 +45,14 @@ public class Main extends Application {
                 throw new RuntimeException(ex);
             }
         });
-
         Image image = new Image(getClass().getResource("/IMAGES/BACKGROUNDS/florest-1.jpeg").toExternalForm());
         BackgroundImage bg = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         VBox root = new VBox();
         root.getStyleClass().add("root");
         root.setBackground(new Background(bg));
-
-        VBox btnsBox = new VBox(10, btnAdm, btnUser);
+        HBox btnsBox = new HBox(10, btnAdm, btnUser);
         btnsBox.getStyleClass().add("btns");
-
         root.getChildren().add(btnsBox);
         Scene scene = new Scene(root, 800, 500);
         scene.getStylesheets()
@@ -66,16 +63,15 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        CriptografiaComArquivo cript = new CriptografiaComArquivo();
         try {
             SecretKey key;
-            File arquivoKey = new File(cript.getARQUIVO_CHAVE());
+            File arquivoKey = new File(Criptografia.getARQUIVO_CHAVE());
             if (arquivoKey.exists()) {
-                key = CriptografiaComArquivo.lerChaveDeArquivo(cript.getARQUIVO_CHAVE());
+                key = Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE());
                 System.out.println(" key read!");
             } else {
-                key = CriptografiaComArquivo.gerarChave();
-                CriptografiaComArquivo.salvarChaveEmArquivo(key, cript.getARQUIVO_CHAVE());
+                key = Criptografia.gerarChave();
+                Criptografia.salvarChaveEmArquivo(key, Criptografia.getARQUIVO_CHAVE());
                 System.out.println("key saved!");
             }
         } catch (Exception e) {
