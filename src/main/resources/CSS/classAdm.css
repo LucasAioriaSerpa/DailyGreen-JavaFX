@@ -39,3 +39,28 @@
 .button-box{
     -fx-alignment: center;
 }
+
+
+
+// DENUNCIA VIEW
+
+.denuncia-view .denuncia-grid{
+    -fx-alignment: center;
+}
+
+.denuncia-title{
+    -fx-alignment: center;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.header{
+    -fx-alignment: center;
+    -fx-padding: 20px;
+    -fx-font-size: 13px;
+}
+
+.table{
+    -fx-pref-width: 750;
+    -fx-pref-height: 650;
+}

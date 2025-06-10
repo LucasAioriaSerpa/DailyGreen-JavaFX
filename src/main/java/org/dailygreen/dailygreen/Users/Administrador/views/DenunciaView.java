@@ -2,6 +2,7 @@ package org.dailygreen.dailygreen.Users.Administrador.views;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
@@ -11,6 +12,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.dao.DenunciaDAO;
 import org.dailygreen.dailygreen.Users.Administrador.models.Denuncia;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -35,19 +42,21 @@ public class DenunciaView {
 
         Text mainTitle = new Text("LISTA DE DENUNCIAS");
         mainTitle.getStyleClass().add("denuncia-title");
-        grid.add(mainTitle, 0, 0, 4, 1);
+        grid.add(mainTitle, 0, 0,10,1);
+        GridPane.setHalignment(mainTitle, HPos.CENTER);
+        mainTitle.getStyleClass().add("denuncia-title");
 
         Label tituloLabel = new Label("Motivo da Denúncia:");
-        grid.add(tituloLabel,0,2);
+        tituloLabel.getStyleClass().add("label-titulo");
 
         TextField tituloField = new TextField();
-        grid.add(tituloField,1,2);
+        tituloField.getStyleClass().add("field-titulo");
 
         Label motivoLabel = new Label("Descrição da Denúncia:");
-        grid.add(motivoLabel,3,2);
+        motivoLabel.getStyleClass().add("label-motivo");
 
         TextField motivoField = new TextField();
-        grid.add(motivoField,4,2);
+        motivoField.getStyleClass().add("field-motivo");
 
         ObservableList<Denuncia> denuncias = FXCollections.observableArrayList();
 
@@ -65,12 +74,18 @@ public class DenunciaView {
             }
         });
         grid.add(registrarButton,6,2);
+        registrarButton.getStyleClass().add("button-registrar");
+
+        HBox header = new HBox(10, tituloLabel, tituloField, motivoLabel, motivoField, registrarButton);
+        grid.add(header, 0,1);
+        header.getStyleClass().add("header");
 
 
 
         // TABELA DE DENUNCIAS
 
         TableView<Denuncia> tableView = new TableView<>();
+        tableView.getStyleClass().add("table");
 
         TableColumn<Denuncia, Integer> id = new TableColumn<>("ID");
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -87,23 +102,6 @@ public class DenunciaView {
         denuncias.addAll(DenunciaDAO.mostrar());
         tableView.setItems(denuncias);
 
-
-        // HYPERLINK
-
-        TableColumn<Denuncia, Void> analise = new TableColumn<>("AÇÃO");
-        analise.setCellFactory(coluna -> new javafx.scene.control.TableCell<Denuncia, Void>() {
-            private final Hyperlink link = new Hyperlink("Analisar");
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(link);
-                }
-            }
-        });
 
 
         // BOTÕES
@@ -142,7 +140,29 @@ public class DenunciaView {
 
                 suspend.setOnAction(event -> {
                     Denuncia denuncia = getTableView().getItems().get(getIndex());
-                    System.out.println("Suspender Denúncia: " + denuncia);
+
+                    // Alerta
+                    Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+                    alerta.setTitle("Confirmar Decisão");
+                    alerta.setHeaderText("Deseja realmente suspender esse usuário?");
+                    ButtonType confirmar = new ButtonType("SUSPENDER");
+                    ButtonType cancelar = new ButtonType("CANCELAR", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    alerta.getButtonTypes().setAll(cancelar, confirmar);
+
+                    Optional<ButtonType> escolha = alerta.showAndWait();
+                    if (escolha.isPresent() && escolha.get() == confirmar){
+                        denuncia.setStatus("Suspenso");
+                        denuncia.setSuspenso(true);
+
+                        List<Denuncia> denuncias = new ArrayList<>(tableView.getItems());
+                        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DenunciaDAO.REPORT_FILE))){
+                            oos.writeObject(denuncias);
+                        } catch (IOException e){
+                            e.printStackTrace();
+                        }
+
+                        tableView.refresh();
+                    }
                 });
 
 
@@ -150,24 +170,53 @@ public class DenunciaView {
 
                 ban.setOnAction(event -> {
                     Denuncia denuncia = getTableView().getItems().get(getIndex());
-                    System.out.println("Banir Denúncia: " + denuncia);
+
+                    // Alerta
+                    Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+                    alerta.setTitle("Confirmar Decisão");
+                    alerta.setHeaderText("Deseja realmente banir esse usuário?");
+                    ButtonType confirmar = new ButtonType("BANIR");
+                    ButtonType cancelar = new ButtonType("CANCELAR", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    alerta.getButtonTypes().setAll(cancelar, confirmar);
+
+                    Optional<ButtonType> escolha = alerta.showAndWait();
+                    if (escolha.isPresent() && escolha.get() == confirmar){
+                        denuncia.setStatus("Banido");
+                        denuncia.setSuspenso(true);
+
+                        List<Denuncia> denuncias = new ArrayList<>(tableView.getItems());
+                        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DenunciaDAO.REPORT_FILE))){
+                            oos.writeObject(denuncias);
+                        } catch (IOException e){
+                            e.printStackTrace();
+                        }
+
+                        tableView.refresh();
+                    }
                 });
             }
 
             @Override
             protected void updateItem(Void item, boolean empty){
+                super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(buutonBox);
+                    Denuncia denuncia = getTableView().getItems().get(getIndex());
+                    if (denuncia.getSuspenso() || denuncia.getBanido()){
+                        setGraphic(null);
+                    } else {
+                        setGraphic(buutonBox);
+                    }
                 }
             }
         });
 
+
         // ADICIONANDO ITENS A TABELA E COLOCANDO ELA NO GRID
 
-        tableView.getColumns().addAll(id, titulo, motivo, status, analise, buttons);
-        grid.add(tableView, 0, 5,5,10);
+        tableView.getColumns().addAll(id, titulo, motivo, status, buttons);
+        grid.add(tableView, 0, 10,10,10);
 
         layout.getChildren().add(grid);
     }

@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public class AdmDAO {
-    private static final String FILE_PATH = "src/main/resources/db_dailygreen/adm.dat";
+    private static final String FILE_PATH = "adm.dat";
 
     public static boolean validarLogin(String email, String password) {
         List<Administrador> lista = FileManager.carregar(FILE_PATH);

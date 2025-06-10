@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DenunciaDAO {
-    public static final String REPORT_FILE = "src/main/resources/db_dailygreen/denuncia.dat";
+    public static final String REPORT_FILE = "denuncia.dat";
 
     public static void registrar(Denuncia denuncia) {
         List<Denuncia> denuncias = mostrar();
