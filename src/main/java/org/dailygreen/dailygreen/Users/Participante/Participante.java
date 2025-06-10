@@ -2,7 +2,6 @@ package org.dailygreen.dailygreen.Users.Participante;
 
 import org.dailygreen.dailygreen.util.Criptografia;
 
-import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 

@@ -22,7 +22,7 @@ import javafx.application.Application;
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         Button btnAdm = new Button("Administrador");
         btnAdm.getStyleClass().add("btn-adm");
         btnAdm.getStyleClass().add("btn");
