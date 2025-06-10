@@ -1,7 +1,9 @@
 package org.dailygreen.dailygreen.Users.Organizacao;
 
-
-
+/**
+ * Classe que representa uma organização no sistema.
+ * Contém informações básicas como nome, email, CNPJ e status de verificação.
+ */
 public class Organizacao {
     private int id;
     private String nome;
@@ -10,31 +12,31 @@ public class Organizacao {
     private String descricao;
     private boolean verificada;
 
-    // Construtor com ID (usado ao carregar do banco de dados)
-    public Organizacao(int id, String nome, String email, String cnpj, String descricao, boolean verificada) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.cnpj = cnpj;
-        this.descricao = descricao;
-        this.verificada = verificada;
+    // Construtores
+    public Organizacao() {
+        // Construtor padrão para frameworks que exigem
     }
 
-    // Construtor sem ID (usado ao inserir no banco)
+    /**
+     * Construtor para criação de novas organizações
+     */
     public Organizacao(String nome, String email, String cnpj, String descricao, boolean verificada) {
-        this.nome = nome;
-        this.email = email;
-        this.cnpj = cnpj;
-        this.descricao = descricao;
-        this.verificada = verificada;
+        setNome(nome);
+        setEmail(email);
+        setCnpj(cnpj);
+        setDescricao(descricao);
+        setVerificada(verificada);
     }
 
-    // Getters e Setters
+    // Getters e Setters com validações básicas
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
+        if(id < 0) {
+            throw new IllegalArgumentException("ID não pode ser negativo");
+        }
         this.id = id;
     }
 
@@ -43,7 +45,10 @@ public class Organizacao {
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        if(nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome não pode ser vazio");
+        }
+        this.nome = nome.trim();
     }
 
     public String getEmail() {
@@ -51,7 +56,10 @@ public class Organizacao {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if(email == null || !email.contains("@")) {
+            throw new IllegalArgumentException("Email inválido");
+        }
+        this.email = email.toLowerCase().trim();
     }
 
     public String getCnpj() {
@@ -59,7 +67,10 @@ public class Organizacao {
     }
 
     public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
+        if(cnpj == null || cnpj.replaceAll("\\D", "").length() != 14) {
+            throw new IllegalArgumentException("CNPJ inválido");
+        }
+        this.cnpj = cnpj.replaceAll("\\D", ""); // Remove não-dígitos
     }
 
     public String getDescricao() {
@@ -67,7 +78,7 @@ public class Organizacao {
     }
 
     public void setDescricao(String descricao) {
-        this.descricao = descricao;
+        this.descricao = descricao != null ? descricao.trim() : "";
     }
 
     public boolean isVerificada() {
@@ -78,9 +89,22 @@ public class Organizacao {
         this.verificada = verificada;
     }
 
-    // Representação em texto (útil em TableView ou console)
+    // Métodos utilitários
     @Override
     public String toString() {
-        return nome + " - " + (verificada ? "Verificada" : "Não verificada");
+        return String.format("%s (ID: %d) - %s", nome, id, verificada ? "Verificada" : "Não verificada");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organizacao that = (Organizacao) o;
+        return id == that.id || cnpj.equals(that.cnpj);
+    }
+
+    @Override
+    public int hashCode() {
+        return cnpj.hashCode();
     }
 }
