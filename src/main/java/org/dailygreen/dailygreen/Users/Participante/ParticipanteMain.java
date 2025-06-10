@@ -16,22 +16,33 @@ public class ParticipanteMain extends Application {
     public void start(Stage primaryStage) throws IOException {
         try {
             Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("/org/dailygreen/dailygreen/participante_login_screen.fxml"),
-                            "Arquivo FXML não encontrado"));
+                    Objects.requireNonNull(
+                            getClass().getResource("/org/dailygreen/dailygreen/participante_login_screen.fxml"),
+                            "Arquivo FXML não encontrado"
+                    )
+            );
 
             primaryStage.setTitle("DailyGreen - Participante");
-            primaryStage.setScene(new Scene(root, 800, 500));
+            Scene scene = new Scene(root, 800, 500);
+
+            String cssPath = Objects.requireNonNull(
+                    getClass().getResource("/CSS/participante.css"),
+                    "Arquivo CSS não encontrado"
+            ).toExternalForm();
+            scene.getStylesheets().add(cssPath);
+
+            primaryStage.setScene(scene); // Define a cena no palco
             primaryStage.show();
 
         } catch (IOException e) {
             System.err.println("Erro ao carregar a interface: " + e.getMessage());
-            throw e; // Re-lança a exceção para tratamento superior
+            throw e;
         }
     }
 
     private static void inicializarDadosTeste() {
         try {
-            // Limpa dados teste RETIRAR DEPOIS
+            // limpa dados teste RETIRAR DEPOIS
             ArquivoParticipante.salvarLista(new ArrayList<>());
 
 //            Participante p1 = new Participante("Abimael", "11111111111", "123");
