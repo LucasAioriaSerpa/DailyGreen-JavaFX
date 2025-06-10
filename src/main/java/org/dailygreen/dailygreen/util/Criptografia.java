@@ -5,6 +5,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
 import java.io.*;
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -71,29 +72,5 @@ public class Criptografia {
         byte[] texto = cipher.doFinal(dados);
         return new String(texto, "UTF-8");
     }
-
-    // * teste *
-//    public static void main(String[] args) {
-//        try {
-//            SecretKey chave;
-//            File arquivoChave = new File(ARQUIVO_CHAVE);
-//            if (arquivoChave.exists()) {
-//                chave = lerChaveDeArquivo(ARQUIVO_CHAVE);
-//                System.out.println("Chave lida do arquivo.");
-//            } else {
-//                chave = gerarChave();
-//                salvarChaveEmArquivo(chave, ARQUIVO_CHAVE);
-//                System.out.println("Chave gerada e salva no arquivo.");
-//            }
-//            String mensagem = "Informação confidencial!";
-//            String criptografado = criptografar(mensagem, chave);
-//            String descriptografado = descriptografar(criptografado, chave);
-//            System.out.println("\nMensagem original:       " + mensagem);
-//            System.out.println("Mensagem criptografada: " + criptografado);
-//            System.out.println("Mensagem descriptografada: " + descriptografado);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 }
 

@@ -6,16 +6,18 @@ import java.util.Objects;
 
 import javax.crypto.SecretKey;
 
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import org.dailygreen.dailygreen.Users.Administrador.MainAdm;
 import org.dailygreen.dailygreen.Users.Participante.ParticipanteMain;
 import org.dailygreen.dailygreen.util.Criptografia;
 
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
+import javafx.application.Application;
 
 public class Main extends Application {
 
@@ -45,7 +47,7 @@ public class Main extends Application {
                 throw new RuntimeException(ex);
             }
         });
-        Image image = new Image(getClass().getResource("/IMAGES/BACKGROUNDS/florest-1.jpeg").toExternalForm());
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/IMAGES/BACKGROUNDS/florest-1.jpeg")).toExternalForm());
         BackgroundImage bg = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         VBox root = new VBox();
@@ -54,10 +56,14 @@ public class Main extends Application {
         HBox btnsBox = new HBox(10, btnAdm, btnUser);
         btnsBox.getStyleClass().add("btns");
         root.getChildren().add(btnsBox);
-        Scene scene = new Scene(root, 800, 500);
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        Scene scene = new Scene(root, (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
         scene.getStylesheets()
                 .add(Objects.requireNonNull(getClass().getResource("/CSS/classMain.css")).toExternalForm());
-        stage.setTitle("MAIN-PAGE");
+        stage.setTitle("DailyGreen - Main-Page");
+        stage.getIcons().add(new Image(Objects.requireNonNull(
+                getClass().getResource("/dailygreen_icon-32x32.png")).toExternalForm()));
+        stage.resizableProperty().setValue(Boolean.FALSE);
         stage.setScene(scene);
         stage.show();
     }

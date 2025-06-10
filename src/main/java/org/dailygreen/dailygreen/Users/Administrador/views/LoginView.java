@@ -1,11 +1,13 @@
 package org.dailygreen.dailygreen.Users.Administrador.views;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.controller.AdmController;
 
@@ -46,7 +48,8 @@ public class LoginView {
         Hyperlink linkToCadastro = new Hyperlink("Ainda não possui login? Cadastre-se aqui!");
         linkToCadastro.setOnAction(e -> {
             CadastroView cadastroView = new CadastroView(stage);
-            Scene scene = new Scene(cadastroView.getView(), 800, 500);
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Scene scene = new Scene(cadastroView.getView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
             scene.getStylesheets().add(getClass().getResource("/CSS/classAdm.css").toExternalForm());
             stage.setScene(scene);
         });

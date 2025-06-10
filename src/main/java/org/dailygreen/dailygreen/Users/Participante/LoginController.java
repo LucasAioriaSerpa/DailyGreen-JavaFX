@@ -3,12 +3,14 @@ package org.dailygreen.dailygreen.Users.Participante;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -79,9 +81,9 @@ public class LoginController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/dailygreen/dailygreen/participante_cadastro_screen.fxml"));
             Parent novaTela = fxmlLoader.load();
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(novaTela);
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Scene scene = new Scene(novaTela, (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {

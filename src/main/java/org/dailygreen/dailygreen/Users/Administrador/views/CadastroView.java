@@ -1,11 +1,13 @@
 package org.dailygreen.dailygreen.Users.Administrador.views;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.controller.AdmController;
 
@@ -53,7 +55,8 @@ public class CadastroView {
         Hyperlink linkToLogin = new Hyperlink("Já possui login? Clique aqui!");
         linkToLogin.setOnAction(e -> {
             LoginView loginView = new LoginView(stage);
-            Scene scene = new Scene(loginView.getView(), 800, 500);
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Scene scene = new Scene(loginView.getView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
             scene.getStylesheets().add(getClass().getResource("/CSS/classAdm.css").toExternalForm());
             stage.setScene(scene);
         });
@@ -64,7 +67,8 @@ public class CadastroView {
 
         Button cadastrarButton = new Button("CADASTRAR");
         cadastrarButton.setOnAction(event -> {
-            AdmController.cadastrar(emailField.getText(), passwordField1.getText(), passwordField2.getText(), stage);
+            try {AdmController.cadastrar(emailField.getText(), passwordField1.getText(), passwordField2.getText(), stage);
+            } catch (Exception e) {throw new RuntimeException(e);}
         });
         HBox buttonBox = new HBox(cadastrarButton);
         buttonBox.getStyleClass().add("button-box");

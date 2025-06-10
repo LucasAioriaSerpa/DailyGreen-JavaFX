@@ -2,8 +2,10 @@ package org.dailygreen.dailygreen.Users.Participante;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,7 +25,8 @@ public class ParticipanteMain extends Application {
             );
 
             primaryStage.setTitle("DailyGreen - Participante");
-            Scene scene = new Scene(root, 800, 500);
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Scene scene = new Scene(root, (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
 
             String cssPath = Objects.requireNonNull(
                     getClass().getResource("/CSS/participante.css"),
@@ -64,11 +67,7 @@ public class ParticipanteMain extends Application {
     }
 
     public static void main(String[] args) {
-
         if (args.length > 0 && args[0].equals("--test")) {
             inicializarDadosTeste();
-        }
-
-        launch(args);
-    }
+        }launch(args);}
 }
