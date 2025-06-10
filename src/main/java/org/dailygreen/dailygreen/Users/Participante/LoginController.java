@@ -31,9 +31,40 @@ public class LoginController {
 
         if (email.isEmpty() || senha.isEmpty()) {
             lblStatus.setText("Preencha todos os campos!");
+            lblStatus.setStyle("-fx-text-fill: red;");
+            return;
+        }
+
+        var participantes = ArquivoParticipante.lerLista();
+        Participante participanteLogado = participantes.stream()
+                .filter(p -> p.getEmail().equals(email) && p.getPassword().equals(senha))
+                .findFirst()
+                .orElse(null);
+
+        if (participanteLogado != null) {
+            lblStatus.setText("Login realizado com sucesso!");
+            lblStatus.setStyle("-fx-text-fill: green;");
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/dailygreen/dailygreen/participante_perfil_screen.fxml"));
+                Parent root = loader.load();
+
+                PerfilController controller = loader.getController();
+                controller.setParticipante(participanteLogado);
+
+                Stage stage = (Stage) txtEmail.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                lblStatus.setText("Erro ao abrir perfil.");
+                lblStatus.setStyle("-fx-text-fill: red;");
+            }
+
         } else {
-            // Aqui você pode validar com o banco de dados
-            lblStatus.setText("Login realizado com: " + email);
+            lblStatus.setText("Email ou senha inválidos!");
+            lblStatus.setStyle("-fx-text-fill: red;");
         }
     }
 

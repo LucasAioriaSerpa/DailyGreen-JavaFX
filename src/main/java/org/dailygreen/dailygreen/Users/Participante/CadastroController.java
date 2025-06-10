@@ -32,7 +32,7 @@ public class CadastroController {
 
             Participante novoParticipante = new Participante(
                     txtNome.getText(),
-                    txtEmail.getText(),  // Estou assumindo que você usa email como CPF
+                    txtEmail.getText(),
                     txtSenha.getText()
             );
 
