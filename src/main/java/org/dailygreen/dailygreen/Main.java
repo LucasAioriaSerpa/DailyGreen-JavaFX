@@ -39,13 +39,8 @@ public class Main extends Application {
         btnUser.getStyleClass().add("btn-user");
         btnUser.getStyleClass().add("btn");
         btnUser.setOnAction(_ -> {
-            try {
-                ParticipanteMain user = new ParticipanteMain();
-                user.start(stage);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                throw new RuntimeException(ex);
-            }
+            ParticipanteMain user = new ParticipanteMain();
+            user.start(stage);
         });
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/IMAGES/BACKGROUNDS/florest-1.jpeg")).toExternalForm());
         BackgroundImage bg = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,

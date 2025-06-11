@@ -1,7 +1,5 @@
 package org.dailygreen.dailygreen.Users.Participante;
 
-import org.dailygreen.dailygreen.util.Criptografia;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -10,7 +8,7 @@ public class Participante implements Serializable {
     private static final long serialVersionUID = 1L;
     private String nome;
     private String email;
-    private final String password;
+    private String password;
 
     public Participante(String nome, String email, String password) {
         this.nome = nome;
@@ -34,7 +32,13 @@ public class Participante implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() throws Exception {return Criptografia.descriptografar(password, Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()));}
+    public Object getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public String toString() {
@@ -44,4 +48,6 @@ public class Participante implements Serializable {
                 ", Senha='" + password + '\'' +
                 '}';
     }
+
+
 }

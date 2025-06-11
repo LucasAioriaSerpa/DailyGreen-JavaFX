@@ -1,65 +1,80 @@
-/* Define fundo e padding para o VBox principal */
-.root {
-    -fx-background-color: #f5f5f5;
-    -fx-padding: 25;
-    -fx-spacing: 20;
+.card {
+    -fx-background-color: white;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5);
+    -fx-min-width: 420px;
+    -fx-spacing: 15px;
 }
 
-/* Título principal */
-.label.title {
-    -fx-font-size: 24px;
+.main-screen {
+    -fx-background-color: #79b791;
+}
+
+.title {
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
 }
 
-/* Rótulos fixos (ex: Nome:, Email:) */
-.label.static-label {
+.status-label {
     -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333;
+    -fx-text-fill: red;
+    -fx-max-width: 300px;
+    -fx-wrap-text: true;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
-/* Rótulos com informações do usuário */
-.label.user-info {
+.text-field, .password-field {
+    -fx-pref-width: 250px;
+    -fx-padding: 8px;
     -fx-font-size: 14px;
-    -fx-text-fill: #555555;
 }
 
-/* Botões */
-.button {
-    -fx-font-weight: bold;
+.button-primary {
+    -fx-background-color: #4CAF50;
     -fx-text-fill: white;
-    -fx-pref-width: 200px;
-    -fx-padding: 10 0;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
     -fx-background-radius: 6px;
 }
 
-/* Botão Editar */
-#btnEditar {
-    -fx-background-color: #4CAF50;
+.button-secondary {
+    -fx-background-color: #9E9E9E;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 6px;
 }
 
-/* Botão Deletar Conta */
-.button:focused {
-    -fx-border-color: #888888;
+.profile-banner {
+    -fx-background-color: #ABD1B5;
+    -fx-padding: 30px;
 }
 
-.button:pressed {
-    -fx-opacity: 0.85;
+.profile-photo {
+    -fx-background-color: #BBDEFB; /* azul claro */
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0.3, 0, 2);
 }
 
-.button:hover {
-    -fx-cursor: hand;
+.profile-photo-text {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
 }
 
-.button:disabled {
-    -fx-opacity: 0.5;
+.profile-name {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
 }
 
-.button.delete {
-    -fx-background-color: #f44336;
-}
-
-/* Botão Voltar / Logout */
-#btnVoltar {
-    -fx-background-color: #2196F3;
+.profile-email {
+    -fx-font-size: 14px;
+    -fx-fill: white;
 }
