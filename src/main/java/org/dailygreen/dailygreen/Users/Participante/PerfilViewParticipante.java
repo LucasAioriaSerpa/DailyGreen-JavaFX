@@ -21,23 +21,23 @@ public class PerfilViewParticipante {
     }
 
     private void criarComponentes(Stage stage) {
-        // ========== TOPO: BANNER DE PERFIL ==========
+        // BANNER
         HBox banner = new HBox(20); // Espaço entre foto e info
         banner.getStyleClass().add("profile-banner");
         banner.setPadding(new Insets(20));
         banner.setAlignment(Pos.CENTER_LEFT);
 
-        // Área da foto de perfil (simulada)
+
         StackPane fotoPerfil = new StackPane();
         fotoPerfil.getStyleClass().add("profile-photo");
         fotoPerfil.setPrefSize(80, 80);
 
-        // Texto opcional no centro da "foto"
+
         Label letraInicial = new Label(participante.getNome().substring(0, 1).toUpperCase());
         letraInicial.getStyleClass().add("profile-photo-text");
         fotoPerfil.getChildren().add(letraInicial);
 
-        // Informações do participante
+
         Text nome = new Text(participante.getNome());
         nome.getStyleClass().add("profile-name");
 
@@ -50,7 +50,7 @@ public class PerfilViewParticipante {
         banner.getChildren().addAll(fotoPerfil, infoBox);
         layout.setTop(banner);
 
-        // ========== CENTRO: POSTAGENS (simuladas) ==========
+        // POSTAGENS
         VBox postagensArea = new VBox(15);
         postagensArea.setPadding(new Insets(20));
         postagensArea.setAlignment(Pos.TOP_CENTER);
@@ -58,7 +58,7 @@ public class PerfilViewParticipante {
         Label tituloPostagens = new Label("Suas Postagens");
         tituloPostagens.getStyleClass().add("section-title");
 
-        // Simulação de postagens
+
         for (int i = 1; i <= 3; i++) {
             Label post = new Label("🌱 Postagem " + i );
             post.getStyleClass().add("post-item");
@@ -67,7 +67,7 @@ public class PerfilViewParticipante {
 
         layout.setCenter(postagensArea);
 
-        // ========== RODAPÉ: BOTÕES ==========
+        // BOTÕES
         HBox botoes = new HBox(15);
         botoes.setAlignment(Pos.CENTER);
         botoes.setPadding(new Insets(20));

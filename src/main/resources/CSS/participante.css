@@ -55,7 +55,7 @@
 }
 
 .profile-photo {
-    -fx-background-color: #BBDEFB; /* azul claro */
+    -fx-background-color: #BBDEFB;
     -fx-background-radius: 50%;
     -fx-border-radius: 50%;
     -fx-alignment: center;
@@ -77,4 +77,40 @@
 .profile-email {
     -fx-font-size: 14px;
     -fx-fill: white;
+}
+
+.participante-label {
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.cabecalho-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 100px;
+    -fx-border-color: #ccc;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.dado-label {
+    -fx-font-size: 13px;
+    -fx-padding: 5px 10px;
+    -fx-min-width: 200px;
+}
+
+.lista-container {
+    -fx-spacing: 8px;
 }

@@ -3,13 +3,10 @@ package org.dailygreen.dailygreen.Users.Participante;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.Objects;
 
 public class LoginViewParticipante {
     private VBox layout;
@@ -32,8 +29,6 @@ public class LoginViewParticipante {
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(30));
         card.getStyleClass().add("card");
-
-
 
         // Título
         Text titulo = new Text("Login do Participante");
@@ -72,11 +67,20 @@ public class LoginViewParticipante {
         btnCadastrar.getStyleClass().add("button-secondary");
         btnCadastrar.setOnAction(e -> abrirTelaCadastro());
 
-        HBox botoes = new HBox(15, btnEntrar, btnCadastrar);
+        Button btnListaParticipantes = new Button("Lista de Participantes");
+        btnListaParticipantes.getStyleClass().add("button-secondary");
+        btnListaParticipantes.setOnAction(e -> abrirListaParticipantes());
+
+        HBox botoes = new HBox(15, btnEntrar, btnCadastrar, btnListaParticipantes);
         botoes.setAlignment(Pos.CENTER);
 
         card.getChildren().addAll(titulo, formGrid, lblStatus, botoes);
         layout.getChildren().add(card);
+    }
+
+    private void abrirListaParticipantes() {
+        ListaParticipantesView listaView = new ListaParticipantesView(stage);
+        stage.getScene().setRoot(listaView.getView());
     }
 
     private void validarLogin() {
