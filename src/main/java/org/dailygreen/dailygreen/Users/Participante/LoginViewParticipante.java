@@ -7,7 +7,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
 public class LoginViewParticipante {
     private VBox layout;
     private Stage stage;
@@ -30,11 +29,9 @@ public class LoginViewParticipante {
         card.setPadding(new Insets(30));
         card.getStyleClass().add("card");
 
-        // Título
         Text titulo = new Text("Login do Participante");
         titulo.getStyleClass().add("title");
 
-        // Formulário
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
         formGrid.setVgap(15);
@@ -58,7 +55,6 @@ public class LoginViewParticipante {
         lblStatus = new Label();
         lblStatus.getStyleClass().add("status-label");
 
-        // Botões
         Button btnEntrar = new Button("Entrar");
         btnEntrar.getStyleClass().add("button-primary");
         btnEntrar.setOnAction(e -> validarLogin());

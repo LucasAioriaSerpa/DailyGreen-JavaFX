@@ -46,7 +46,7 @@ public class LoginView {
         grid.add(passwordField, 0, 4);
 
         Hyperlink linkToCadastro = new Hyperlink("Ainda não possui login? Cadastre-se aqui!");
-        linkToCadastro.setOnAction(e -> {
+        linkToCadastro.setOnAction(_ -> {
             CadastroView cadastroView = new CadastroView(stage);
             Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
             Scene scene = new Scene(cadastroView.getView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
@@ -59,7 +59,7 @@ public class LoginView {
         grid.add(linkToCadastroBox, 0, 5);
 
         Button loginButton = new Button("ENTRAR");
-        loginButton.setOnAction(event -> {
+        loginButton.setOnAction(_ -> {
             AdmController.login(emailField.getText(), passwordField.getText(), stage);
         });
         HBox buttonBox = new HBox(loginButton);

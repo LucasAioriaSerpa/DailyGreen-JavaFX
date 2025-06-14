@@ -1,22 +1,15 @@
 module org.dailygreen.dailygreen {
     requires javafx.controls;
-    requires javafx.fxml;
-    requires transitive javafx.graphics;
-    requires java.sql;
-    requires java.desktop;
-    requires java.compiler;
-    requires org.jetbrains.annotations;
-
-    opens org.dailygreen.dailygreen.Users.Participante to javafx.fxml;
-    opens org.dailygreen.dailygreen to javafx.fxml;
-    opens org.dailygreen.dailygreen.Users.Administrador.models to javafx.base;
+    requires javafx.graphics;
+    requires java.base;
+    
     exports org.dailygreen.dailygreen;
     exports org.dailygreen.dailygreen.Users.Administrador;
     exports org.dailygreen.dailygreen.Users.Participante;
-    exports org.dailygreen.dailygreen.util;
-    opens org.dailygreen.dailygreen.util to javafx.fxml;
-    opens org.dailygreen.dailygreen.Users.Administrador.controller to javafx.base;
-    opens org.dailygreen.dailygreen.Users.Administrador.dao to javafx.base;
     exports org.dailygreen.dailygreen.Postagens;
-    opens org.dailygreen.dailygreen.Postagens to javafx.fxml;
+    
+    opens org.dailygreen.dailygreen to javafx.graphics;
+    opens org.dailygreen.dailygreen.Users.Administrador to javafx.graphics;
+    opens org.dailygreen.dailygreen.Users.Participante to javafx.graphics;
+    opens org.dailygreen.dailygreen.Postagens to javafx.graphics;
 }

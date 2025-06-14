@@ -1,4 +1,4 @@
-
+/* Cores e valores base */
 * {
     -fx-primary: #79b791;
     -fx-primary-light: #ABD1B5;
@@ -6,12 +6,30 @@
     -fx-accent: #51291E;
     -fx-primary-transparent: rgba(121, 183, 145, 0.2);
     -fx-accent-transparent: rgba(81, 41, 30, 0.1);
+    -fx-shadow-default: rgba(0, 0, 0, 0.1);
+    -fx-shadow-hover: rgba(0, 0, 0, 0.2);
 }
 
-.root {
-    -fx-background-color: -fx-background;
+.postagens-view {
+    -fx-alignment: center;
+    -fx-padding: 20;
 }
 
+.center-section {
+    -fx-alignment: top-center;
+    -fx-spacing: 15;
+}
+
+.text-field, .text-area, .button {
+    -fx-max-width: 400px;
+    -fx-alignment: center;
+}
+
+.button {
+    -fx-min-width: 150px;
+}
+
+/* SplitPane */
 .split-pane {
     -fx-background-color: transparent;
     -fx-border-width: 0;
@@ -25,15 +43,15 @@
 
 .split-pane-divider {
     -fx-background-color: -fx-primary-light;
-    -fx-padding: 0 1px 0 1px;
+    -fx-padding: 0 1px;
 }
 
 .split-pane-divider:hover {
     -fx-background-color: -fx-primary;
     -fx-scale-x: 1.5;
-    -fx-transition: background-color 0.3s, scale-x 0.2s;
 }
 
+/* Seções */
 .left-section,
 .center-section,
 .right-section {
@@ -41,7 +59,7 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 4, 0, 0, 0);
     -fx-background-radius: 5;
     -fx-border-radius: 5;
-    -fx-transition: all 0.3s;
+    -fx-padding: 10;
 }
 
 .left-section:hover,
@@ -51,12 +69,14 @@
     -fx-background-color: derive(white, 2%);
 }
 
+/* Labels */
 .label {
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-text-fill: -fx-accent;
 }
 
+/* Campos de texto */
 .text-field,
 .text-area {
     -fx-background-color: -fx-background;
@@ -64,7 +84,6 @@
     -fx-border-radius: 4;
     -fx-background-radius: 4;
     -fx-padding: 8;
-    -fx-transition: border-color 0.3s, background-color 0.3s;
 }
 
 .text-field:hover,
@@ -84,6 +103,7 @@
     -fx-background-color: transparent;
 }
 
+/* Botões */
 .button {
     -fx-background-color: -fx-primary;
     -fx-text-fill: white;
@@ -91,7 +111,7 @@
     -fx-background-radius: 4;
     -fx-padding: 10 20;
     -fx-cursor: hand;
-    -fx-transition: all 0.3s;
+    -fx-min-width: 100px;
 }
 
 .button:hover {
@@ -107,6 +127,12 @@
     -fx-background-color: derive(-fx-primary, -20%);
 }
 
+.button:disabled {
+    -fx-opacity: 0.6;
+    -fx-cursor: default;
+}
+
+/* ListView */
 .list-view {
     -fx-background-color: -fx-background;
     -fx-border-color: -fx-primary-light;
@@ -118,13 +144,11 @@
 .list-cell {
     -fx-padding: 8;
     -fx-background-color: transparent;
-    -fx-transition: all 0.2s;
 }
 
 .list-cell:filled:selected {
     -fx-background-color: -fx-primary;
     -fx-text-fill: white;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 4, 0, 0, 0);
 }
 
 .list-cell:filled:hover {
@@ -133,6 +157,7 @@
     -fx-scale-y: 1.01;
 }
 
+/* Scrollbar */
 .scroll-bar:vertical,
 .scroll-bar:horizontal {
     -fx-background-color: transparent;
@@ -149,18 +174,9 @@
     -fx-background-color: -fx-primary;
 }
 
-.split-pane,
-.list-view {
-    -fx-cache-hint: speed;
-}
-
-.button:disabled {
-    -fx-opacity: 0.6;
-    -fx-cursor: default;
-}
-
-.button:focused,
-.list-view:focused {
-    -fx-border-color: -fx-accent;
-    -fx-border-width: 2;
+/* Postagens View */
+.postagens-view {
+    -fx-spacing: 10;
+    -fx-padding: 10;
+    -fx-alignment: center;
 }
