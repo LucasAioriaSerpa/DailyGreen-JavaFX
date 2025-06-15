@@ -7,6 +7,8 @@ import javax.crypto.SecretKey;
 
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
+import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.Users.util.DATuser;
 import org.dailygreen.dailygreen.util.Criptografia;
 
 import javafx.scene.Scene;
@@ -75,8 +77,19 @@ public class Main extends Application {
         }
     }
 
+    private static void initializeUser() {
+        if (DATuser.check()) {
+            User user = new User("NONE", "NONE");
+            DATuser.setUser(user);
+            System.out.println("User created and saved successfully!");
+            return;
+        }
+        System.out.println("User loaded successfully!");
+    }
+
     public static void main(String[] args) {
         initializeSecurityKey();
+        initializeUser();
         launch(args);
     }
 }

@@ -1,4 +1,4 @@
-/* Cores e valores base */
+
 * {
     -fx-primary: #79b791;
     -fx-primary-light: #ABD1B5;
@@ -29,7 +29,6 @@
     -fx-min-width: 150px;
 }
 
-/* SplitPane */
 .split-pane {
     -fx-background-color: transparent;
     -fx-border-width: 0;
@@ -51,7 +50,7 @@
     -fx-scale-x: 1.5;
 }
 
-/* Seções */
+/* Sections */
 .left-section,
 .center-section,
 .right-section {
@@ -69,14 +68,12 @@
     -fx-background-color: derive(white, 2%);
 }
 
-/* Labels */
 .label {
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-text-fill: -fx-accent;
 }
 
-/* Campos de texto */
 .text-field,
 .text-area {
     -fx-background-color: -fx-background;
@@ -132,7 +129,6 @@
     -fx-cursor: default;
 }
 
-/* ListView */
 .list-view {
     -fx-background-color: -fx-background;
     -fx-border-color: -fx-primary-light;
@@ -174,7 +170,6 @@
     -fx-background-color: -fx-primary;
 }
 
-/* Postagens View */
 .postagens-view {
     -fx-spacing: 10;
     -fx-padding: 10;

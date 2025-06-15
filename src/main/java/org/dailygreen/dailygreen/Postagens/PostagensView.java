@@ -79,6 +79,17 @@ public class PostagensView {
         descriptionArea.setPrefRowCount(4);
         Button submitButton = new Button("Postar");
         submitButton.setMaxWidth(200);
+        submitButton.setOnAction(_ -> {
+            String title = titleField.getText();
+            String description = descriptionArea.getText();
+            if (title.isBlank() || description.isBlank()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro ao postar");
+                alert.setHeaderText("Preencha todos os campos");
+                alert.setContentText("Todos os campos devem ser preenchidos.");
+                alert.showAndWait();
+            } else {PostagensControll.sendPost(stage, title, description);}
+        });
         postForm.getChildren().addAll(
             titleLabel, titleField,
             descriptionLabel, descriptionArea,
