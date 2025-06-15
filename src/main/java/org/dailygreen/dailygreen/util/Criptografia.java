@@ -7,6 +7,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -18,59 +19,79 @@ import java.util.Base64;
  */
 public class Criptografia {
     private static final String ARQUIVO_CHAVE = "src/main/resources/key.aes";
+
     // ? GETTER ARQUIVO_CHAVE
-    public static String getARQUIVO_CHAVE() {return ARQUIVO_CHAVE;}
+    public static String getARQUIVO_CHAVE() {
+        return ARQUIVO_CHAVE;
+    }
+
     // ? Gera uma nova chave AES
     public static SecretKey gerarChave() throws Exception {
         KeyGenerator keyGen = KeyGenerator.getInstance("AES");
         keyGen.init(256);
         return keyGen.generateKey();
     }
+
     // ? Salva a chave no arquivo
     public static void salvarChaveEmArquivo(SecretKey chave, String caminho) throws IOException {
         String chaveBase64 = Base64.getEncoder().encodeToString(chave.getEncoded());
-        try (FileWriter writer = new FileWriter(caminho)) {writer.write(chaveBase64);}
+        try (FileWriter writer = new FileWriter(caminho)) {
+            writer.write(chaveBase64);
+        }
     }
+
     // ? Lê a chave do arquivo
     public static SecretKey lerChaveDeArquivo(String caminho) throws IOException {
-        StringBuilder conteudo = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(caminho))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {conteudo.append(linha);}
+            String conteudo = reader.readLine();
+            byte[] chaveBytes = Base64.getDecoder().decode(conteudo);
+            return new SecretKeySpec(chaveBytes, "AES");
         }
-        byte[] chaveBytes = Base64.getDecoder().decode(conteudo.toString());
-        return new SecretKeySpec(chaveBytes, "AES");
     }
+
     // ? Gera IV aleatório
-    public static byte[] gerarIV() {
-        byte[] iv = new byte[16];
-        new SecureRandom().nextBytes(iv);
+    private static final int IV_LENGTH = 16;
+
+    private static byte[] gerarIV() {
+        byte[] iv = new byte[IV_LENGTH];
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(iv);
         return iv;
     }
+
     // ? Criptografa string
     public static String criptografar(String texto, SecretKey chave) throws Exception {
         byte[] iv = gerarIV();
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, chave, ivSpec);
-        byte[] criptografado = cipher.doFinal(texto.getBytes("UTF-8"));
-        byte[] combinado = new byte[iv.length + criptografado.length];
-        System.arraycopy(iv, 0, combinado, 0, iv.length);
-        System.arraycopy(criptografado, 0, combinado, iv.length, criptografado.length);
-        return Base64.getEncoder().encodeToString(combinado);
+        byte[] textoCriptografado = cipher.doFinal(texto.getBytes(StandardCharsets.UTF_8));
+        byte[] ivETexto = new byte[iv.length + textoCriptografado.length];
+        System.arraycopy(iv, 0, ivETexto, 0, iv.length);
+        System.arraycopy(textoCriptografado, 0, ivETexto, iv.length, textoCriptografado.length);
+        return Base64.getEncoder().encodeToString(ivETexto);
     }
+
     // ? Descriptografa string
-    public static String descriptografar(String criptografadoBase64, SecretKey chave) throws Exception {
-        byte[] combinado = Base64.getDecoder().decode(criptografadoBase64);
-        byte[] iv = new byte[16];
-        byte[] dados = new byte[combinado.length - 16];
-        System.arraycopy(combinado, 0, iv, 0, 16);
-        System.arraycopy(combinado, 16, dados, 0, dados.length);
-        IvParameterSpec ivSpec = new IvParameterSpec(iv);
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, chave, ivSpec);
-        byte[] texto = cipher.doFinal(dados);
-        return new String(texto, "UTF-8");
+    public static String descriptografar(String textoCriptografado, SecretKey chave) throws Exception {
+        try {
+            byte[] ivETexto = Base64.getDecoder().decode(textoCriptografado.trim());
+            if (ivETexto.length < IV_LENGTH) {
+                throw new IllegalArgumentException("Dados criptografados inválidos");
+            }
+            byte[] iv = new byte[IV_LENGTH];
+            byte[] textoCifrado = new byte[ivETexto.length - IV_LENGTH];
+            System.arraycopy(ivETexto, 0, iv, 0, IV_LENGTH);
+            System.arraycopy(ivETexto, IV_LENGTH, textoCifrado, 0, textoCifrado.length);
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, chave, new IvParameterSpec(iv));
+            byte[] textoDescriptografado = cipher.doFinal(textoCifrado);
+            return new String(textoDescriptografado, StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException e) {
+            throw new Exception("Formato de dados criptografados inválido");
+        } catch (Exception e) {
+            throw new Exception("Erro na descriptografia: " + e.getMessage());
+        }
     }
 }
 

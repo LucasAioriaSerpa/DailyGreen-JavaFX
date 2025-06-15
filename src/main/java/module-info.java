@@ -2,7 +2,8 @@ module org.dailygreen.dailygreen {
     requires javafx.controls;
     requires javafx.graphics;
     requires java.base;
-    
+    requires java.logging;
+
     exports org.dailygreen.dailygreen;
     exports org.dailygreen.dailygreen.Users.Administrador;
     exports org.dailygreen.dailygreen.Users.Participante;
