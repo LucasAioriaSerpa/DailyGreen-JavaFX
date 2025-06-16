@@ -1,14 +1,17 @@
 package org.dailygreen.dailygreen.Postagens.Reacao;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Recao {
-    private final long id_reacao;
+public class Recao implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+    private long ID;
     private String reaction;
     private String[] reactionsType;
     private int[] reactionNum;
-    public Recao(long id_reacao, String reaction) {
-        this.id_reacao = id_reacao;
+    public Recao(String reaction) {
         this.reaction = reaction;
         reactionsType = new String[]{
                 "gostei",

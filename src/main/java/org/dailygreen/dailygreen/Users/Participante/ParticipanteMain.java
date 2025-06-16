@@ -59,9 +59,7 @@ public class ParticipanteMain extends Application {
     }
 
     public static void main(String[] args) {
-        if (args.length > 0 && args[0].equals("--test")) {
-            inicializarDadosTeste();
-        }
+        if (args.length > 0 && args[0].equals("--test")) {inicializarDadosTeste();}
         launch(args);
     }
 }

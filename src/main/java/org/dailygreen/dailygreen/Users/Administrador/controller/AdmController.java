@@ -9,6 +9,8 @@ import org.dailygreen.dailygreen.Users.Administrador.dao.AdmDAO;
 import org.dailygreen.dailygreen.Users.Administrador.views.DenunciaView;
 import org.dailygreen.dailygreen.Users.Administrador.views.LoginView;
 
+import java.util.Objects;
+
 public class AdmController {
     static Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     public static void login(String email, String password, Stage stage) {
@@ -18,7 +20,7 @@ public class AdmController {
             // APÓS O LOGIN, LEVA PARA A PÁGINA DE DENÚNCIA
             DenunciaView denunciaView = new DenunciaView(stage);
             Scene scene = new Scene(denunciaView.getDenunciaView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
-            scene.getStylesheets().add(AdmController.class.getResource("/CSS/classAdm.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(AdmController.class.getResource("/CSS/classAdm.css")).toExternalForm());
             stage.setScene(scene);
         } else {
             showAlert("Email ou senha inválidos!", Alert.AlertType.ERROR);

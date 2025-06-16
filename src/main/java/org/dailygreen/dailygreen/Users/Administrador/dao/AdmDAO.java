@@ -2,6 +2,8 @@ package org.dailygreen.dailygreen.Users.Administrador.dao;
 
 import org.dailygreen.dailygreen.Users.Administrador.models.Administrador;
 import org.dailygreen.dailygreen.Users.Administrador.utils.FileManager;
+import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.Users.util.DATuser;
 import org.dailygreen.dailygreen.util.Criptografia;
 
 import java.util.List;
@@ -82,6 +84,11 @@ public class AdmDAO {
                         }
                         boolean resultado = senhaDescriptografada.equals(password);
                         LOGGER.info("Resultado da validação: " + resultado);
+                        if (resultado) {
+                            User user = DATuser.getUser();
+                            user.setAccount(admin);
+                            DATuser.setUser(user);
+                        }
                         return resultado;
                     } catch (Exception e) {
                         LOGGER.log(Level.WARNING, "Erro ao validar senha para email: " + email, e);

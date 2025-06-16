@@ -77,19 +77,27 @@ public class Main extends Application {
         }
     }
 
-    private static void initializeUser() {
-        if (DATuser.check()) {
-            User user = new User("NONE", "NONE");
+    private static boolean initializeUser() {
+        if (!DATuser.check()) {
+            User user = new User("NONE");
             DATuser.setUser(user);
             System.out.println("User created and saved successfully!");
-            return;
+            return false;
         }
         System.out.println("User loaded successfully!");
+        return true;
     }
 
     public static void main(String[] args) {
         initializeSecurityKey();
-        initializeUser();
+//        if (initializeUser()) {
+//            User user = DATuser.getUser();
+//            switch (user.getType()) {
+//                case "administrador" -> MainController.btnAdm(new Stage());
+//                case "participante" -> MainController.btnUser(new Stage());
+//                case "NONE" -> System.out.println("No user logged in, showing main page.");
+//            }
+//        }
         launch(args);
     }
 }

@@ -50,7 +50,6 @@
     -fx-scale-x: 1.5;
 }
 
-/* Sections */
 .left-section,
 .center-section,
 .right-section {
@@ -100,7 +99,6 @@
     -fx-background-color: transparent;
 }
 
-/* Botões */
 .button {
     -fx-background-color: -fx-primary;
     -fx-text-fill: white;
@@ -153,7 +151,6 @@
     -fx-scale-y: 1.01;
 }
 
-/* Scrollbar */
 .scroll-bar:vertical,
 .scroll-bar:horizontal {
     -fx-background-color: transparent;

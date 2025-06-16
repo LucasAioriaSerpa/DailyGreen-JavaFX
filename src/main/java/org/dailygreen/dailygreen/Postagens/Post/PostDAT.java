@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class PostDAT {
-    private static final String ARQUIVO_POST = "posts.dat";
+    private static final String ARQUIVO_POST = "src/main/resources/posts.dat";
 
     public static void salvarPost(Post post) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO_POST))) {

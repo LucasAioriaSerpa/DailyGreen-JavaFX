@@ -6,6 +6,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.Users.util.DATuser;
+import org.dailygreen.dailygreen.util.Criptografia;
 
 public class LoginViewParticipante {
     private VBox layout;
@@ -82,18 +85,22 @@ public class LoginViewParticipante {
     private void validarLogin() {
         String email = txtEmail.getText();
         String senha = txtSenha.getText();
-
         if (email.isEmpty() || senha.isEmpty()) {
             lblStatus.setText("Preencha todos os campos!");
             lblStatus.setStyle("-fx-text-fill: red;");
             return;
         }
-
         try {
             Participante participanteLogado = ArquivoParticipante.lerLista().stream()
                     .filter(p -> {
                         try {
-                            return p.getEmail().equals(email) && p.getPassword().equals(senha);
+                            boolean result = p.getEmail().equals(email) && Criptografia.descriptografar(p.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE())).equals(senha);
+                            if (result) {
+                                User user = DATuser.getUser();
+                                user.setAccount(p);
+                                DATuser.setUser(user);
+                            }
+                            return result;
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             return false;

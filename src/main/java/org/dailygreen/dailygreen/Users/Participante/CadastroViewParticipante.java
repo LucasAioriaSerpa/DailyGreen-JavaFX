@@ -87,13 +87,11 @@ public class CadastroViewParticipante {
                 lblStatus.setStyle("-fx-text-fill: red;");
                 return;
             }
-
             Participante novoParticipante = new Participante(
                     txtNome.getText(),
                     txtEmail.getText(),
                     txtSenha.getText()
             );
-
             ArquivoParticipante.adicionarParticipante(novoParticipante);
 
             lblStatus.setText("Cadastro realizado com sucesso!");

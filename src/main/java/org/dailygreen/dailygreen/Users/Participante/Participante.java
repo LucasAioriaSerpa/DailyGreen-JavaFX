@@ -1,19 +1,20 @@
 package org.dailygreen.dailygreen.Users.Participante;
 
-import java.io.Serial;
-import java.io.Serializable;
+import org.dailygreen.dailygreen.util.Criptografia;
+
+import java.io.*;
 
 public class Participante implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private static long ID;
+    private long ID;
     private String nome;
     private String email;
     private String password;
-    public Participante(String nome, String email, String password) {
+    public Participante(String nome, String email, String password) throws Exception {
         this.nome = nome;
         this.email = email;
-        this.password = password;
+        this.password = Criptografia.criptografar(password, Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()));
     }
     public long getID() {return ID;}
     public void setID(long ID) {this.ID = ID;}
@@ -21,7 +22,7 @@ public class Participante implements Serializable {
     public void setNome(String nome) {this.nome = nome;}
     public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
-    public Object getPassword() {return password;}
+    public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
     @Override
     public String toString() {

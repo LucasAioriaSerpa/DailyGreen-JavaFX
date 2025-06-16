@@ -10,6 +10,7 @@ public class Evento extends Post implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private final long id_post = super.getSerialVersionUID();
+    private long ID;
     private Date dataHoraInicio;
     private Date dataHoraFim;
     private String local;
@@ -22,6 +23,9 @@ public class Evento extends Post implements Serializable {
         this.link = link;
     }
     // ? GETTER AND SETTER
+    public long getId_post() {return id_post;}
+    public long getID() {return ID;}
+
     public Date getDataHoraInicio() {return dataHoraInicio;}
     public void setDataHoraInicio(Date dataHoraInicio) {this.dataHoraInicio = dataHoraInicio;}
 

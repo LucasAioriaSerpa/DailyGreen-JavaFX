@@ -16,10 +16,7 @@ public class ArquivoParticipante {
     private static final String CAMINHO_ARQUIVO = "src/main/resources/db_dailygreen/participante.dat";
     private static final String ARQUIVO_ID = "src/main/resources/db_dailygreen/ultimo_id.dat";
     private static AtomicLong ultimoId;
-
-    static {
-        carregarUltimoId();
-    }
+    static {carregarUltimoId();}
 
     private static void carregarUltimoId() {
         File arquivo = new File(ARQUIVO_ID);
@@ -75,9 +72,7 @@ public class ArquivoParticipante {
         ArrayList<Participante> lista = new ArrayList<>();
         try {
             garantirArquivo();
-            try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(Paths.get(CAMINHO_ARQUIVO)))) {
-                lista = (ArrayList<Participante>) ois.readObject();
-            }
+            try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(Paths.get(CAMINHO_ARQUIVO)))) {lista = (ArrayList<Participante>) ois.readObject();}
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Erro ao ler lista: " + e.getMessage());
         }
@@ -86,9 +81,7 @@ public class ArquivoParticipante {
 
     public static void adicionarParticipante(Participante participante) {
         List<Participante> participantes = lerLista();
-        if (participantes.stream().anyMatch(p -> p.getEmail().equals(participante.getEmail()))) {
-            throw new IllegalArgumentException("Já existe um participante com este email");
-        }
+        if (participantes.stream().anyMatch(p -> p.getEmail().equals(participante.getEmail()))) {throw new IllegalArgumentException("Já existe um participante com este email");}
         participante.setID(gerarNovoId());
         participantes.add(participante);
         salvarLista(new ArrayList<>(participantes));
