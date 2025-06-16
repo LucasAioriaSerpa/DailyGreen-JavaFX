@@ -16,8 +16,11 @@ public class LoginViewParticipante {
     private TextField txtEmail;
     private PasswordField txtSenha;
     private Label lblStatus;
-
+    private User user;
     public LoginViewParticipante(Stage stage) {
+        user = DATuser.getUser();
+        Participante userParticipante = (Participante) user.getAccount();
+        if (user.isLogged()) {abrirPerfil(userParticipante);}
         this.stage = stage;
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
@@ -94,13 +97,11 @@ public class LoginViewParticipante {
             Participante participanteLogado = ArquivoParticipante.lerLista().stream()
                     .filter(p -> {
                         try {
-                            boolean result = p.getEmail().equals(email) && Criptografia.descriptografar(p.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE())).equals(senha);
-                            if (result) {
-                                User user = DATuser.getUser();
-                                user.setAccount(p);
-                                DATuser.setUser(user);
-                            }
-                            return result;
+                            return p.getEmail().equals(email) &&
+                                    Criptografia.descriptografar(
+                                            p.getPassword(),
+                                            Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE())
+                                    ).equals(senha);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             return false;
@@ -122,6 +123,10 @@ public class LoginViewParticipante {
     }
 
     private void abrirPerfil(Participante participante) {
+        User user = DATuser.getUser();
+        user.setAccount(participante);
+        user.setLogged(true);
+        DATuser.setUser(user);
         PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participante);
         stage.getScene().setRoot(perfilView.getView());
     }
