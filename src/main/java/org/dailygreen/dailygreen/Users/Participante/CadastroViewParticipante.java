@@ -7,12 +7,18 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.regex.Pattern;
+
 public class CadastroViewParticipante {
     private VBox layout;
     private TextField txtNome;
     private TextField txtEmail;
     private PasswordField txtSenha;
     private Label lblStatus;
+
+    private static final String EMAIL_REGEX =
+            "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
 
     public CadastroViewParticipante(Stage stage) {
         this.layout = new VBox();
@@ -86,6 +92,12 @@ public class CadastroViewParticipante {
                 lblStatus.setStyle("-fx-text-fill: red;");
                 return;
             }
+
+            if (!validarEmail(txtEmail.getText())) {
+                mostrarErro("Por favor, insira um e-mail válido!");
+                return;
+            }
+
             Participante novoParticipante = new Participante(
                     txtNome.getText(),
                     txtEmail.getText(),
@@ -102,6 +114,21 @@ public class CadastroViewParticipante {
             lblStatus.setText("Erro: " + e.getMessage());
             lblStatus.setStyle("-fx-text-fill: red;");
         }
+    }
+
+
+    private boolean validarEmail(String email) {
+        return EMAIL_PATTERN.matcher(email).matches();
+    }
+
+    private void mostrarErro(String mensagem) {
+        lblStatus.setText(mensagem);
+        lblStatus.setStyle("-fx-text-fill: red;");
+    }
+
+    private void mostrarSucesso(String mensagem) {
+        lblStatus.setText(mensagem);
+        lblStatus.setStyle("-fx-text-fill: green;");
     }
 
     private void voltarParaLogin(Stage stage) {
