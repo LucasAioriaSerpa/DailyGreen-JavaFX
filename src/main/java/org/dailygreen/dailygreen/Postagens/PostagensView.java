@@ -11,6 +11,8 @@ import org.dailygreen.dailygreen.Postagens.Post.Post;
 import org.dailygreen.dailygreen.Postagens.utils.DATpost;
 import org.dailygreen.dailygreen.Users.Organizacao.Organizacao;
 import org.dailygreen.dailygreen.Users.Participante.Participante;
+import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.Users.util.DATuser;
 
 public class PostagensView {
     private final Stage stage;
@@ -20,6 +22,11 @@ public class PostagensView {
     public PostagensView(Stage stage) {
         this.stage = stage;
         this.layout = new VBox();
+        User user = DATuser.getUser();
+        switch (user.getType()) {
+            case "participante" -> accountParticipante = (Participante) user.getAccount();
+            case "organizador" -> accountOrganizacao = (Organizacao) user.getAccount();
+        }
         layout.setAlignment(Pos.CENTER); // Centraliza o conteúdo verticalmente
         layout.getStyleClass().add("postagens-view");
         stage.setTitle("Postagens");

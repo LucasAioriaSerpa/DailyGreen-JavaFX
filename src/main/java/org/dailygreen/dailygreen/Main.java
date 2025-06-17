@@ -5,47 +5,23 @@ import java.util.Objects;
 
 import javax.crypto.SecretKey;
 
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import org.dailygreen.dailygreen.Users.User;
 import org.dailygreen.dailygreen.Users.util.DATuser;
 import org.dailygreen.dailygreen.util.Criptografia;
 
-import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.scene.layout.*;
+import javafx.scene.image.Image;
+import javafx.scene.control.Button;
+import javafx.application.Application;
 
 public class Main extends Application {
-    private static String userType = "NONE";
-    private static boolean hasloged = false;
 
     @Override
     public void start(Stage stage) {
-        stage.getIcons().add(new Image(Objects.requireNonNull(
-                getClass().getResource("/dailygreen_icon-32x32.png")
-        ).toExternalForm()));
-        stage.setResizable(false);
-        if (!userType.equals("NONE")) {
-            switch (userType) {
-                case "administrador" -> MainController.btnAdm(stage);
-                case "participante" -> MainController.btnUser(stage);
-                default -> showMainPage(stage);
-            }
-        } else {
-            showMainPage(stage);
-        }
-    }
-
-    private void showMainPage(Stage stage) {
         Button btnAdm = new Button("Administrador");
         btnAdm.getStyleClass().add("btn-adm");
         btnAdm.getStyleClass().add("btn");
@@ -80,6 +56,10 @@ public class Main extends Application {
                 getClass().getResource("/CSS/classMain.css")
         ).toExternalForm());
         stage.setTitle("DailyGreen - Main-Page");
+        stage.getIcons().add(new Image(Objects.requireNonNull(
+                getClass().getResource("/dailygreen_icon-32x32.png")
+        ).toExternalForm()));
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
@@ -91,29 +71,33 @@ public class Main extends Application {
                 SecretKey key = Criptografia.gerarChave();
                 Criptografia.salvarChaveEmArquivo(key, Criptografia.getARQUIVO_CHAVE());
                 System.out.println("Key created and saved successfully!");
-            } else {
-                System.out.println("Existing key loaded successfully!");
-            }
+            } else {System.out.println("Existing key loaded successfully!");}
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize security key: " + e.getMessage(), e);
         }
     }
 
-    private static void initializeUser() {
+    private static boolean initializeUser() {
         if (!DATuser.check()) {
             User user = new User("NONE");
             DATuser.setUser(user);
             System.out.println("User created and saved successfully!");
-        } else {
-            System.out.println("User loaded successfully!");
-            User user = DATuser.getUser();
-            userType = user.getType();
+            return false;
         }
+        System.out.println("User loaded successfully!");
+        return true;
     }
 
     public static void main(String[] args) {
         initializeSecurityKey();
-        initializeUser();
+//        if (initializeUser()) {
+//            User user = DATuser.getUser();
+//            switch (user.getType()) {
+//                case "administrador" -> MainController.btnAdm(new Stage());
+//                case "participante" -> MainController.btnUser(new Stage());
+//                case "NONE" -> System.out.println("No user logged in, showing main page.");
+//            }
+//        }
         launch(args);
     }
 }

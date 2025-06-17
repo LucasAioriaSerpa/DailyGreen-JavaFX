@@ -6,22 +6,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Postagens.Post.Post;
-import org.dailygreen.dailygreen.Postagens.utils.DATpost;
-import org.dailygreen.dailygreen.Users.Organizacao.Organizacao;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.Users.util.DATuser;
 
 import java.util.ArrayList;
 
 public class PerfilViewParticipante {
     private BorderPane layout;
     private Participante participante;
-    private User user;
+
     public PerfilViewParticipante(Stage stage, Participante participante) {
         this.participante = participante;
         this.layout = new BorderPane();
-        user = DATuser.getUser();
         layout.getStyleClass().add("main-screen");
         criarComponentes(stage);
     }
@@ -60,20 +54,15 @@ public class PerfilViewParticipante {
         VBox postagensArea = new VBox(15);
         postagensArea.setPadding(new Insets(20));
         postagensArea.setAlignment(Pos.TOP_CENTER);
+
         Label tituloPostagens = new Label("Suas Postagens");
         tituloPostagens.getStyleClass().add("section-title");
-        ArrayList<Post> posts = DATpost.lerLista();
-        if (posts.isEmpty()) {
-            Label label = new Label("Nenhuma postagem cadastrada!");
-            postagensArea.getChildren().add(label);
-        } else {
-            for (Post post : posts) {
-                if (post.getId_autor() == participante.getID()) {
-                    Label postLabel = new Label(post.getTitulo() + "\n" + post.getDescricao());
-                    postLabel.getStyleClass().add("post-item");
-                    postagensArea.getChildren().add(postLabel);
-                }
-            }
+
+
+        for (int i = 1; i <= 3; i++) {
+            Label post = new Label("🌱 Postagem " + i );
+            post.getStyleClass().add("post-item");
+            postagensArea.getChildren().add(post);
         }
 
         layout.setCenter(postagensArea);
