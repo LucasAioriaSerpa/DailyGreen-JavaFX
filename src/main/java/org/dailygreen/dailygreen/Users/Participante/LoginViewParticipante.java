@@ -97,7 +97,7 @@ public class LoginViewParticipante {
                             boolean result = p.getEmail().equals(email) && Criptografia.descriptografar(p.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE())).equals(senha);
                             if (result) {
                                 User user = DATuser.getUser();
-                                user.setAccount(p);
+                                user.setAccountParticipante(p);
                                 DATuser.setUser(user);
                             }
                             return result;

@@ -24,8 +24,8 @@ public class PostagensView {
         this.layout = new VBox();
         User user = DATuser.getUser();
         switch (user.getType()) {
-            case "participante" -> accountParticipante = (Participante) user.getAccount();
-            case "organizador" -> accountOrganizacao = (Organizacao) user.getAccount();
+            case "participante" -> accountParticipante = user.getAccountParticipante();
+            case "organizador" -> accountOrganizacao = user.getAccountOrganizacao();
         }
         layout.setAlignment(Pos.CENTER); // Centraliza o conteúdo verticalmente
         layout.getStyleClass().add("postagens-view");

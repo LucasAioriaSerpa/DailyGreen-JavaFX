@@ -1,16 +1,34 @@
 package org.dailygreen.dailygreen.Users;
 
+import org.dailygreen.dailygreen.Users.Administrador.models.Administrador;
+import org.dailygreen.dailygreen.Users.Organizacao.Organizacao;
+import org.dailygreen.dailygreen.Users.Participante.Participante;
+
 import java.io.Serial;
 import java.io.Serializable;
 
-public class User<T extends Serializable> implements Serializable {
+public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private String type;
-    private T account;
-    public User(String type){this.type = type; /* ? "participante" , "Organizador" e "Administrador"*/}
+    private Administrador accountAdministrador;
+    private Participante accountParticipante;
+    private Organizacao accountOrganizacao;
+    private boolean isLogged = false;
+    public User(String type){this.type = type; /* ? "participante" , "Organizador" e "Administrador"*/ }
+
     public String getType() {return type;}
-    public T getAccount() {return account;}
-    public void setAccount(Object account) {this.account = (T) account;}
     public void setType(String type) {this.type = type;}
+
+    public Administrador getAccountAdministrador() {return accountAdministrador;}
+    public void setAccountAdministrador(Administrador accountAdministrador) {this.accountAdministrador = accountAdministrador;}
+
+    public Participante getAccountParticipante() {return accountParticipante;}
+    public void setAccountParticipante(Participante accountParticipante) {this.accountParticipante = accountParticipante;}
+
+    public Organizacao getAccountOrganizacao() {return accountOrganizacao;}
+    public void setAccountOrganizacao(Organizacao accountOrganizacao) {this.accountOrganizacao = accountOrganizacao;}
+
+    public boolean isLogged() {return isLogged;}
+    public void setLogged(boolean logged) {isLogged = logged;}
 }

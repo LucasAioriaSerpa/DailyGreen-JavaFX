@@ -86,7 +86,7 @@ public class AdmDAO {
                         LOGGER.info("Resultado da validação: " + resultado);
                         if (resultado) {
                             User user = DATuser.getUser();
-                            user.setAccount(admin);
+                            user.setAccountAdministrador(admin);
                             DATuser.setUser(user);
                         }
                         return resultado;
