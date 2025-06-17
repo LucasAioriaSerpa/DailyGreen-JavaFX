@@ -32,7 +32,6 @@ public class CadastroViewParticipante {
         Text titulo = new Text("Cadastro de Participante");
         titulo.getStyleClass().add("title");
 
-        // Formulário em GridPane
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(15);

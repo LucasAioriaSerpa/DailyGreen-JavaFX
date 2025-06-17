@@ -32,11 +32,11 @@ public class EditarPerfilViewParticipante {
         // Título
         Text titulo = new Text("Editar Perfil");
         titulo.getStyleClass().add("title");
-        // GridPane para campos de edição
+
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        // Campos editáveis
+
         Label lblNome = new Label("Nome:");
         txtNome = new TextField(participanteOriginal.getNome());
         txtNome.setPromptText("Novo nome");
@@ -45,10 +45,10 @@ public class EditarPerfilViewParticipante {
         txtEmail.setPromptText("Novo email");
         grid.addRow(0, lblNome, txtNome);
         grid.addRow(1, lblEmail, txtEmail);
-        // Status label
+
         lblStatus = new Label();
         lblStatus.getStyleClass().add("status-label");
-        // Botões
+
         Button btnSalvar = new Button("Salvar");
         btnSalvar.getStyleClass().add("button-primary");
         btnSalvar.setOnAction(e -> salvarEdicao(stage));
@@ -57,7 +57,8 @@ public class EditarPerfilViewParticipante {
         btnCancelar.setOnAction(e -> voltarParaPerfil(stage));
         HBox botoes = new HBox(10, btnSalvar, btnCancelar);
         botoes.setAlignment(Pos.CENTER);
-        // Layout principal
+
+        // principal
         layout.getChildren().addAll(
                 titulo,
                 grid,

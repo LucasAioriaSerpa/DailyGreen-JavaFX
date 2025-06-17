@@ -28,7 +28,7 @@ public class PerfilViewParticipante {
 
     private void criarComponentes(Stage stage) {
         // BANNER
-        HBox banner = new HBox(20); // Espaço entre foto e info
+        HBox banner = new HBox(20);
         banner.getStyleClass().add("profile-banner");
         banner.setPadding(new Insets(20));
         banner.setAlignment(Pos.CENTER_LEFT);
