@@ -106,6 +106,7 @@ public class PerfilViewParticipante {
         User user = DATuser.getUser();
         user.setLogged(false);
         user.setAccountParticipante(null);
+        DATuser.setUser(user);
         voltarParaLogin(stage);
     }
 
@@ -113,6 +114,7 @@ public class PerfilViewParticipante {
         User user = DATuser.getUser();
         user.setLogged(false);
         user.setAccountParticipante(null);
+        DATuser.setUser(user);
         LoginViewParticipante loginView = new LoginViewParticipante(stage);
         stage.getScene().setRoot(loginView.getView());
     }
