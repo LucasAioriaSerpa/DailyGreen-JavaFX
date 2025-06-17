@@ -151,6 +151,10 @@
     -fx-border-radius: 5;
 }
 
+.combo-filtro .list-view .list-cell:hover {
+    -fx-background-color: #79B791;
+}
+
 /* Campo de pesquisa */
 .campo-pesquisa {
     -fx-pref-width: 300;
