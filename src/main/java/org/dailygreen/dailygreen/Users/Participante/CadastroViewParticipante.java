@@ -100,7 +100,7 @@ public class CadastroViewParticipante {
             ArquivoParticipante.lerLista().forEach(System.out::println); // Debug
 
         } catch (Exception e) {
-            lblStatus.setText("Erro ao cadastrar: " + e.getMessage());
+            lblStatus.setText("Erro: " + e.getMessage());
             lblStatus.setStyle("-fx-text-fill: red;");
         }
     }
