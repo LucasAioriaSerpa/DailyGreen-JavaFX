@@ -145,6 +145,15 @@ public class DenunciaFormView {
 
         // BOTÃO ENVIAR DENUNCIA
 
+        Button voltar = new Button("VOLTAR");
+        voltar.setOnAction(event -> {
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            DenunciaView denunciaView = new DenunciaView(stage);
+            Scene scene = new Scene(denunciaView.getDenunciaView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
+            scene.getStylesheets().add(AdmController.class.getResource("/CSS/classAdm.css").toExternalForm());
+            stage.setScene(scene);
+        });
+
         Button enviarDenuncia = new Button("ENVIAR");
         enviarDenuncia.setOnAction(event -> {
             String participanteValue = listaParticipantes.getValue();
@@ -174,7 +183,7 @@ public class DenunciaFormView {
         });
         grid.add(enviarDenuncia, 0, 4);
 
-        VBox formulario = new VBox(5, titleFormulario, participantes, optionTitulo, descricaoDenuncia, enviarDenuncia);
+        VBox formulario = new VBox(5, titleFormulario, participantes, optionTitulo, descricaoDenuncia, enviarDenuncia, voltar   );
         grid.add(formulario, 0, 0);
         formulario.setAlignment(Pos.CENTER);
 

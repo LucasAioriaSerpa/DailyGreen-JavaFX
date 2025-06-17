@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.dailygreen.dailygreen.Postagens.PostagensView;
 import org.dailygreen.dailygreen.Users.User;
 import org.dailygreen.dailygreen.Users.util.DATuser;
 
@@ -13,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class PerfilViewParticipante {
-    private BorderPane layout;
-    private Participante participante;
+    private final BorderPane layout;
+    private final Participante participante;
 
     public PerfilViewParticipante(Stage stage, Participante participante) {
         this.participante = participante;
@@ -33,16 +34,13 @@ public class PerfilViewParticipante {
         banner.setPadding(new Insets(20));
         banner.setAlignment(Pos.CENTER_LEFT);
 
-
         StackPane fotoPerfil = new StackPane();
         fotoPerfil.getStyleClass().add("profile-photo");
         fotoPerfil.setPrefSize(80, 80);
 
-
         Label letraInicial = new Label(participante.getNome().substring(0, 1).toUpperCase());
         letraInicial.getStyleClass().add("profile-photo-text");
         fotoPerfil.getChildren().add(letraInicial);
-
 
         Text nome = new Text(participante.getNome());
         nome.getStyleClass().add("profile-name");
@@ -64,13 +62,6 @@ public class PerfilViewParticipante {
         Label tituloPostagens = new Label("Suas Postagens");
         tituloPostagens.getStyleClass().add("section-title");
 
-
-        for (int i = 1; i <= 3; i++) {
-            Label post = new Label("🌱 Postagem " + i );
-            post.getStyleClass().add("post-item");
-            postagensArea.getChildren().add(post);
-        }
-
         layout.setCenter(postagensArea);
 
         // BOTÕES
@@ -90,7 +81,11 @@ public class PerfilViewParticipante {
         btnVoltar.getStyleClass().add("button-secondary");
         btnVoltar.setOnAction(e -> voltarParaLogin(stage));
 
-        botoes.getChildren().addAll(btnEditar, btnDeletar, btnVoltar);
+        Button btnPostagens = new Button("Postagens");
+        btnPostagens.getStyleClass().add("button-primary");
+        btnPostagens.setOnAction(_ -> irParaPostagens(stage));
+
+        botoes.getChildren().addAll(btnEditar, btnDeletar, btnVoltar, btnPostagens);
         layout.setBottom(botoes);
     }
 
@@ -117,6 +112,11 @@ public class PerfilViewParticipante {
         DATuser.setUser(user);
         LoginViewParticipante loginView = new LoginViewParticipante(stage);
         stage.getScene().setRoot(loginView.getView());
+    }
+
+    private void irParaPostagens(Stage stage) {
+        PostagensView postagensView = new PostagensView(stage);
+        stage.getScene().setRoot(postagensView.getView());
     }
 
     public BorderPane getView() {

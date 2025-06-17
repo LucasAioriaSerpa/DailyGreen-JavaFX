@@ -3,6 +3,21 @@
     -fx-alignment: center;
 }
 
+.logo {
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 100px;
+}
+
+.title-root {
+    -fx-text-fill: #51291E;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 20 0;
+}
+
 .btns {
     -fx-alignment: center;
 }

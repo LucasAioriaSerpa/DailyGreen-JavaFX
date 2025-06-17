@@ -6,6 +6,8 @@ import java.util.Objects;
 import javax.crypto.SecretKey;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import org.dailygreen.dailygreen.Users.Administrador.MainAdm;
 import org.dailygreen.dailygreen.Users.Participante.ParticipanteMain;
@@ -24,6 +26,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        ImageView logo = new ImageView(
+                new Image(Objects.requireNonNull(
+                        getClass().getResource("/IMAGES/logo-dailygreen.png")).toExternalForm())
+        );
+        logo.setFitWidth(500);
+        logo.setPreserveRatio(true);
+        logo.setSmooth(true);
+        logo.setCache(true);
+        logo.getStyleClass().add("logo");
         Button btnAdm = new Button("Administrador");
         btnAdm.getStyleClass().add("btn-adm");
         btnAdm.getStyleClass().add("btn");
@@ -42,7 +53,7 @@ public class Main extends Application {
                 BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT
         );
-        VBox root = new VBox();
+        VBox root = new VBox(10, logo);
         root.getStyleClass().add("root");
         root.setBackground(new Background(bg));
         HBox btnsBox = new HBox(10, btnAdm, btnUser);
