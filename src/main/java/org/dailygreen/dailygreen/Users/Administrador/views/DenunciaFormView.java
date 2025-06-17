@@ -1,7 +1,9 @@
 package org.dailygreen.dailygreen.Users.Administrador.views;
 
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -35,6 +37,7 @@ public class DenunciaFormView {
     public void showComponents() {
         GridPane grid = new GridPane();
         grid.getStyleClass().add("denuncia-form");
+        grid.setAlignment(Pos.CENTER);
 
 
         // TITULO
@@ -52,7 +55,7 @@ public class DenunciaFormView {
         ComboBox<String> listaParticipantes = new ComboBox<>();
         listaParticipantes.setEditable(true);
         List<String> nomesParticipantes = ArquivoParticipante.lerLista().stream()
-                .map(p -> p.getNome())
+                .map(p -> p.getEmail())
                 .toList();
         listaParticipantes.getItems().addAll(nomesParticipantes);
 
@@ -66,6 +69,7 @@ public class DenunciaFormView {
             listaParticipantes.getItems().setAll(userFiltrado);
             listaParticipantes.show();
         });
+        listaParticipantes.getStyleClass().add("combo-box");
 
         VBox participantes = new VBox(5, participanteDenunciado, listaParticipantes);
         grid.add(participantes, 0, 1);
@@ -89,14 +93,11 @@ public class DenunciaFormView {
                 "Incitação a Práticas Ilegais",
                 "Conteúdo Impróprio ou Explicito"
         );
-        tituloOption.setValue("Selecione um motivo...");
+        tituloOption.setValue(null);
+        tituloOption.getStyleClass().add("combo-box");
 
         VBox optionTitulo = new VBox(5, tituloDenuncia, tituloOption);
-        grid.add(optionTitulo, 1, 1);
-
-
-        HBox participanteTitulo = new HBox(5, participantes, optionTitulo);
-        grid.add(participanteTitulo, 0, 1);
+        grid.add(optionTitulo, 0, 2);
 
 
 
@@ -134,10 +135,11 @@ public class DenunciaFormView {
                 "Imagens ou vídeos com nudez ou violência",
                 "Divulgação de material gráfico que fere a política da plataforma"
         );
-        motivoOption.setValue("Expecifique...");
+        motivoOption.setValue(null);
+        motivoOption.getStyleClass().add("combo-box");
 
         VBox descricaoDenuncia = new VBox(5, motivoDenuncia, motivoOption);
-        grid.add(descricaoDenuncia, 0, 2);
+        grid.add(descricaoDenuncia, 0, 3);
 
 
 
@@ -149,7 +151,11 @@ public class DenunciaFormView {
             String tittuloValue = tituloOption.getValue();
             String motivoValue = motivoOption.getValue();
 
-            if (!participanteValue.isEmpty() && !tittuloValue.isEmpty() && !motivoValue.isEmpty()) {
+            if (participanteValue != null && !participanteValue.isEmpty()
+                    && tittuloValue != null && !tittuloValue.isEmpty()
+                    && motivoValue != null && !motivoValue.isEmpty())
+
+            {
                 Denuncia denuncia = new Denuncia(participanteValue, tittuloValue, motivoValue);
                 DenunciaDAO.registrar(denuncia);
 
@@ -158,12 +164,19 @@ public class DenunciaFormView {
                 Scene scene = new Scene(denunciaView.getDenunciaView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
                 scene.getStylesheets().add(AdmController.class.getResource("/CSS/classAdm.css").toExternalForm());
                 stage.setScene(scene);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Necessário preencher todos os campos!");
+                alert.showAndWait();
             }
-        });
-        grid.add(enviarDenuncia, 0, 3);
 
-        VBox formulario = new VBox(10, titleFormulario, participanteTitulo, descricaoDenuncia, enviarDenuncia);
+        });
+        grid.add(enviarDenuncia, 0, 4);
+
+        VBox formulario = new VBox(5, titleFormulario, participantes, optionTitulo, descricaoDenuncia, enviarDenuncia);
         grid.add(formulario, 0, 0);
+        formulario.setAlignment(Pos.CENTER);
 
         layout.getChildren().add(grid);
     }

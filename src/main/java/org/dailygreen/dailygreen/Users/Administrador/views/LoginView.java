@@ -36,6 +36,7 @@ public class LoginView {
         grid.add(emailLabel, 0, 1);
 
         TextField emailField = new TextField();
+        emailField.getStyleClass().add("text-field");
         grid.add(emailField, 0, 2);
 
         Label passwordLabel = new Label("Digite sua senha:");
@@ -43,6 +44,7 @@ public class LoginView {
         grid.add(passwordLabel, 0, 3);
 
         PasswordField passwordField = new PasswordField();
+        passwordField.getStyleClass().add("password-field");
         grid.add(passwordField, 0, 4);
 
         Hyperlink linkToCadastro = new Hyperlink("Ainda não possui login? Cadastre-se aqui!");
@@ -53,6 +55,7 @@ public class LoginView {
             scene.getStylesheets().add(getClass().getResource("/CSS/classAdm.css").toExternalForm());
             stage.setScene(scene);
         });
+        linkToCadastro.getStyleClass().add("hyperlink");
 
         HBox linkToCadastroBox = new HBox(linkToCadastro);
         linkToCadastroBox.getStyleClass().add("box-link");
@@ -62,6 +65,8 @@ public class LoginView {
         loginButton.setOnAction(_ -> {
             AdmController.login(emailField.getText(), passwordField.getText(), stage);
         });
+        loginButton.getStyleClass().add("button");
+
         HBox buttonBox = new HBox(loginButton);
         buttonBox.getStyleClass().add("button-box");
         grid.add(buttonBox, 0, 6);

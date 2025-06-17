@@ -40,6 +40,17 @@ public class DenunciaDAO {
         return maxId + 1;
     }
 
+    public static void removerPorEmail(String denuncia){
+        List<Denuncia> denuncias = mostrar();
+        denuncias.removeIf(d -> d.getParticipante().equalsIgnoreCase(denuncia));
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(REPORT_FILE))){
+            oos.writeObject(denuncias);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public static List<Denuncia> filtrar(String tipo, String termo){
         final String finalTermo = termo.toLowerCase();
         return mostrar().stream().filter(d -> {

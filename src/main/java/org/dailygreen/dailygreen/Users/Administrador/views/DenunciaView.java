@@ -15,11 +15,11 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.dao.DenunciaDAO;
 import org.dailygreen.dailygreen.Users.Administrador.models.Denuncia;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,9 +49,11 @@ public class DenunciaView {
         ComboBox<String> filtro = new ComboBox<>();
         filtro.getItems().addAll("ID", "Participante", "Titulo", "Motivo", "Data", "Status");
         filtro.setValue("ID");
+        filtro.getStyleClass().add("combo-filtro");
 
         TextField campoPesquisa = new TextField();
         campoPesquisa.setPromptText("Digite o valor que deseja buscar...");
+        campoPesquisa.getStyleClass().add("campo-pesquisa");
 
         Button btnBuscar = new Button("FILTRAR");
         btnBuscar.setOnAction(e -> {
@@ -60,68 +62,33 @@ public class DenunciaView {
             List<Denuncia> filtradas = DenunciaDAO.filtrar(tipo, termo);
             denuncias.setAll(filtradas);
         });
+        btnBuscar.getStyleClass().add("botao-filtrar");
 
-        Button btnFormDenuncia = new Button("FORMULÁRIO");
+        Button btnFormDenuncia = new Button("DENUNCIAR");
         btnFormDenuncia.setOnAction(e -> {
             DenunciaFormView denunciaFormView = new DenunciaFormView(stage);
             Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
             Scene scene = new Scene(denunciaFormView.getDenunciaFormView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
-            scene.getStylesheets().add(getClass().getResource("/CSS/classAdm.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/CSS/formDenuncia.css").toExternalForm());
             stage.setScene(scene);
         });
+        btnFormDenuncia.getStyleClass().add("botao-form-denuncia");
 
         HBox filtros = new HBox(10, filtro, campoPesquisa, btnBuscar, btnFormDenuncia);
+        filtros.getStyleClass().add("filtros-container");
         grid.add(filtros, 0, 0);
-
-
-
-        // HEADER | INSERT DENÚNCIAS
-
-        /*Text mainTitle = new Text("LISTA DE DENUNCIAS");
-        mainTitle.getStyleClass().add("denuncia-title");
-        grid.add(mainTitle, 0, 0,10,1);
-        GridPane.setHalignment(mainTitle, HPos.CENTER);
-        mainTitle.getStyleClass().add("denuncia-title");
-
-        Label tituloLabel = new Label("Motivo da Denúncia:");
-        tituloLabel.getStyleClass().add("label-titulo");
-
-        TextField tituloField = new TextField();
-        tituloField.getStyleClass().add("field-titulo");
-
-        Label motivoLabel = new Label("Descrição da Denúncia:");
-        motivoLabel.getStyleClass().add("label-motivo");
-
-        TextField motivoField = new TextField();
-        motivoField.getStyleClass().add("field-motivo");
-        */
-        /*Button registrarButton = new Button("REGISTRAR");
-        registrarButton.setOnAction(e -> {
-            String tituloValue = tituloField.getText();
-            String motivoValue = motivoField.getText();
-
-            if (!tituloValue.isEmpty() && !motivoValue.isEmpty()){
-                Denuncia denuncia = new Denuncia(tituloValue, motivoValue);
-                DenunciaDAO.registrar(denuncia);
-                denuncias.add(denuncia);
-                tituloField.clear();
-                motivoField.clear();
-            }
-        });
-        grid.add(registrarButton,6,2);
-        registrarButton.getStyleClass().add("button-registrar");*/
 
 
 
         // TABELA DE DENUNCIAS
 
         TableView<Denuncia> tableView = new TableView<>();
-        tableView.getStyleClass().add("table");
+        tableView.getStyleClass().add("table-view-denuncia");
 
         TableColumn<Denuncia, String> id = new TableColumn<>("ID");
         id.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getId().toString()));
 
-        TableColumn<Denuncia, String> participante = new TableColumn<>("PARTICIPANTE");
+        TableColumn<Denuncia, String> participante = new TableColumn<>("EMAIL DO PARTICIPANTE");
         participante.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getParticipante()));
 
         TableColumn<Denuncia, String> titulo = new TableColumn<>("TITULO");
@@ -130,8 +97,13 @@ public class DenunciaView {
         TableColumn<Denuncia, String> motivo = new TableColumn<>("MOTIVO");
         motivo.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getMotivo()));
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         TableColumn<Denuncia, String> data = new TableColumn<>("DATA REGISTRO");
-        data.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getData().toString()));
+        data.setCellValueFactory(cell -> {
+            LocalDate dataOriginal = cell.getValue().getData();
+            String dataFormatada = dataOriginal.format(formatter);
+            return new javafx.beans.property.SimpleStringProperty(dataFormatada);
+        });
 
         TableColumn<Denuncia, String> status = new TableColumn<>("STATUS");
         status.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getStatus()));
@@ -167,7 +139,8 @@ public class DenunciaView {
                     // Se confirmar
                     Optional<ButtonType> escolha = alerta.showAndWait();
                     if (escolha.isPresent() && escolha.get() == confirmar){
-
+                        DenunciaDAO.removerPorEmail(denuncia.getParticipante());
+                        denuncias.remove(denuncia);
                     }
                 });
 
@@ -187,10 +160,15 @@ public class DenunciaView {
 
                     Optional<ButtonType> escolha = alerta.showAndWait();
                     if (escolha.isPresent() && escolha.get() == confirmar){
-                        denuncia.setStatus("Suspenso");
-                        denuncia.setSuspenso(true);
-
+                        String email = denuncia.getParticipante();
                         List<Denuncia> denuncias = new ArrayList<>(tableView.getItems());
+                        for (Denuncia d : denuncias){
+                            if (d.getParticipante().equalsIgnoreCase(email)){
+                                d.setStatus("Suspenso");
+                                d.setSuspenso(true);
+                            }
+                        }
+
                         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DenunciaDAO.REPORT_FILE))){
                             oos.writeObject(denuncias);
                         } catch (IOException e){
@@ -200,6 +178,10 @@ public class DenunciaView {
                         tableView.refresh();
                     }
                 });
+
+                delete.setId("delete");
+                suspend.setId("suspend");
+                ban.setId("ban");
 
 
                 // BOTÃO BANIR
@@ -217,10 +199,15 @@ public class DenunciaView {
 
                     Optional<ButtonType> escolha = alerta.showAndWait();
                     if (escolha.isPresent() && escolha.get() == confirmar){
-                        denuncia.setStatus("Banido");
-                        denuncia.setSuspenso(true);
-
+                        String email = denuncia.getParticipante();
                         List<Denuncia> denuncias = new ArrayList<>(tableView.getItems());
+                        for (Denuncia d : denuncias){
+                            if (d.getParticipante().equalsIgnoreCase(email)){
+                                d.setStatus("Banido");
+                                d.setSuspenso(true);
+                            }
+                        }
+
                         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DenunciaDAO.REPORT_FILE))){
                             oos.writeObject(denuncias);
                         } catch (IOException e){
@@ -252,7 +239,7 @@ public class DenunciaView {
         // ADICIONANDO ITENS A TABELA E COLOCANDO ELA NO GRID
 
         tableView.getColumns().addAll(id, participante, titulo, motivo, data, status, buttons);
-        grid.add(tableView, 0, 10,10,10);
+        grid.add(tableView, 0, 1);
 
         layout.getChildren().add(grid);
     }

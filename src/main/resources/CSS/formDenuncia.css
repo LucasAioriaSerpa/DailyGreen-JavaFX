@@ -1,0 +1,105 @@
+/* DENUNCIA FORM VIEW */
+
+.denuncia-form-view {
+    -fx-background-color: #EDF4ED;
+    -fx-padding: 30;
+    -fx-spacing: 15;
+    -fx-alignment: center;
+}
+
+.denuncia-form {
+    -fx-vgap: 15;
+    -fx-hgap: 20;
+    -fx-padding: 20;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0.1, 0, 3);
+}
+
+/* Título do formulário */
+.denuncia-form .label {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #51291E;
+    -fx-padding: 0 0 15 0;
+}
+
+/* Labels dos campos */
+.participante-denunciado,
+.denuncia-form-title {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #51291E;
+}
+
+/* ComboBox estilizado */
+.combo-box {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #79B791;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-padding: 8;
+    -fx-pref-width: 300;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #79B791;
+    -fx-background-radius: 0 5 5 0;
+}
+
+.combo-box .arrow {
+    -fx-background-color: white;
+}
+
+.combo-box .list-cell {
+    -fx-background: white;
+    -fx-background-color: white;
+    -fx-text-fill: #51291E;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-padding: 3 8;
+}
+
+.combo-box .list-view {
+    -fx-background-color: white;
+    -fx-border-color: #79B791;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.1, 0, 2);
+}
+
+.combo-box .list-cell:filled:hover {
+    -fx-background-color: #E1EFE4;
+}
+
+/* Botão Enviar */
+.button {
+    -fx-background-color: #79B791;
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 25;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: #5A9E72;
+}
+
+/* Layout dos campos */
+.vbox, .hbox {
+    -fx-spacing: 8;
+}
+
+/* Ajuste para os campos lado a lado */
+.participante-titulo {
+    -fx-spacing: 20;
+}
