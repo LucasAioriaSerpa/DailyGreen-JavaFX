@@ -108,6 +108,7 @@ public class PostagensView {
         Label descriptionLabel = new Label("Descrição:");
         TextArea descriptionArea = new TextArea();
         descriptionArea.setPromptText("Digite a descrição da postagem");
+        descriptionArea.setWrapText(true);
         descriptionArea.setMaxWidth(400);
         descriptionArea.setPrefRowCount(4);
         Button submitButton = new Button("Postar");
@@ -152,6 +153,7 @@ public class PostagensView {
             Label descriptionLabel = new Label(post.getDescricao());
             descriptionLabel.getStyleClass().add("post-description");
             descriptionLabel.setWrapText(true);
+            descriptionLabel.setMaxWidth(360);
             System.out.println(accountParticipante.getID());
             System.out.println(post.getId_autor());
             if (post.getId_autor() == accountParticipante.getID()) {

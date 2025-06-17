@@ -6,7 +6,7 @@
 
     <groupId>org.dailygreen</groupId>
     <artifactId>DailyGreen</artifactId>
-    <version>0.1.0</version>
+    <version>0.12.12</version>
     <name>dailygreen</name>
 
     <properties>
