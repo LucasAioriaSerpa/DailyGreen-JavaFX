@@ -6,8 +6,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.Users.util.DATuser;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class PerfilViewParticipante {
     private BorderPane layout;
@@ -17,6 +20,9 @@ public class PerfilViewParticipante {
         this.participante = participante;
         this.layout = new BorderPane();
         layout.getStyleClass().add("main-screen");
+        layout.getStylesheets().add(Objects.requireNonNull(
+                getClass().getResource("/CSS/Participante.css")).toExternalForm()
+        );
         criarComponentes(stage);
     }
 
@@ -97,10 +103,16 @@ public class PerfilViewParticipante {
         ArrayList<Participante> participantes = ArquivoParticipante.lerLista();
         participantes.removeIf(p -> p.getEmail().equals(participante.getEmail()));
         ArquivoParticipante.salvarLista(participantes);
+        User user = DATuser.getUser();
+        user.setLogged(false);
+        user.setAccountParticipante(null);
         voltarParaLogin(stage);
     }
 
     private void voltarParaLogin(Stage stage) {
+        User user = DATuser.getUser();
+        user.setLogged(false);
+        user.setAccountParticipante(null);
         LoginViewParticipante loginView = new LoginViewParticipante(stage);
         stage.getScene().setRoot(loginView.getView());
     }

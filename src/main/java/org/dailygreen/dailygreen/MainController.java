@@ -2,44 +2,67 @@ package org.dailygreen.dailygreen;
 
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.MainAdm;
+import org.dailygreen.dailygreen.Users.Participante.EditarPerfilViewParticipante;
+import org.dailygreen.dailygreen.Users.Participante.Participante;
 import org.dailygreen.dailygreen.Users.Participante.ParticipanteMain;
+import org.dailygreen.dailygreen.Users.Participante.PerfilViewParticipante;
 import org.dailygreen.dailygreen.Users.User;
 import org.dailygreen.dailygreen.Users.util.DATuser;
 
 import java.io.IOException;
 
 public class MainController {
-
-    public static void btnAdm(Stage stage) {
+    private static User user;
+    public static void btnAdmin(Stage stage) {
         try {
-            User user = DATuser.getUser();
-            user.setType("administrador");
-            DATuser.setUser(user);
-            MainAdm adm = new MainAdm();
-            adm.start(stage);
+            inicializarUsuario("administrador");
+            iniciarInterfaceAdministrador(stage);
         } catch (IOException ex) {
-            User user = DATuser.getUser();
-            user.setType("NONE");
-            DATuser.setUser(user);
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
+            tratarErro(ex, "NONE");
         }
     }
 
     public static void btnUser(Stage stage) {
         try {
-            User user = DATuser.getUser();
-            user.setType("participante");
-            DATuser.setUser(user);
-            ParticipanteMain userPmain = new ParticipanteMain();
-            userPmain.start(stage);
+            inicializarUsuario("participante");
+            user = DATuser.getUser();
+            if (user.isLogged()) {
+                inicializarPerfil(stage, user.getAccountParticipante());
+                return;
+            }
+            iniciarInterfaceParticipante(stage);
         } catch (Exception e) {
-            User user = DATuser.getUser();
-            user.setType("NONE");
-            DATuser.setUser(user);
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            tratarErro(e, "NONE");
         }
+    }
+
+    private static void inicializarUsuario(String tipo) {
+        User user = DATuser.getUser();
+        user.setType(tipo);
+        DATuser.setUser(user);
+    }
+
+    private static void tratarErro(Exception ex, String tipoUsuario) {
+        User user = DATuser.getUser();
+        user.setType(tipoUsuario);
+        DATuser.setUser(user);
+        ex.printStackTrace();
+        throw new RuntimeException(ex);
+    }
+
+    private static void iniciarInterfaceAdministrador(Stage stage) throws IOException {
+        MainAdm adm = new MainAdm();
+        adm.start(stage);
+    }
+
+    private static void iniciarInterfaceParticipante(Stage stage) {
+        ParticipanteMain userPmain = new ParticipanteMain();
+        userPmain.start(stage);
+    }
+
+    private static void inicializarPerfil(Stage stage, Participante participante) {
+        PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participante);
+        stage.getScene().setRoot(perfilView.getView());
     }
 
 }

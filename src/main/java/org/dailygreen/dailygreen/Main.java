@@ -7,6 +7,8 @@ import javax.crypto.SecretKey;
 
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
+import org.dailygreen.dailygreen.Users.Administrador.MainAdm;
+import org.dailygreen.dailygreen.Users.Participante.ParticipanteMain;
 import org.dailygreen.dailygreen.Users.User;
 import org.dailygreen.dailygreen.Users.util.DATuser;
 import org.dailygreen.dailygreen.util.Criptografia;
@@ -25,7 +27,7 @@ public class Main extends Application {
         Button btnAdm = new Button("Administrador");
         btnAdm.getStyleClass().add("btn-adm");
         btnAdm.getStyleClass().add("btn");
-        btnAdm.setOnAction(_-> {MainController.btnAdm(stage);});
+        btnAdm.setOnAction(_-> {MainController.btnAdmin(stage);});
         Button btnUser = new Button("Usuario");
         btnUser.getStyleClass().add("btn-user");
         btnUser.getStyleClass().add("btn");
@@ -90,14 +92,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         initializeSecurityKey();
-//        if (initializeUser()) {
-//            User user = DATuser.getUser();
-//            switch (user.getType()) {
-//                case "administrador" -> MainController.btnAdm(new Stage());
-//                case "participante" -> MainController.btnUser(new Stage());
-//                case "NONE" -> System.out.println("No user logged in, showing main page.");
-//            }
-//        }
+        initializeUser();
         launch(args);
     }
 }

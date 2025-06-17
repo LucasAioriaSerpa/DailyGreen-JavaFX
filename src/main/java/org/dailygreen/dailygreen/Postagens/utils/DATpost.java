@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -100,6 +101,16 @@ public class DATpost {
         posts.add(post);
         salvarLista(posts);
         LOGGER.info("Post adicionado com sucesso. ID: " + post.getID());
+    }
+
+    public static void atualizarPost(long id, Post novoPost) {
+        List<Post> posts = lerLista();
+        Optional<Post> postOpt = posts.stream().filter(p -> p.getID() == id).findFirst();
+        if (postOpt.isPresent()) {
+            int idx = posts.indexOf(postOpt.get());
+            posts.set(idx, novoPost);
+            salvarLista(posts);
+        }
     }
 
     public static void removerPost(long id) {

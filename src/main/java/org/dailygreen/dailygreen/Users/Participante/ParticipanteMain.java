@@ -14,25 +14,20 @@ public class ParticipanteMain extends Application {
     public void start(Stage primaryStage) {
         try {
             LoginViewParticipante loginView = new LoginViewParticipante(primaryStage);
-
             Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
             Scene scene = new Scene(
                     loginView.getView(),
                     (int)(screenBounds.getWidth() / 2),
                     (int)(screenBounds.getHeight() / 2)
             );
-
-            // Adiciona o CSS
             String cssPath = Objects.requireNonNull(
                     getClass().getResource("/CSS/participante.css"),
                     "Arquivo CSS não encontrado"
             ).toExternalForm();
             scene.getStylesheets().add(cssPath);
-
             primaryStage.setTitle("DailyGreen - Login Participante");
             primaryStage.setScene(scene);
             primaryStage.show();
-
         } catch (Exception e) {
             System.err.println("Erro ao carregar a interface: " + e.getMessage());
             e.printStackTrace();

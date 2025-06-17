@@ -10,6 +10,8 @@ import org.dailygreen.dailygreen.Users.User;
 import org.dailygreen.dailygreen.Users.util.DATuser;
 import org.dailygreen.dailygreen.util.Criptografia;
 
+import java.util.Objects;
+
 public class LoginViewParticipante {
     private VBox layout;
     private Stage stage;
@@ -122,6 +124,10 @@ public class LoginViewParticipante {
     }
 
     private void abrirPerfil(Participante participante) {
+        User user = DATuser.getUser();
+        user.setLogged(true);
+        user.setAccountParticipante(participante);
+        DATuser.setUser(user);
         PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participante);
         stage.getScene().setRoot(perfilView.getView());
     }
