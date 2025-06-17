@@ -9,9 +9,9 @@
 .screen {
     -fx-alignment: center;
     -fx-background-color: #EDF4ED;
-    -fx-padding: 30;
-    -fx-hgap: 15;
-    -fx-vgap: 15;
+    -fx-padding: 25;
+    -fx-hgap: 7;
+    -fx-vgap: 7;
     -fx-border-radius: 15;
     -fx-background-radius: 15;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.1, 0, 5);
@@ -151,7 +151,7 @@
     -fx-border-radius: 5;
 }
 
-/* Campo de pesquisa (mais escuro como solicitado) */
+/* Campo de pesquisa */
 .campo-pesquisa {
     -fx-pref-width: 300;
     -fx-padding: 8;
@@ -236,7 +236,7 @@
 }
 
 .table-view-denuncia .table-row-cell:selected {
-    -fx-background-color: #E1EFE4;
+    -fx-background-color: #79b791;
     -fx-text-fill: #51291E;
 }
 
