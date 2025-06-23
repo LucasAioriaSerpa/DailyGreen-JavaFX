@@ -149,7 +149,13 @@ public class TelaEventosOrganizacao {
             }
         });
 
-        VBox form = new VBox(10, nomeField, descricaoArea, dataField, btnSalvar, btnExcluir);
+        Button btnVoltar = new Button("Voltar");
+        btnVoltar.getStyleClass().add("button");
+        btnVoltar.setOnAction(e -> {
+            new TelaOrganizador(stage, email); // volta para a tela principal do organizador
+        });
+
+        VBox form = new VBox(10, nomeField, descricaoArea, dataField, btnSalvar, btnExcluir, btnVoltar);
         form.setAlignment(Pos.CENTER_LEFT);
         form.getStyleClass().add("center-section");
 

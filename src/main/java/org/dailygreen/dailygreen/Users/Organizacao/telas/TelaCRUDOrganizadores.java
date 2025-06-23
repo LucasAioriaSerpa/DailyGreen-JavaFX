@@ -113,6 +113,7 @@ public class TelaCRUDOrganizadores {
                 txtCnpj.setText(newSelection.getCnpj());
             }
         });
+
     }
 
     private void mostrarLogin() {
@@ -125,8 +126,18 @@ public class TelaCRUDOrganizadores {
         formLogin.getStyleClass().add("center-section");
         formLogin.setAlignment(Pos.CENTER);
 
-        layout.getChildren().addAll(titulo, formLogin);
+        // Botão Voltar
+        Button btnVoltar = new Button("Voltar");
+        btnVoltar.getStyleClass().add("button");
+        btnVoltar.setOnAction(e -> new TelaOrganizador(stage)); // volta para tela principal
+
+        HBox boxVoltar = new HBox(btnVoltar);
+        boxVoltar.setAlignment(Pos.CENTER);
+        boxVoltar.setPadding(new Insets(10, 0, 0, 0));
+
+        layout.getChildren().addAll(titulo, formLogin, boxVoltar);
     }
+
 
     private void mostrarCRUD() {
         layout.getChildren().clear();
@@ -137,11 +148,17 @@ public class TelaCRUDOrganizadores {
         HBox botoes = new HBox(10, btnAtualizar, btnExcluir);
         botoes.setAlignment(Pos.CENTER);
 
-        VBox form = new VBox(10, txtEmail, txtSenha, txtCnpj, botoes);
+        // Botão Voltar
+        Button btnVoltar = new Button("Voltar");
+        btnVoltar.getStyleClass().add("button");
+        btnVoltar.setOnAction(e -> mostrarLogin()); // ou outro método, se desejar voltar para outra tela
+
+        VBox form = new VBox(10, txtEmail, txtSenha, txtCnpj, botoes, btnVoltar);
         form.getStyleClass().add("center-section");
 
         layout.getChildren().addAll(titulo, form, tabela);
     }
+
 
     private void fazerLogin() {
         String email = txtEmail.getText().trim();

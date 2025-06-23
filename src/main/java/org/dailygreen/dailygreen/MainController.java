@@ -16,6 +16,13 @@ import java.io.IOException;
 public class MainController {
     private static User user;
 
+
+    public static void mostrarTelaPrincipal(Stage stage) {
+        // Reabra a tela principal aqui
+        new Main().start(stage);
+    }
+
+
     public static void btnAdmin(Stage stage) {
         try {
             inicializarUsuario("administrador");

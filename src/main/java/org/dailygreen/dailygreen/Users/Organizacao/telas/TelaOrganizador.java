@@ -107,7 +107,11 @@ public class TelaOrganizador {
         Button btnGerenciar = new Button("Listar Organizadores");
         btnGerenciar.setOnAction(e -> MainController.btnGerenciarOrganizadores(stage, email));
 
-        botoes.getChildren().addAll(btnLogin, btnCadastro, btnGerenciar);
+        Button btnVoltar = new Button("Voltar");
+        btnVoltar.setOnAction(e -> MainController.mostrarTelaPrincipal(stage));
+
+
+        botoes.getChildren().addAll(btnLogin, btnCadastro, btnGerenciar, btnVoltar);
 
         card.getChildren().addAll(titulo, grid, lblStatus, botoes);
         layout.getChildren().add(card);
