@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,7 +20,7 @@ public class TelaEventosOrganizacao {
     private VBox layout;
     private ObservableList<EventoOrganizacao> eventos;
     private Stage stage;
-    private String eventoFilePath;  // caminho do arquivo específico do usuário
+    private String eventoFilePath;
     private Scene scene;
 
     public TelaEventosOrganizacao(Stage stage, String email) {
@@ -38,17 +37,15 @@ public class TelaEventosOrganizacao {
 
         montarComponentes();
 
-        // Criar a scene e aplicar CSS
         scene = new Scene(layout, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/CSS/classPostagem.css").toExternalForm());
 
-        // Setar a scene no stage
         stage.setScene(scene);
         stage.show();
     }
 
     private void montarComponentes() {
-        Label tituloLabel = new Label("Criar Novo Evento");
+        Label tituloLabel = new Label("Criar ou Editar Evento");
         tituloLabel.getStyleClass().add("label");
         tituloLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
@@ -65,8 +62,8 @@ public class TelaEventosOrganizacao {
         dataField.setPromptText("Data (ex: 25/06/2025)");
         dataField.getStyleClass().add("text-field");
 
-        Button btnPostar = new Button("Postar Evento");
-        btnPostar.getStyleClass().add("button");
+        Button btnSalvar = new Button("Postar Evento");
+        btnSalvar.getStyleClass().add("button");
 
         TableView<EventoOrganizacao> tabela = new TableView<>();
         tabela.setItems(eventos);
@@ -83,7 +80,10 @@ public class TelaEventosOrganizacao {
         tabela.getColumns().addAll(colNome, colDesc, colData);
         tabela.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        btnPostar.setOnAction(e -> {
+        // Variável de controle de edição
+        final EventoOrganizacao[] eventoEditando = {null};
+
+        btnSalvar.setOnAction(e -> {
             String nome = nomeField.getText();
             String descricao = descricaoArea.getText();
             String data = dataField.getText();
@@ -93,8 +93,20 @@ public class TelaEventosOrganizacao {
                 return;
             }
 
-            EventoOrganizacao novo = new EventoOrganizacao(nome, descricao, data);
-            eventos.add(novo);
+            if (eventoEditando[0] == null) {
+                // Criar novo evento
+                EventoOrganizacao novo = new EventoOrganizacao(nome, descricao, data);
+                eventos.add(novo);
+            } else {
+                // Editar evento existente
+                eventoEditando[0].setNome(nome);
+                eventoEditando[0].setDescricao(descricao);
+                eventoEditando[0].setData(data);
+                tabela.refresh();
+                eventoEditando[0] = null;
+                btnSalvar.setText("Postar Evento");
+            }
+
             salvarEventos();
 
             nomeField.clear();
@@ -102,12 +114,61 @@ public class TelaEventosOrganizacao {
             dataField.clear();
         });
 
-        VBox form = new VBox(10, nomeField, descricaoArea, dataField, btnPostar);
+        // Duplo clique para editar
+        tabela.setRowFactory(tv -> {
+            TableRow<EventoOrganizacao> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    EventoOrganizacao eventoSelecionado = row.getItem();
+                    nomeField.setText(eventoSelecionado.getNome());
+                    descricaoArea.setText(eventoSelecionado.getDescricao());
+                    dataField.setText(eventoSelecionado.getData());
+                    btnSalvar.setText("Salvar Alterações");
+                    eventoEditando[0] = eventoSelecionado;
+                }
+            });
+            return row;
+        });
+
+        // Botão excluir
+        Button btnExcluir = new Button("Excluir Evento Selecionado");
+        btnExcluir.getStyleClass().add("button-red");
+        btnExcluir.setOnAction(e -> {
+            EventoOrganizacao selecionado = tabela.getSelectionModel().getSelectedItem();
+            if (selecionado != null) {
+                Alert confirmacao = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmacao.setTitle("Confirmar Exclusão");
+                confirmacao.setHeaderText(null);
+                confirmacao.setContentText("Deseja realmente excluir este evento?");
+                confirmacao.showAndWait().ifPresent(resp -> {
+                    if (resp == ButtonType.OK) {
+                        eventos.remove(selecionado);
+                        salvarEventos();
+                    }
+                });
+            }
+        });
+
+        VBox form = new VBox(10, nomeField, descricaoArea, dataField, btnSalvar, btnExcluir);
         form.setAlignment(Pos.CENTER_LEFT);
         form.getStyleClass().add("center-section");
 
         layout.getStyleClass().add("postagens-view");
         layout.getChildren().addAll(tituloLabel, form, new Separator(), new Label("Eventos Criados:"), tabela);
+    }
+
+
+    private void editarEvento(EventoOrganizacao evento) {
+        TextInputDialog dialog = new TextInputDialog(evento.getNome());
+        dialog.setTitle("Editar Evento");
+        dialog.setHeaderText("Editar nome do evento");
+        dialog.setContentText("Novo nome:");
+
+        dialog.showAndWait().ifPresent(novoNome -> {
+            evento.setNome(novoNome);
+            salvarEventos();
+            eventos.setAll(carregarEventos());
+        });
     }
 
     private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
@@ -120,10 +181,7 @@ public class TelaEventosOrganizacao {
 
     private void salvarEventos() {
         File file = new File(eventoFilePath);
-        file.getParentFile().mkdirs(); // Cria pasta data/ se não existir
-
-        System.out.println("Salvando evento em: " + file.getAbsolutePath());
-
+        file.getParentFile().mkdirs();
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(new ArrayList<>(eventos));
         } catch (IOException e) {
@@ -133,12 +191,7 @@ public class TelaEventosOrganizacao {
 
     private List<EventoOrganizacao> carregarEventos() {
         File file = new File(eventoFilePath);
-        if (!file.exists()) {
-            return new ArrayList<>();
-        }
-
-        System.out.println("Carregando eventos de: " + file.getAbsolutePath());
-
+        if (!file.exists()) return new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             return (List<EventoOrganizacao>) ois.readObject();
         } catch (Exception e) {
@@ -150,5 +203,4 @@ public class TelaEventosOrganizacao {
     public VBox getView() {
         return layout;
     }
-
 }

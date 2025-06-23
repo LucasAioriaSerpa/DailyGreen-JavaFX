@@ -25,6 +25,19 @@ public class EventoOrganizacao implements Serializable {
         return data;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+
     @Override
     public String toString() {
         return "Evento: " + nome + " | " + descricao + " | Data: " + data;
