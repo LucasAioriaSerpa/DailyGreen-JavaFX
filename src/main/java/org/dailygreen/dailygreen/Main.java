@@ -43,6 +43,11 @@ public class Main extends Application {
         btnUser.getStyleClass().add("btn-user");
         btnUser.getStyleClass().add("btn");
         btnUser.setOnAction(_ -> {MainController.btnUser(stage);});
+        Button btnOrganizador = new Button("Organizador");
+        btnOrganizador.getStyleClass().add("btn-organizador");
+        btnOrganizador.getStyleClass().add("btn");
+        btnOrganizador.setOnAction(_ -> {MainController.btnOrganizador(stage);});
+
         Image image = new Image(Objects.requireNonNull(
                 getClass().getResource("/IMAGES/BACKGROUNDS/florest-1.jpeg")).toExternalForm()
         );
@@ -56,7 +61,7 @@ public class Main extends Application {
         VBox root = new VBox(10, logo);
         root.getStyleClass().add("root");
         root.setBackground(new Background(bg));
-        HBox btnsBox = new HBox(10, btnAdm, btnUser);
+        HBox btnsBox = new HBox(10, btnAdm, btnUser, btnOrganizador);
         btnsBox.getStyleClass().add("btns");
         root.getChildren().add(btnsBox);
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();

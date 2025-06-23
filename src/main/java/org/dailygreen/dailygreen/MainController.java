@@ -1,7 +1,9 @@
 package org.dailygreen.dailygreen;
 
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.MainAdm;
+import org.dailygreen.dailygreen.Users.Organizacao.telas.TelaOrganizador;
 import org.dailygreen.dailygreen.Users.Participante.EditarPerfilViewParticipante;
 import org.dailygreen.dailygreen.Users.Participante.Participante;
 import org.dailygreen.dailygreen.Users.Participante.ParticipanteMain;
@@ -35,6 +37,24 @@ public class MainController {
             tratarErro(e, "NONE");
         }
     }
+    public static void btnOrganizador(Stage stage) {
+        try {
+            inicializarUsuario("organizador");
+
+            // Em vez de instanciar uma Application, só carregamos a view
+            TelaOrganizador tela = new TelaOrganizador(stage);
+            Scene scene = new Scene(tela.getView(), 600, 400);
+
+            stage.setTitle("Login - Organizador");
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (Exception e) {
+            tratarErro(e, "organizador");
+        }
+    }
+
+
 
     private static void inicializarUsuario(String tipo) {
         User user = DATuser.getUser();
@@ -65,4 +85,9 @@ public class MainController {
         stage.getScene().setRoot(perfilView.getView());
     }
 
-}
+    }
+
+
+
+
+
