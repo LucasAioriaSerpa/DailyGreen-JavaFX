@@ -2,12 +2,12 @@ package org.dailygreen.dailygreen.Users.Organizacao.telas;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.dailygreen.dailygreen.MainController;
 import org.dailygreen.dailygreen.Users.Organizacao.model.Organizador;
 
 import java.io.*;
@@ -18,6 +18,7 @@ public class TelaOrganizador {
     private VBox layout;
     private TextField txtEmail;
     private PasswordField txtSenha;
+    private TextField txtCnpj;
     private Label lblStatus;
     private final String FILE_PATH = "resources/db_dailygreen/organizadores.dat";
     private Stage stage;
@@ -44,7 +45,6 @@ public class TelaOrganizador {
         return layout;
     }
 
-
     private void criarComponentes() {
         VBox card = new VBox(20);
         card.getStyleClass().add("screen");
@@ -61,38 +61,40 @@ public class TelaOrganizador {
         grid.setAlignment(Pos.CENTER);
 
         Label lblEmail = new Label("Email:");
-        lblEmail.getStyleClass().add("label-email");
         txtEmail = new TextField();
         txtEmail.setPromptText("Digite seu email");
-        txtEmail.getStyleClass().add("text-field");
 
         Label lblSenha = new Label("Senha:");
-        lblSenha.getStyleClass().add("label-password");
         txtSenha = new PasswordField();
         txtSenha.setPromptText("Digite sua senha");
-        txtSenha.getStyleClass().add("password-field");
+
+        Label lblCnpj = new Label("CNPJ:");
+        txtCnpj = new TextField();
+        txtCnpj.setPromptText("Digite seu CNPJ");
 
         grid.add(lblEmail, 0, 0);
         grid.add(txtEmail, 1, 0);
         grid.add(lblSenha, 0, 1);
         grid.add(txtSenha, 1, 1);
+        grid.add(lblCnpj, 0, 2);
+        grid.add(txtCnpj, 1, 2);
 
         lblStatus = new Label();
         lblStatus.setWrapText(true);
 
         HBox botoes = new HBox(15);
         botoes.setAlignment(Pos.CENTER);
-        botoes.getStyleClass().add("button-box");
 
         Button btnLogin = new Button("Login");
-        btnLogin.getStyleClass().add("button-box");
         btnLogin.setOnAction(e -> fazerLogin());
 
         Button btnCadastro = new Button("Cadastrar");
-        btnCadastro.getStyleClass().add("button-box");
         btnCadastro.setOnAction(e -> fazerCadastro());
 
-        botoes.getChildren().addAll(btnLogin, btnCadastro);
+        Button btnGerenciar = new Button("Listar Organizadores");
+        btnGerenciar.setOnAction(e -> MainController.btnGerenciarOrganizadores(stage));
+
+        botoes.getChildren().addAll(btnLogin, btnCadastro, btnGerenciar);
 
         card.getChildren().addAll(titulo, grid, lblStatus, botoes);
         layout.getChildren().add(card);
@@ -117,15 +119,14 @@ public class TelaOrganizador {
         }
 
         mostrarErro("Email ou senha inválidos.");
-
-
     }
 
     private void fazerCadastro() {
         String email = txtEmail.getText();
         String senha = txtSenha.getText();
+        String cnpj = txtCnpj.getText();
 
-        if (email.isEmpty() || senha.isEmpty()) {
+        if (email.isEmpty() || senha.isEmpty() || cnpj.isEmpty()) {
             mostrarErro("Preencha todos os campos.");
             return;
         }
@@ -138,7 +139,7 @@ public class TelaOrganizador {
             }
         }
 
-        lista.add(new Organizador(email, senha));
+        lista.add(new Organizador(email, senha, cnpj));
         salvarOrganizadores(lista);
         mostrarSucesso("Cadastro realizado com sucesso!");
     }
@@ -169,12 +170,11 @@ public class TelaOrganizador {
 
     private void salvarOrganizadores(ArrayList<Organizador> lista) {
         File file = new File(FILE_PATH);
-        file.getParentFile().mkdirs(); // Garante que a pasta exista
+        file.getParentFile().mkdirs();
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(lista);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }

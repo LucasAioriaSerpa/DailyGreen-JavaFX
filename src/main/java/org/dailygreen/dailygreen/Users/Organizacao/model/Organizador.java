@@ -3,29 +3,22 @@ package org.dailygreen.dailygreen.Users.Organizacao.model;
 import java.io.Serializable;
 
 public class Organizador implements Serializable {
-    private static final long serialVersionUID = 1L;
-
     private String email;
     private String senha;
+    private String cnpj;
 
-    public Organizador(String email, String senha) {
+    public Organizador(String email, String senha, String cnpj) {
         this.email = email;
         this.senha = senha;
+        this.cnpj = cnpj;
     }
 
-    public String getEmail() {
-        return email;
-    }
+    // Getters e setters
+    public String getEmail() { return email; }
+    public String getSenha() { return senha; }
+    public String getCnpj() { return cnpj; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+    public void setEmail(String email) { this.email = email; }
+    public void setSenha(String senha) { this.senha = senha; }
+    public void setCnpj(String cnpj) { this.cnpj = cnpj; }
 }

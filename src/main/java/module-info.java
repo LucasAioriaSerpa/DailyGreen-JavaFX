@@ -13,6 +13,8 @@ module org.dailygreen.dailygreen {
 
 
     opens org.dailygreen.dailygreen to javafx.graphics;
+    opens org.dailygreen.dailygreen.Users.Organizacao.model to javafx.base;
+    opens org.dailygreen.dailygreen.Users.Organizacao.telas to javafx.base;
     opens org.dailygreen.dailygreen.Users.Organizacao.util to javafx.base;
     opens org.dailygreen.dailygreen.Users.Administrador to javafx.graphics;
     opens org.dailygreen.dailygreen.Users.Participante to javafx.graphics;

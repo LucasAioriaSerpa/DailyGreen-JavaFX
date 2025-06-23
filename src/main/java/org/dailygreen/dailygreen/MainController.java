@@ -3,6 +3,7 @@ package org.dailygreen.dailygreen;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.MainAdm;
+import org.dailygreen.dailygreen.Users.Organizacao.telas.TelaCRUDOrganizadores;
 import org.dailygreen.dailygreen.Users.Organizacao.telas.TelaOrganizador;
 import org.dailygreen.dailygreen.Users.Participante.EditarPerfilViewParticipante;
 import org.dailygreen.dailygreen.Users.Participante.Participante;
@@ -53,6 +54,14 @@ public class MainController {
             tratarErro(e, "organizador");
         }
     }
+    public static void btnGerenciarOrganizadores(Stage stage) {
+        try {
+            new TelaCRUDOrganizadores(stage); // a tela já monta e aplica o scene
+        } catch (Exception e) {
+            tratarErro(e, "administrador"); // ou outro tipo, se quiser marcar
+        }
+    }
+
 
 
 
