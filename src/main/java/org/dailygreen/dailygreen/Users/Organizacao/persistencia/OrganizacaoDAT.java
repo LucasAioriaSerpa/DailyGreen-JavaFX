@@ -1,5 +1,7 @@
 package org.dailygreen.dailygreen.Users.Organizacao.persistencia;
 
+import org.dailygreen.dailygreen.Users.Organizacao.model.Organizador;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,28 @@ public class OrganizacaoDAT {
         salvarDados(organizacoes);
         return true;
     }
+    public static List<Organizador> lerOrganizadores() {
+        File file = new File("resources/db_dailygreen/organizadores.dat");
+        if (!file.exists()) return new ArrayList<>();
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            return (List<Organizador>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public static void salvarOrganizadores(List<Organizador> lista) {
+        File file = new File("resources/db_dailygreen/organizadores.dat");
+        file.getParentFile().mkdirs();
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            oos.writeObject(lista);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static boolean fazerLogin(String email, String senha) {
         List<String[]> organizacoes = lerDados();

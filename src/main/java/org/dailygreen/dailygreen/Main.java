@@ -46,8 +46,9 @@ public class Main extends Application {
         Button btnOrganizador = new Button("Organizador");
         btnOrganizador.getStyleClass().add("btn-organizador");
         btnOrganizador.getStyleClass().add("btn");
-        btnOrganizador.setOnAction(_ -> {MainController.btnOrganizador(stage);});
-
+        btnOrganizador.setOnAction(_ -> {
+            MainController.btnOrganizadorLogin(stage);
+        });
         Image image = new Image(Objects.requireNonNull(
                 getClass().getResource("/IMAGES/BACKGROUNDS/florest-1.jpeg")).toExternalForm()
         );

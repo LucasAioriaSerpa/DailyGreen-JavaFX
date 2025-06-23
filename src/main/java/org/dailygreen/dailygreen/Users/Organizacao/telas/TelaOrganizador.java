@@ -9,12 +9,15 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.MainController;
 import org.dailygreen.dailygreen.Users.Organizacao.model.Organizador;
+import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.Users.util.DATuser;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class TelaOrganizador {
 
+    private final String email;
     private VBox layout;
     private TextField txtEmail;
     private PasswordField txtSenha;
@@ -25,7 +28,14 @@ public class TelaOrganizador {
     private Scene scene;
 
     public TelaOrganizador(Stage stage) {
+        this(stage, ""); // email vazio significa que está na tela de login
+    }
+
+    public TelaOrganizador(Stage stage, String email) {
         this.stage = stage;
+        this.email = email;
+
+
 
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
@@ -39,6 +49,9 @@ public class TelaOrganizador {
         stage.setTitle("Login Organizador");
         stage.setScene(scene);
         stage.show();
+    }
+    public String getEmail() {
+        return this.email;
     }
 
     public VBox getView() {
@@ -92,7 +105,7 @@ public class TelaOrganizador {
         btnCadastro.setOnAction(e -> fazerCadastro());
 
         Button btnGerenciar = new Button("Listar Organizadores");
-        btnGerenciar.setOnAction(e -> MainController.btnGerenciarOrganizadores(stage));
+        btnGerenciar.setOnAction(e -> MainController.btnGerenciarOrganizadores(stage, email));
 
         botoes.getChildren().addAll(btnLogin, btnCadastro, btnGerenciar);
 
@@ -113,6 +126,12 @@ public class TelaOrganizador {
         for (Organizador org : lista) {
             if (org.getEmail().equals(email) && org.getSenha().equals(senha)) {
                 mostrarSucesso("Login bem-sucedido!");
+                // Salvar email no objeto User para acesso global
+                User user = DATuser.getUser();
+                user.setType("organizador");
+                user.setEmailOrganizador(email); // você precisa criar esse método
+                DATuser.setUser(user);
+
                 new TelaEventosOrganizacao(stage, email);
                 return;
             }
@@ -120,6 +139,7 @@ public class TelaOrganizador {
 
         mostrarErro("Email ou senha inválidos.");
     }
+
 
     private void fazerCadastro() {
         String email = txtEmail.getText();

@@ -9,7 +9,7 @@ public class MainOrganizador extends Application {
 
     @Override
     public void start(Stage stage) {
-        TelaOrganizador tela = new TelaOrganizador(stage);
+        TelaOrganizador tela = new TelaOrganizador(stage, ""); // email vazio para iniciar
 
         Scene scene = new Scene(tela.getView(), 600, 400);
 

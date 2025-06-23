@@ -10,9 +10,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Organizacao.model.Organizador;
+import org.dailygreen.dailygreen.Users.Organizacao.persistencia.OrganizacaoDAT;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TelaCRUDOrganizadores {
@@ -21,39 +20,49 @@ public class TelaCRUDOrganizadores {
     private VBox layout;
     private ObservableList<Organizador> organizadores;
     private Scene scene;
+    private String emailLogado;
     private final String FILE_PATH = "resources/db_dailygreen/organizadores.dat";
 
-    // Campos para editar/criar
+    // Formulários
     private TextField txtEmail;
     private PasswordField txtSenha;
     private TextField txtCnpj;
 
     private TableView<Organizador> tabela;
 
-    public TelaCRUDOrganizadores(Stage stage) {
+    // Botões
+    private Button btnLogin;
+    private Button btnAtualizar;
+    private Button btnExcluir;
+
+    public TelaCRUDOrganizadores(Stage stage, String emailLogado) {
         this.stage = stage;
+        this.emailLogado = emailLogado;
         this.layout = new VBox(15);
         this.layout.setPadding(new Insets(20));
-        this.layout.getStyleClass().add("postagens-view"); // classe CSS principal do container
+        this.layout.getStyleClass().add("postagens-view");
 
-        organizadores = FXCollections.observableArrayList(carregarOrganizadores());
+        organizadores = FXCollections.observableArrayList();
 
         montarComponentes();
 
         scene = new Scene(layout, 900, 600);
         scene.getStylesheets().add(getClass().getResource("/CSS/classPostagem.css").toExternalForm());
 
-        stage.setTitle("Gerenciar Organizadores");
+        stage.setTitle("Gerenciar Conta de Organizador");
         stage.setScene(scene);
         stage.show();
+
+        if (emailLogado == null || emailLogado.isEmpty()) {
+            mostrarLogin();
+        } else {
+            carregarOrganizadorLogado();
+            mostrarCRUD();
+        }
     }
 
     private void montarComponentes() {
-        // Título
-        Label titulo = new Label("CRUD Organizadores");
-        titulo.getStyleClass().add("label");
-
-        // Formulário
+        // Campos para email e senha (serão usados para login e para edição)
         txtEmail = new TextField();
         txtEmail.setPromptText("Email");
         txtEmail.getStyleClass().add("text-field");
@@ -66,23 +75,19 @@ public class TelaCRUDOrganizadores {
         txtCnpj.setPromptText("CNPJ");
         txtCnpj.getStyleClass().add("text-field");
 
-        Button btnAdicionar = new Button("Adicionar");
-        btnAdicionar.getStyleClass().add("button");
-        btnAdicionar.setOnAction(e -> adicionarOrganizador());
+        // Botão de login (apenas para fase login)
+        btnLogin = new Button("Login");
+        btnLogin.getStyleClass().add("button");
+        btnLogin.setOnAction(e -> fazerLogin());
 
-        Button btnAtualizar = new Button("Atualizar");
+        // Botões de atualizar e excluir (apenas para CRUD)
+        btnAtualizar = new Button("Atualizar");
         btnAtualizar.getStyleClass().add("button");
         btnAtualizar.setOnAction(e -> atualizarOrganizador());
 
-        Button btnExcluir = new Button("Excluir");
+        btnExcluir = new Button("Excluir Conta");
         btnExcluir.getStyleClass().add("button");
         btnExcluir.setOnAction(e -> excluirOrganizador());
-
-        HBox botoes = new HBox(10, btnAdicionar, btnAtualizar, btnExcluir);
-        botoes.setAlignment(Pos.CENTER);
-
-        VBox form = new VBox(10, txtEmail, txtSenha, txtCnpj, botoes);
-        form.getStyleClass().add("center-section");
 
         // Tabela
         tabela = new TableView<>(organizadores);
@@ -108,38 +113,73 @@ public class TelaCRUDOrganizadores {
                 txtCnpj.setText(newSelection.getCnpj());
             }
         });
+    }
+
+    private void mostrarLogin() {
+        layout.getChildren().clear();
+
+        Label titulo = new Label("Faça Login");
+        titulo.getStyleClass().add("label");
+
+        VBox formLogin = new VBox(10, txtEmail, txtSenha, btnLogin);
+        formLogin.getStyleClass().add("center-section");
+        formLogin.setAlignment(Pos.CENTER);
+
+        layout.getChildren().addAll(titulo, formLogin);
+    }
+
+    private void mostrarCRUD() {
+        layout.getChildren().clear();
+
+        Label titulo = new Label("Sua Conta");
+        titulo.getStyleClass().add("label");
+
+        HBox botoes = new HBox(10, btnAtualizar, btnExcluir);
+        botoes.setAlignment(Pos.CENTER);
+
+        VBox form = new VBox(10, txtEmail, txtSenha, txtCnpj, botoes);
+        form.getStyleClass().add("center-section");
 
         layout.getChildren().addAll(titulo, form, tabela);
     }
 
-    private void adicionarOrganizador() {
+    private void fazerLogin() {
         String email = txtEmail.getText().trim();
         String senha = txtSenha.getText().trim();
-        String cnpj = txtCnpj.getText().trim();
 
-        if (email.isEmpty() || senha.isEmpty() || cnpj.isEmpty()) {
+        if (email.isEmpty() || senha.isEmpty()) {
             mostrarAlerta("Erro", "Preencha todos os campos.", Alert.AlertType.ERROR);
             return;
         }
 
-        // Verifica se email já existe
-        for (Organizador org : organizadores) {
-            if (org.getEmail().equals(email)) {
-                mostrarAlerta("Erro", "Email já cadastrado.", Alert.AlertType.ERROR);
+        List<Organizador> todos = OrganizacaoDAT.lerOrganizadores();
+        for (Organizador o : todos) {
+            if (o.getEmail().equalsIgnoreCase(email) && o.getSenha().equals(senha)) {
+                emailLogado = email;
+                organizadores.clear();
+                organizadores.add(o);
+                mostrarAlerta("Sucesso", "Login efetuado com sucesso!", Alert.AlertType.INFORMATION);
+                mostrarCRUD();
                 return;
             }
         }
+        mostrarAlerta("Erro", "Email ou senha inválidos.", Alert.AlertType.ERROR);
+    }
 
-        Organizador novo = new Organizador(email, senha, cnpj);
-        organizadores.add(novo);
-        salvarOrganizadores();
-        limparCampos();
+    private void carregarOrganizadorLogado() {
+        organizadores.clear();
+        List<Organizador> todos = OrganizacaoDAT.lerOrganizadores();
+        for (Organizador o : todos) {
+            if (o.getEmail().equalsIgnoreCase(emailLogado)) {
+                organizadores.add(o);
+                break;
+            }
+        }
     }
 
     private void atualizarOrganizador() {
-        Organizador selecionado = tabela.getSelectionModel().getSelectedItem();
-        if (selecionado == null) {
-            mostrarAlerta("Erro", "Selecione um organizador para atualizar.", Alert.AlertType.ERROR);
+        if (organizadores.isEmpty()) {
+            mostrarAlerta("Erro", "Nenhum organizador encontrado.", Alert.AlertType.ERROR);
             return;
         }
 
@@ -152,33 +192,41 @@ public class TelaCRUDOrganizadores {
             return;
         }
 
-        // Atualiza dados
-        selecionado.setEmail(email);
-        selecionado.setSenha(senha);
-        selecionado.setCnpj(cnpj);
+        Organizador organizador = organizadores.get(0); // só 1 logado
+        organizador.setEmail(email);
+        organizador.setSenha(senha);
+        organizador.setCnpj(cnpj);
 
+        salvarOrganizadorLogado(organizador);
         tabela.refresh();
-        salvarOrganizadores();
-        limparCampos();
+        mostrarAlerta("Sucesso", "Dados atualizados com sucesso.", Alert.AlertType.INFORMATION);
     }
 
     private void excluirOrganizador() {
-        Organizador selecionado = tabela.getSelectionModel().getSelectedItem();
-        if (selecionado == null) {
-            mostrarAlerta("Erro", "Selecione um organizador para excluir.", Alert.AlertType.ERROR);
-            return;
-        }
+        if (organizadores.isEmpty()) return;
 
-        organizadores.remove(selecionado);
-        salvarOrganizadores();
-        limparCampos();
+        List<Organizador> todos = OrganizacaoDAT.lerOrganizadores();
+        todos.removeIf(o -> o.getEmail().equalsIgnoreCase(emailLogado));
+        OrganizacaoDAT.salvarOrganizadores(todos);
+
+        organizadores.clear();
+        tabela.refresh();
+        mostrarAlerta("Sucesso", "Conta excluída.", Alert.AlertType.INFORMATION);
+
+        // Volta pra tela de login após exclusão
+        emailLogado = "";
+        mostrarLogin();
     }
 
-    private void limparCampos() {
-        txtEmail.clear();
-        txtSenha.clear();
-        txtCnpj.clear();
-        tabela.getSelectionModel().clearSelection();
+    private void salvarOrganizadorLogado(Organizador atualizado) {
+        List<Organizador> todos = OrganizacaoDAT.lerOrganizadores();
+        for (int i = 0; i < todos.size(); i++) {
+            if (todos.get(i).getEmail().equalsIgnoreCase(emailLogado)) {
+                todos.set(i, atualizado);
+                break;
+            }
+        }
+        OrganizacaoDAT.salvarOrganizadores(todos);
     }
 
     private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
@@ -187,28 +235,5 @@ public class TelaCRUDOrganizadores {
         alerta.setHeaderText(null);
         alerta.setContentText(mensagem);
         alerta.showAndWait();
-    }
-
-    private List<Organizador> carregarOrganizadores() {
-        File file = new File(FILE_PATH);
-        if (!file.exists()) {
-            return new ArrayList<>();
-        }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            return (List<Organizador>) ois.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    private void salvarOrganizadores() {
-        File file = new File(FILE_PATH);
-        file.getParentFile().mkdirs();
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            oos.writeObject(new ArrayList<>(organizadores));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -11,6 +11,8 @@ public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private String type;
+    private String emailOrganizador;  // adiciona este campo
+
     private Administrador accountAdministrador;
     private Participante accountParticipante;
     private Organizacao accountOrganizacao;
@@ -31,4 +33,13 @@ public class User implements Serializable {
 
     public boolean isLogged() {return isLogged;}
     public void setLogged(boolean logged) {isLogged = logged;}
+
+    // getter e setter
+    public String getEmailOrganizador() {
+        return emailOrganizador;
+    }
+
+    public void setEmailOrganizador(String emailOrganizador) {
+        this.emailOrganizador = emailOrganizador;
+    }
 }

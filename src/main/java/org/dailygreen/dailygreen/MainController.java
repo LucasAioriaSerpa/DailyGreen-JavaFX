@@ -5,7 +5,6 @@ import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.MainAdm;
 import org.dailygreen.dailygreen.Users.Organizacao.telas.TelaCRUDOrganizadores;
 import org.dailygreen.dailygreen.Users.Organizacao.telas.TelaOrganizador;
-import org.dailygreen.dailygreen.Users.Participante.EditarPerfilViewParticipante;
 import org.dailygreen.dailygreen.Users.Participante.Participante;
 import org.dailygreen.dailygreen.Users.Participante.ParticipanteMain;
 import org.dailygreen.dailygreen.Users.Participante.PerfilViewParticipante;
@@ -16,6 +15,7 @@ import java.io.IOException;
 
 public class MainController {
     private static User user;
+
     public static void btnAdmin(Stage stage) {
         try {
             inicializarUsuario("administrador");
@@ -38,12 +38,11 @@ public class MainController {
             tratarErro(e, "NONE");
         }
     }
-    public static void btnOrganizador(Stage stage) {
+    public static void btnOrganizador(Stage stage, String emailOrganizador) {
         try {
             inicializarUsuario("organizador");
 
-            // Em vez de instanciar uma Application, só carregamos a view
-            TelaOrganizador tela = new TelaOrganizador(stage);
+            TelaOrganizador tela = new TelaOrganizador(stage, emailOrganizador);
             Scene scene = new Scene(tela.getView(), 600, 400);
 
             stage.setTitle("Login - Organizador");
@@ -54,13 +53,43 @@ public class MainController {
             tratarErro(e, "organizador");
         }
     }
-    public static void btnGerenciarOrganizadores(Stage stage) {
+    // Para abrir a tela de login do organizador (sem precisar do email)
+    public static void btnOrganizadorLogin(Stage stage) {
         try {
-            new TelaCRUDOrganizadores(stage); // a tela já monta e aplica o scene
+            inicializarUsuario("organizador");
+            TelaOrganizador tela = new TelaOrganizador(stage); // construtor sem email
+            Scene scene = new Scene(tela.getView(), 600, 400);
+
+            stage.setTitle("Login - Organizador");
+            stage.setScene(scene);
+            stage.show();
         } catch (Exception e) {
-            tratarErro(e, "administrador"); // ou outro tipo, se quiser marcar
+            tratarErro(e, "organizador");
         }
     }
+
+    // Para abrir a tela de CRUD do organizador (com email)
+    public static void btnOrganizadorCRUD(Stage stage, String emailOrganizador) {
+        try {
+            new TelaCRUDOrganizadores(stage, emailOrganizador);
+        } catch (Exception e) {
+            tratarErro(e, "organizador");
+        }
+    }
+
+
+
+    public static void btnGerenciarOrganizadores(Stage stage, String email) {
+        try {
+            User user = DATuser.getUser();
+
+            new TelaCRUDOrganizadores(stage, email);
+        } catch (Exception e) {
+            tratarErro(e, "organizador");
+        }
+    }
+
+
 
 
 
