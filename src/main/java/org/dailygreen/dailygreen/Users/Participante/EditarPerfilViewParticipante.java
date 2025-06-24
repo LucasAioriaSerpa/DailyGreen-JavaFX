@@ -23,7 +23,7 @@ public class EditarPerfilViewParticipante {
         this.layout = new VBox(20);
         layout.getStyleClass().add("main-screen");
         layout.getStylesheets().add(Objects.requireNonNull(
-                getClass().getResource("/CSS/Participante.css")).toExternalForm()
+                getClass().getResource("/CSS/participante.css")).toExternalForm()
         );
         criarComponentes(stage);
     }

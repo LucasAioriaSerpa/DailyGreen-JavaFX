@@ -22,7 +22,7 @@ public class PerfilViewParticipante {
         this.layout = new BorderPane();
         layout.getStyleClass().add("main-screen");
         layout.getStylesheets().add(Objects.requireNonNull(
-                getClass().getResource("/CSS/Participante.css")).toExternalForm()
+                getClass().getResource("/CSS/participante.css")).toExternalForm()
         );
         criarComponentes(stage);
     }

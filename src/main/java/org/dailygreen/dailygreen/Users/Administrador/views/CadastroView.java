@@ -11,6 +11,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.Administrador.controller.AdmController;
 
+import java.util.Objects;
+
 public class CadastroView {
     private VBox layout;
     private Stage stage;
@@ -19,6 +21,9 @@ public class CadastroView {
         this.stage = stage;
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
+        layout.getStylesheets().add(Objects.requireNonNull(
+                getClass().getResource("/CSS/classAdm.css")
+        ).toExternalForm());
         stage.setTitle("Cadastro Administrador");
         showComponents();
     }

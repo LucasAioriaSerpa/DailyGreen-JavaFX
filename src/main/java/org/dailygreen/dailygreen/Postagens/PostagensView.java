@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -18,12 +17,14 @@ import org.dailygreen.dailygreen.Postagens.utils.DATpost;
 import org.dailygreen.dailygreen.Users.Organizacao.Organizacao;
 import org.dailygreen.dailygreen.Users.Participante.ArquivoParticipante;
 import org.dailygreen.dailygreen.Users.Participante.Participante;
-import org.dailygreen.dailygreen.Users.Participante.PerfilViewParticipante;
 import org.dailygreen.dailygreen.Users.User;
 import org.dailygreen.dailygreen.Users.util.DATuser;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
+import org.dailygreen.dailygreen.Postagens.Reacao.RecaoDAO;
+import org.dailygreen.dailygreen.Postagens.Comentario.Comentario;
+import org.dailygreen.dailygreen.Postagens.Comentario.ComentarioDAO;
+import org.dailygreen.dailygreen.Users.Organizacao.persistencia.EventoOrganizacaoDAT;
+import org.dailygreen.dailygreen.Users.Organizacao.util.EventoOrganizacao;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -33,7 +34,7 @@ public class PostagensView {
     private final VBox layout;
     private Participante accountParticipante;
     private Organizacao accountOrganizacao;
-    private User user;
+    private final User user;
     public PostagensView(Stage stage) {
         user = DATuser.getUser();
         this.stage = stage;
@@ -84,6 +85,18 @@ public class PostagensView {
         VBox rightSection = createSection("right-section");
         HBox.setHgrow(rightSection, Priority.ALWAYS);
         rightSection.setPrefWidth(120);
+        Label eventosLabel = new Label("Eventos");
+        eventosLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold;");
+        ListView<String> eventosListView = new ListView<>();
+        eventosListView.setPrefWidth(110);
+        eventosListView.setMaxWidth(110);
+        eventosListView.setMinWidth(110);
+        eventosListView.setPrefHeight(300);
+        for (EventoOrganizacao evento : EventoOrganizacaoDAT.lerLista()) {
+            eventosListView.getItems().add(evento.toString());
+        }
+        rightSection.getChildren().addAll(eventosLabel, eventosListView);
+
         // ? config main container
         mainContainer.getChildren().addAll(leftSection, centerSection, rightSection);
         layout.getChildren().add(mainContainer);
@@ -111,22 +124,7 @@ public class PostagensView {
         descriptionArea.setWrapText(true);
         descriptionArea.setMaxWidth(400);
         descriptionArea.setPrefRowCount(4);
-        Button submitButton = new Button("Postar");
-        submitButton.setMaxWidth(200);
-        submitButton.setOnAction(_ -> {
-            String title = titleField.getText();
-            String description = descriptionArea.getText();
-            if (title.isBlank() || description.isBlank()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erro ao postar");
-                alert.setHeaderText("Preencha todos os campos");
-                alert.setContentText("Todos os campos devem ser preenchidos.");
-                alert.showAndWait();
-            } else {
-                PostagensControll.sendPost(stage, accountParticipante.getID(), title, description);
-                stage.getScene().setRoot(new PostagensView(stage).getView());
-            }
-        });
+        Button submitButton = getButton(stage, titleField, descriptionArea);
         postForm.getChildren().addAll(
             titleLabel, titleField,
             descriptionLabel, descriptionArea,
@@ -135,75 +133,153 @@ public class PostagensView {
         return postForm;
     }
 
+    private @NotNull Button getButton(Stage stage, TextField titleField, TextArea descriptionArea) {
+        Button submitButton = new Button("Postar");
+        submitButton.setMaxWidth(200);
+        submitButton.setOnAction(_ -> {
+            PostagensControll.acaoPostar(stage, accountParticipante, titleField, descriptionArea);
+        });
+        return submitButton;
+    }
+
+    /**
+     * Cria a lista de postagens exibidas na interface.
+     * Cada item é um VBox criado por createPostCard.
+     */
     private ListView<VBox> createPostList() {
         ListView<VBox> postList = new ListView<>();
-        ArrayList<Participante> participanteList = ArquivoParticipante.lerLista();
         VBox.setVgrow(postList, Priority.ALWAYS);
         postList.setMaxWidth(400);
+        ArrayList<Participante> participanteList = ArquivoParticipante.lerLista();
         for (Post post : DATpost.lerLista()) {
-            VBox postCard = new VBox(5);
-            postCard.getStyleClass().add("post-card");
-            postCard.setPadding(new Insets(10));
-            Label titleLabel = new Label(post.getTitulo() + " (Autor: " + participanteList.stream()
-                    .filter(p -> p.getID() == post.getId_autor())
-                    .map(Participante::getNome)
-                    .findFirst()
-                    .orElse("Desconhecido") + ")");
-            titleLabel.getStyleClass().add("post-title");
-            Label descriptionLabel = new Label(post.getDescricao());
-            descriptionLabel.getStyleClass().add("post-description");
-            descriptionLabel.setWrapText(true);
-            descriptionLabel.setMaxWidth(360);
-            System.out.println(accountParticipante.getID());
-            System.out.println(post.getId_autor());
-            if (post.getId_autor() == accountParticipante.getID()) {
-                HBox buttonBox = new HBox(10);
-                buttonBox.setAlignment(Pos.CENTER_RIGHT);
-                Button btnEditar = getBtnEditar(post, postList);
-                Button btnDeletar = new Button("Deletar");
-                btnDeletar.setOnAction(e -> {
-                    DATpost.removerPost(post.getID());
-                    postList.getItems().remove(postCard);
-                });
-                buttonBox.getChildren().addAll(btnEditar, btnDeletar);
-                Separator separator = new Separator();
-                postCard.getChildren().addAll(titleLabel, descriptionLabel, buttonBox, separator);
-            } else {
-                Separator separator = new Separator();
-                postCard.getChildren().addAll(titleLabel, descriptionLabel, separator);
-            }
+            VBox postCard = createPostCard(post, participanteList, postList);
             postList.getItems().add(postCard);
         }
         return postList;
     }
 
+    /**
+     * Cria o card visual de uma postagem, incluindo título, descrição, reações, comentários e botões de edição/deleção.
+     */
+    private VBox createPostCard(Post post, ArrayList<Participante> participanteList, ListView<VBox> postList) {
+        VBox postCard = new VBox(5);
+        postCard.getStyleClass().add("post-card");
+        postCard.setPadding(new Insets(10));
+
+        String autorNome = participanteList.stream()
+                .filter(p -> p.getID() == post.getId_autor())
+                .map(Participante::getNome)
+                .findFirst()
+                .orElse("Desconhecido");
+
+        Label titleLabel = new Label(post.getTitulo() + " (Autor: " + autorNome + ")");
+        titleLabel.getStyleClass().add("post-title");
+
+        Label descriptionLabel = new Label(post.getDescricao());
+        descriptionLabel.getStyleClass().add("post-description");
+        descriptionLabel.setWrapText(true);
+        descriptionLabel.setMaxWidth(360);
+
+        HBox reactionsBox = createReactionsBox(post);
+
+        VBox comentariosBox = createComentariosBox(post);
+
+        if (post.getId_autor() == accountParticipante.getID()) {
+            HBox buttonBox = new HBox(10);
+            buttonBox.setAlignment(Pos.CENTER_RIGHT);
+            Button btnEditar = getBtnEditar(post, postList);
+            Button btnDeletar = new Button("Deletar");
+            btnDeletar.setOnAction(e -> {
+                PostagensControll.acaoDeletarPost(post, postCard, postList, this);
+            });
+            buttonBox.getChildren().addAll(btnEditar, btnDeletar);
+            Separator separator = new Separator();
+            postCard.getChildren().addAll(titleLabel, descriptionLabel, reactionsBox, comentariosBox, buttonBox, separator);
+        } else {
+            Separator separator = new Separator();
+            postCard.getChildren().addAll(titleLabel, descriptionLabel, reactionsBox, comentariosBox, separator);
+        }
+        return postCard;
+    }
+
+    /**
+     * Cria o box de reações para uma postagem.
+     */
+    private HBox createReactionsBox(Post post) {
+        HBox reactionsBox = new HBox(8);
+        reactionsBox.setAlignment(Pos.CENTER_LEFT);
+        reactionsBox.getStyleClass().add("reactions-box");
+        String[] tipos = {"gostei", "parabens", "apoio", "amei", "genial"};
+        String email = user.getEmailOrganizador();
+        String tipoReacaoUsuario = RecaoDAO.buscarTipoReacaoUsuario(email, post.getID());
+        for (String tipo : tipos) {
+            Button btn = new Button(tipo.substring(0, 1).toUpperCase() + tipo.substring(1));
+            btn.getStyleClass().add("button-" + tipo);
+            btn.setStyle("-fx-font-size: 11px; -fx-padding: 3 8;");
+            long count = RecaoDAO.contarPorTipo(post.getID(), tipo);
+            Label lblCount = new Label(String.valueOf(count));
+            if (tipo.equals(tipoReacaoUsuario)) {
+                btn.setStyle(
+                        btn.getStyle() + ";" +
+                                " -fx-border-color: #222;" +
+                                " -fx-border-width: 2;" +
+                                " -fx-font-weight: bold;"
+                );
+            }
+            btn.setOnAction(e -> {
+                PostagensControll.acaoReagir(post, tipo, email, stage);
+            });
+            VBox reactionCol = new VBox(btn, lblCount);
+            reactionCol.setAlignment(Pos.CENTER);
+            reactionCol.getStyleClass().add("reaction-col");
+            reactionsBox.getChildren().add(reactionCol);
+        }
+        return reactionsBox;
+    }
+
+    /**
+     * Cria o box de comentários para uma postagem, incluindo lista e campo de novo comentário.
+     */
+    private VBox createComentariosBox(Post post) {
+        VBox comentariosBox = new VBox(4);
+        comentariosBox.setPadding(new Insets(8, 0, 0, 0));
+        Label comentariosTitulo = new Label("Comentários:");
+        comentariosTitulo.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
+        comentariosBox.getChildren().add(comentariosTitulo);
+        for (Comentario comentario : ComentarioDAO.buscarPorPost(post.getID())) {
+            Label comentarioLabel = new Label(
+                comentario.getAutorEmail() + ": " + comentario.getConteudo()
+            );
+            comentarioLabel.setStyle("" +
+                    "-fx-font-size: 11px;" +
+                    " -fx-background-color: #f4f4f4;" +
+                    " -fx-padding: 2 6 2 6;" +
+                    " -fx-background-radius: 4;"
+            );
+            comentariosBox.getChildren().add(comentarioLabel);
+        }
+        HBox novoComentarioBox = new HBox(4);
+        novoComentarioBox.setAlignment(Pos.CENTER_LEFT);
+        TextField campoComentario = new TextField();
+        campoComentario.setPromptText("Adicionar comentário...");
+        campoComentario.setPrefWidth(220);
+        Button btnComentar = new Button("Comentar");
+        btnComentar.setOnAction(e -> {
+            PostagensControll.acaoComentar(post, user.getEmailOrganizador(), campoComentario, stage);
+        });
+        novoComentarioBox.getChildren().addAll(campoComentario, btnComentar);
+        comentariosBox.getChildren().add(novoComentarioBox);
+        return comentariosBox;
+    }
+
     private @NotNull Button getBtnEditar(Post post, ListView<VBox> postList) {
         Button btnEditar = new Button("Editar");
         btnEditar.setOnAction(_ -> {
-            // ? Formulário simples de edição
-            TextInputDialog dialog = new TextInputDialog(post.getTitulo());
-            Stage dialogStage = (Stage) dialog.getDialogPane().getScene().getWindow();
-            dialogStage.getIcons().add(new Image(
-                    Objects.requireNonNull(getClass().getResourceAsStream("/dailygreen_icon-32x32.png"))
-            ));
-            dialog.setTitle("Editar Postagem");
-            dialog.setHeaderText("Editar título da postagem");
-            dialog.setContentText("Novo título:");
-            dialog.showAndWait().ifPresent(novoTitulo -> {
-                TextInputDialog descDialog = new TextInputDialog(post.getDescricao());
-                descDialog.setTitle("Editar Postagem");
-                descDialog.setHeaderText("Editar descrição da postagem");
-                descDialog.setContentText("Nova descrição:");
-                descDialog.showAndWait().ifPresent(novaDesc -> {
-                    post.setTitulo(novoTitulo);
-                    post.setDescricao(novaDesc);
-                    DATpost.atualizarPost(post.getID(), post);
-                    // ? Atualiza a lista
-                    postList.getItems().clear();
-                    postList.getItems().addAll(createPostList().getItems());
-                });
-            });
+            PostagensControll.acaoEditar(post, postList, this, stage);
         });
         return btnEditar;
     }
+
+    private void updatePostList() {stage.getScene().setRoot(new PostagensView(stage).getView());}
+
 }

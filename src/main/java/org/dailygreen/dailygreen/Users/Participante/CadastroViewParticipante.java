@@ -7,6 +7,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class CadastroViewParticipante {
@@ -23,6 +24,9 @@ public class CadastroViewParticipante {
     public CadastroViewParticipante(Stage stage) {
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
+        layout.getStylesheets().add(Objects.requireNonNull(
+                getClass().getResource("/CSS/participante.css")
+        ).toExternalForm());
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40));
         criarComponentes(stage);

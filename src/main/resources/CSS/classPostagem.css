@@ -1,4 +1,3 @@
-
 * {
     -fx-primary: #79b791;
     -fx-primary-light: #ABD1B5;
@@ -13,6 +12,7 @@
 .postagens-view {
     -fx-alignment: center;
     -fx-padding: 20;
+    -fx-spacing: 10;
 }
 
 .center-section {
@@ -140,11 +140,6 @@
     -fx-background-color: transparent;
 }
 
-.list-cell:filled:selected {
-    -fx-background-color: -fx-primary;
-    -fx-text-fill: white;
-}
-
 .list-cell:filled:hover {
     -fx-background-color: -fx-primary-transparent;
     -fx-scale-x: 1.01;
@@ -167,8 +162,94 @@
     -fx-background-color: -fx-primary;
 }
 
-.postagens-view {
-    -fx-spacing: 10;
-    -fx-padding: 10;
+.reactions-box {
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+    -fx-padding: 4 0 4 0;
+    -fx-max-width: 100%;
+    -fx-pref-width: 360px;
+    -fx-wrap-text: false;
+    -fx-overflow-x: auto;
+    -fx-overflow-y: hidden;
+}
+
+.reactions-box .button {
+    -fx-font-size: 11px;
+    -fx-padding: 3 8;
+    -fx-min-width: 60px;
+    -fx-max-width: 80px;
+    -fx-background-radius: 4;
+    -fx-wrap-text: false;
+}
+
+.reactions-box .reaction-col {
     -fx-alignment: center;
+    -fx-spacing: 2;
+    -fx-min-width: 60px;
+    -fx-max-width: 80px;
+}
+
+.post-card {
+    -fx-max-width: 380px;
+    -fx-pref-width: 360px;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-spacing: 6;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.07), 4, 0, 0, 0);
+    -fx-border-radius: 8;
+    -fx-border-color: -fx-primary-light;
+    -fx-border-width: 1;
+    -fx-wrap-text: false;
+    -fx-overflow-x: hidden;
+}
+
+.reactions-box .scroll-bar:horizontal {
+    -fx-pref-height: 6px;
+    -fx-background-color: transparent;
+}
+.reactions-box .scroll-bar:horizontal .thumb {
+    -fx-background-color: -fx-primary-light;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+.button-gostei {
+    -fx-background-color: #2ecc40 !important;
+    -fx-text-fill: white;
+}
+.button-gostei:focused, .button-gostei:hover {
+    -fx-background-color: #27ae38 !important;
+}
+
+.button-parabens {
+    -fx-background-color: #f1c40f !important;
+    -fx-text-fill: #333;
+}
+.button-parabens:focused, .button-parabens:hover {
+    -fx-background-color: #d4ac0d !important;
+}
+
+.button-apoio {
+    -fx-background-color: #0074d9 !important;
+    -fx-text-fill: white;
+}
+.button-apoio:focused, .button-apoio:hover {
+    -fx-background-color: #005fa3 !important;
+}
+
+.button-amei {
+    -fx-background-color: #e74c3c !important;
+    -fx-text-fill: white;
+}
+.button-amei:focused, .button-amei:hover {
+    -fx-background-color: #c0392b !important;
+}
+
+.button-genial {
+    -fx-background-color: #9b59b6 !important;
+    -fx-text-fill: white;
+}
+.button-genial:focused, .button-genial:hover {
+    -fx-background-color: #6c3483 !important;
 }

@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ListaParticipantesView {
     private VBox layout;
@@ -20,6 +21,9 @@ public class ListaParticipantesView {
         this.stage = stage;
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
+        layout.getStylesheets().add(Objects.requireNonNull(
+                getClass().getResource("/CSS/participante.css")
+        ).toExternalForm());
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40));
         criarComponentes();

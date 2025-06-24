@@ -20,6 +20,7 @@ import org.dailygreen.dailygreen.Users.Participante.ArquivoParticipante;
 import javax.swing.text.View;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DenunciaFormView {
@@ -30,6 +31,9 @@ public class DenunciaFormView {
         this.stage = stage;
         this.layout = new VBox();
         layout.getStyleClass().add("denuncia-form-view");
+        layout.getStylesheets().add(Objects.requireNonNull(
+                AdmController.class.getResource("/CSS/classAdm.css")
+        ).toExternalForm());
         stage.setTitle("Formulário de Denúncias");
         showComponents();
     }
