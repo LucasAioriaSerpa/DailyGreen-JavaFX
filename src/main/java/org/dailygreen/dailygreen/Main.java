@@ -7,12 +7,9 @@ import javax.crypto.SecretKey;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
-import org.dailygreen.dailygreen.Users.Administrador.MainAdm;
-import org.dailygreen.dailygreen.Users.Participante.ParticipanteMain;
 import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.Users.util.DATuser;
+import org.dailygreen.dailygreen.util.DAT.DATuser;
 import org.dailygreen.dailygreen.util.Criptografia;
 
 import javafx.scene.Scene;
@@ -21,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.application.Application;
+import org.dailygreen.dailygreen.util.controller.MainController;
 
 public class Main extends Application {
 
@@ -38,7 +36,8 @@ public class Main extends Application {
         Button btnAdm = new Button("Administrador");
         btnAdm.getStyleClass().add("btn-adm");
         btnAdm.getStyleClass().add("btn");
-        btnAdm.setOnAction(_-> {MainController.btnAdmin(stage);});
+        btnAdm.setOnAction(_-> {
+            MainController.btnAdmin(stage);});
         Button btnUser = new Button("Usuario");
         btnUser.getStyleClass().add("btn-user");
         btnUser.getStyleClass().add("btn");

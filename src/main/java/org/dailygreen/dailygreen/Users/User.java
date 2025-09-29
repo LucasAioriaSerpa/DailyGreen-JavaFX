@@ -1,9 +1,5 @@
 package org.dailygreen.dailygreen.Users;
 
-import org.dailygreen.dailygreen.Users.Administrador.models.Administrador;
-import org.dailygreen.dailygreen.Users.Organizacao.Organizacao;
-import org.dailygreen.dailygreen.Users.Participante.Participante;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -11,7 +7,7 @@ public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private String type;
-    private String emailOrganizador;  // adiciona este campo
+    private String emailOrganizador;
 
     private Administrador accountAdministrador;
     private Participante accountParticipante;
@@ -34,11 +30,9 @@ public class User implements Serializable {
     public boolean isLogged() {return isLogged;}
     public void setLogged(boolean logged) {isLogged = logged;}
 
-    // getter e setter
     public String getEmailOrganizador() {
         return emailOrganizador;
     }
-
     public void setEmailOrganizador(String emailOrganizador) {
         this.emailOrganizador = emailOrganizador;
     }
