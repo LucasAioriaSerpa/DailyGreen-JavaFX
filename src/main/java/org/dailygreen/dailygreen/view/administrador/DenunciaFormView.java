@@ -1,5 +1,6 @@
 package org.dailygreen.dailygreen.view.administrador;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -8,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -183,7 +185,12 @@ public class DenunciaFormView {
         });
         grid.add(enviarDenuncia, 0, 4);
 
-        VBox formulario = new VBox(5, titleFormulario, participantes, optionTitulo, descricaoDenuncia, enviarDenuncia, voltar   );
+        HBox buttonsBox = new HBox(3, voltar, enviarDenuncia);
+        grid.add(buttonsBox, 0,5);
+        buttonsBox.setAlignment(Pos.CENTER);
+        buttonsBox.setPadding(new Insets(10, 0, 10, 0));
+
+        VBox formulario = new VBox(5, titleFormulario, participantes, optionTitulo, descricaoDenuncia, buttonsBox);
         grid.add(formulario, 0, 0);
         formulario.setAlignment(Pos.CENTER);
 
