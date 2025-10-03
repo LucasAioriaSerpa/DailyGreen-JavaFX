@@ -3,29 +3,24 @@ package org.dailygreen.dailygreen.view;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.layout.HBox;
+import org.dailygreen.dailygreen.Postagens.Comentario;
 import org.dailygreen.dailygreen.Postagens.EventoOrganizacao;
 import org.dailygreen.dailygreen.Postagens.Post;
-import org.dailygreen.dailygreen.util.controller.PostagensControll;
-import org.dailygreen.dailygreen.util.DAT.DATpost;
 import org.dailygreen.dailygreen.Users.Organizacao;
-import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
 import org.dailygreen.dailygreen.Users.Participante;
 import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAT.DATuser;
-import org.jetbrains.annotations.NotNull;
-import org.dailygreen.dailygreen.util.DAO.RecaoDAO;
-import org.dailygreen.dailygreen.Postagens.Comentario;
 import org.dailygreen.dailygreen.util.DAO.ComentarioDAO;
+import org.dailygreen.dailygreen.util.DAO.RecaoDAO;
+import org.dailygreen.dailygreen.util.DAT.DATpost;
+import org.dailygreen.dailygreen.util.DAT.DATuser;
 import org.dailygreen.dailygreen.util.DAT.EventoOrganizacaoDAT;
+import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
+import org.dailygreen.dailygreen.util.controller.PostagensControll;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -36,11 +31,11 @@ public class PostagensView {
     private Participante accountParticipante;
     private Organizacao accountOrganizacao;
     private final User user;
+
     public PostagensView(Stage stage) {
         user = DATuser.getUser();
         this.stage = stage;
         this.layout = new VBox();
-        User user = DATuser.getUser();
         switch (user.getType()) {
             case "participante" -> accountParticipante = user.getAccountParticipante();
             case "organizador" -> accountOrganizacao = user.getAccountOrganizacao();
@@ -49,110 +44,121 @@ public class PostagensView {
         layout.getStylesheets().add(Objects.requireNonNull(
                 getClass().getResource("/CSS/classPostagem.css")).toExternalForm()
         );
-        stage.setTitle("Postagens");
-        stage.setResizable(false);
-        showComponents(stage);
+        stage.setTitle("DailyGreen - Feed");
+        showComponents();
     }
 
-    public VBox getView() {return layout;}
+    public VBox getView() {
+        return layout;
+    }
 
-    public Stage getStage() {return stage;}
+    public Stage getStage() {
+        return stage;
+    }
 
-    private void showComponents(Stage stage) {
+    private void showComponents() {
         HBox mainContainer = new HBox();
-        // ? Section left
+        mainContainer.getStyleClass().add("main-container");
+
+        // ? Seção Esquerda (Navegação)
         VBox leftSection = createSection("left-section");
-        Button btnPerfil = new Button("Perfil");
-        btnPerfil.getStyleClass().add("button-primary");
-        btnPerfil.setOnAction(_ -> {
-            PostagensControll.goPerfil(stage, user.getAccountParticipante());});
+        Button btnPerfil = new Button("Meu Perfil");
+        btnPerfil.getStyleClass().add("nav-button");
+        btnPerfil.setOnAction(_ -> PostagensControll.goPerfil(stage, user.getAccountParticipante()));
+
         Button btnPostagens = new Button("Postagens");
-        btnPostagens.getStyleClass().add("button-secondary");
+        btnPostagens.getStyleClass().add("nav-button-active");
         leftSection.getChildren().addAll(btnPerfil, btnPostagens);
-        HBox.setHgrow(leftSection, Priority.ALWAYS);
-        leftSection.setPrefWidth(120);
-        // ? Section center
-        VBox centerSection = createSection("center-section");
-        HBox.setHgrow(centerSection, Priority.ALWAYS);
-        centerSection.setPrefWidth(360);
-        ScrollPane scrollPane = new ScrollPane(centerSection);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        centerSection.getChildren().addAll(
-                createPostForm(stage),
+        leftSection.setPrefWidth(220);
+        leftSection.setMinWidth(200);
+        HBox.setHgrow(leftSection, Priority.NEVER);
+
+        // ? Seção Central (Postagens)
+        VBox centerSectionContent = new VBox(20);
+        centerSectionContent.setPadding(new Insets(15));
+        centerSectionContent.getChildren().addAll(
+                createPostForm(),
                 createPostList()
         );
-        // ? Section right
-        VBox rightSection = createSection("right-section");
-        HBox.setHgrow(rightSection, Priority.ALWAYS);
-        rightSection.setPrefWidth(120);
-        Label eventosLabel = new Label("Eventos");
-        eventosLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold;");
-        ListView<String> eventosListView = new ListView<>();
-        eventosListView.setPrefWidth(110);
-        eventosListView.setMaxWidth(110);
-        eventosListView.setMinWidth(110);
-        eventosListView.setPrefHeight(300);
-        for (EventoOrganizacao evento : EventoOrganizacaoDAT.lerLista()) {
-            eventosListView.getItems().add(evento.toString());
-        }
-        rightSection.getChildren().addAll(eventosLabel, eventosListView);
 
-        // ? config main container
-        mainContainer.getChildren().addAll(leftSection, centerSection, rightSection);
+        ScrollPane centerScrollPane = new ScrollPane(centerSectionContent);
+        centerScrollPane.getStyleClass().add("center-scroll-pane");
+        centerScrollPane.setFitToWidth(true);
+        HBox.setHgrow(centerScrollPane, Priority.ALWAYS);
+
+        // ? Seção Direita (Eventos)
+        VBox rightSection = createSection("right-section");
+        rightSection.setPrefWidth(300);
+        rightSection.setMinWidth(260);
+        HBox.setHgrow(rightSection, Priority.SOMETIMES);
+
+        Label eventosLabel = new Label("Próximos Eventos");
+        eventosLabel.getStyleClass().add("section-title");
+
+        ListView<EventoOrganizacao> eventosListView = new ListView<>();
+        eventosListView.getItems().addAll(EventoOrganizacaoDAT.lerLista());
+        eventosListView.setCellFactory(_ -> new ListCell<>() {
+            @Override
+            protected void updateItem(EventoOrganizacao evento, boolean empty) {
+                super.updateItem(evento, empty);
+                if (empty || evento == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    VBox eventoCard = new VBox(5);
+                    Label nomeEvento = new Label(evento.getNome());
+                    nomeEvento.getStyleClass().add("event-title");
+                    Label dataEvento = new Label("Data: " + evento.getData());
+                    dataEvento.getStyleClass().add("event-detail");
+                    eventoCard.getChildren().addAll(nomeEvento, dataEvento);
+                    setGraphic(eventoCard);
+                }
+            }
+        });
+        VBox.setVgrow(eventosListView, Priority.ALWAYS);
+        rightSection.getChildren().addAll(eventosLabel, eventosListView);
+        mainContainer.getChildren().addAll(leftSection, centerScrollPane, rightSection);
         layout.getChildren().add(mainContainer);
         VBox.setVgrow(mainContainer, Priority.ALWAYS);
     }
 
     private VBox createSection(String styleClass) {
-        VBox section = new VBox(10);
+        VBox section = new VBox(15);
         section.setAlignment(Pos.TOP_CENTER);
-        section.setPadding(new Insets(15));
+        section.setPadding(new Insets(20));
         section.getStyleClass().add(styleClass);
         return section;
     }
 
-    private VBox createPostForm(Stage stage) {
-        VBox postForm = new VBox(15);
-        postForm.setAlignment(Pos.CENTER);
-        Label titleLabel = new Label("Título:");
-        TextField titleField = new TextField();
-        titleField.setPromptText("Digite o título da postagem");
-        titleField.setMaxWidth(400);
-        Label descriptionLabel = new Label("Descrição:");
-        TextArea descriptionArea = new TextArea();
-        descriptionArea.setPromptText("Digite a descrição da postagem");
-        descriptionArea.setWrapText(true);
-        descriptionArea.setMaxWidth(400);
-        descriptionArea.setPrefRowCount(4);
-        Button submitButton = getButton(titleField, descriptionArea);
-        postForm.getChildren().addAll(
-            titleLabel, titleField,
-            descriptionLabel, descriptionArea,
-            submitButton
-        );
-        return postForm;
-    }
+    private VBox createPostForm() {
+        VBox postForm = new VBox(10);
+        postForm.getStyleClass().add("post-form");
 
-    private @NotNull Button getButton(TextField titleField, TextArea descriptionArea) {
-        Button submitButton = new Button("Postar");
-        submitButton.setMaxWidth(200);
+        Label formTitle = new Label("Criar nova postagem");
+        formTitle.getStyleClass().add("form-title");
+
+        TextField titleField = new TextField();
+        titleField.setPromptText("Qual o título da sua ideia?");
+
+        TextArea descriptionArea = new TextArea();
+        descriptionArea.setPromptText("Descreva sua ideia ou evento aqui...");
+        descriptionArea.setWrapText(true);
+        descriptionArea.setPrefRowCount(4);
+
+        Button submitButton = new Button("Publicar");
+        submitButton.setMaxWidth(Double.MAX_VALUE);
         submitButton.setOnAction(_ -> {
             PostagensControll.acaoPostar(accountParticipante, titleField, descriptionArea);
             updatePostList();
         });
-        return submitButton;
+        postForm.getChildren().addAll(formTitle, titleField, descriptionArea, submitButton);
+        return postForm;
     }
 
-    /**
-     * Cria a lista de postagens exibidas na interface.
-     * Cada item é um VBox criado por createPostCard.
-     */
     private ListView<VBox> createPostList() {
         ListView<VBox> postList = new ListView<>();
+        postList.getStyleClass().add("post-list");
         VBox.setVgrow(postList, Priority.ALWAYS);
-        postList.setMaxWidth(400);
         ArrayList<Participante> participanteList = ParticipanteDAT.lerLista();
         for (Post post : DATpost.lerLista()) {
             VBox postCard = createPostCard(post, participanteList, postList);
@@ -161,131 +167,116 @@ public class PostagensView {
         return postList;
     }
 
-    /**
-     * Cria o card visual de uma postagem, incluindo título, descrição, reações, comentários e botões de edição/deleção.
-     */
     private VBox createPostCard(Post post, ArrayList<Participante> participanteList, ListView<VBox> postList) {
-        VBox postCard = new VBox(5);
+        VBox postCard = new VBox(15);
         postCard.getStyleClass().add("post-card");
-        postCard.setPadding(new Insets(10));
 
+        // ? Autor
         String autorNome = participanteList.stream()
                 .filter(p -> p.getID() == post.getId_autor())
                 .map(Participante::getNome)
                 .findFirst()
-                .orElse("Desconhecido");
+                .orElse("Autor Desconhecido");
 
-        Label titleLabel = new Label(post.getTitulo() + " (Autor: " + autorNome + ")");
+        // ? Header do Post
+        Label titleLabel = new Label(post.getTitulo());
         titleLabel.getStyleClass().add("post-title");
+        Label authorLabel = new Label("por " + autorNome);
+        authorLabel.getStyleClass().add("post-author");
+        VBox postHeader = new VBox(titleLabel, authorLabel);
 
+        // ? Descrição
         Label descriptionLabel = new Label(post.getDescricao());
         descriptionLabel.getStyleClass().add("post-description");
         descriptionLabel.setWrapText(true);
-        descriptionLabel.setMaxWidth(360);
 
+        // ? Reações e Comentários
         HBox reactionsBox = createReactionsBox(post);
-
         VBox comentariosBox = createComentariosBox(post);
 
-        if (post.getId_autor() == accountParticipante.getID()) {
+        postCard.getChildren().addAll(postHeader, descriptionLabel, reactionsBox, comentariosBox);
+
+        if (user.getAccountParticipante() != null && post.getId_autor() == user.getAccountParticipante().getID()) {
             HBox buttonBox = new HBox(10);
             buttonBox.setAlignment(Pos.CENTER_RIGHT);
-            Button btnEditar = getBtnEditar(post);
+            buttonBox.getStyleClass().add("action-buttons");
+            Button btnEditar = new Button("Editar");
+            btnEditar.setOnAction(_ -> {
+                PostagensControll.acaoEditar(post);
+                updatePostList();
+            });
             Button btnDeletar = new Button("Deletar");
+            btnDeletar.getStyleClass().add("button-danger");
             btnDeletar.setOnAction(_ -> {
                 PostagensControll.acaoDeletarPost(post, postCard, postList, this);
                 updatePostList();
             });
             buttonBox.getChildren().addAll(btnEditar, btnDeletar);
-            Separator separator = new Separator();
-            postCard.getChildren().addAll(titleLabel, descriptionLabel, reactionsBox, comentariosBox, buttonBox, separator);
-        } else {
-            Separator separator = new Separator();
-            postCard.getChildren().addAll(titleLabel, descriptionLabel, reactionsBox, comentariosBox, separator);
+            postCard.getChildren().add(buttonBox);
         }
         return postCard;
     }
 
-    /**
-     * Cria o box de reações para uma postagem.
-     */
     private HBox createReactionsBox(Post post) {
-        HBox reactionsBox = new HBox(8);
+        HBox reactionsBox = new HBox(5);
         reactionsBox.setAlignment(Pos.CENTER_LEFT);
         reactionsBox.getStyleClass().add("reactions-box");
         String[] tipos = {"gostei", "parabens", "apoio", "amei", "genial"};
         String tipoReacaoUsuario = RecaoDAO.buscarTipoReacaoUsuario(user.getAccountParticipante().getEmail(), post.getID());
         for (String tipo : tipos) {
-            Button btn = new Button(tipo.substring(0, 1).toUpperCase() + tipo.substring(1));
-            btn.getStyleClass().add("button-" + tipo);
-            btn.setStyle("-fx-font-size: 11px; -fx-padding: 3 8;");
             long count = RecaoDAO.contarPorTipo(post.getID(), tipo);
-            Label lblCount = new Label(String.valueOf(count));
+            Button btn = new Button(tipo.substring(0, 1).toUpperCase() + tipo.substring(1) + " (" + count + ")");
+            btn.getStyleClass().add("reaction-button");
+            btn.getStyleClass().add("button-" + tipo);
             if (tipo.equals(tipoReacaoUsuario)) {
-                btn.setStyle(
-                        btn.getStyle() + ";" +
-                                " -fx-border-color: #222;" +
-                                " -fx-border-width: 2;" +
-                                " -fx-font-weight: bold;"
-                );
+                btn.getStyleClass().add("selected");
             }
-            btn.setOnAction(e -> {
+            btn.setOnAction(_ -> {
                 PostagensControll.acaoReagir(post, tipo, user.getAccountParticipante().getEmail());
                 updatePostList();
             });
-            VBox reactionCol = new VBox(btn, lblCount);
-            reactionCol.setAlignment(Pos.CENTER);
-            reactionCol.getStyleClass().add("reaction-col");
-            reactionsBox.getChildren().add(reactionCol);
+            reactionsBox.getChildren().add(btn);
         }
         return reactionsBox;
     }
 
-    /**
-     * Cria o box de comentários para uma postagem, incluindo lista e campo de novo comentário.
-     */
     private VBox createComentariosBox(Post post) {
-        VBox comentariosBox = new VBox(4);
-        comentariosBox.setPadding(new Insets(8, 0, 0, 0));
-        Label comentariosTitulo = new Label("Comentários:");
-        comentariosTitulo.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
+        VBox comentariosBox = new VBox(8);
+        comentariosBox.getStyleClass().add("comentarios-box");
+        Label comentariosTitulo = new Label("Comentários");
+        comentariosTitulo.getStyleClass().add("section-subtitle");
         comentariosBox.getChildren().add(comentariosTitulo);
-        for (Comentario comentario : ComentarioDAO.buscarPorPost(post.getID())) {
-            Label comentarioLabel = new Label(
-                comentario.getAutorEmail() + ": " + comentario.getConteudo()
-            );
-            comentarioLabel.setStyle("" +
-                    "-fx-font-size: 11px;" +
-                    " -fx-background-color: #f4f4f4;" +
-                    " -fx-padding: 2 6 2 6;" +
-                    " -fx-background-radius: 4;"
-            );
-            comentariosBox.getChildren().add(comentarioLabel);
+        VBox commentList = new VBox(5);
+        commentList.getStyleClass().add("comment-list");
+        ArrayList<Comentario> comentarios = (ArrayList<Comentario>) ComentarioDAO.buscarPorPost(post.getID());
+        if (comentarios.isEmpty()) {
+            Label noCommentsLabel = new Label("Nenhum comentário ainda.");
+            noCommentsLabel.getStyleClass().add("no-comments-label");
+            commentList.getChildren().add(noCommentsLabel);
+        } else {
+            for (Comentario comentario : comentarios) {
+                Label comentarioLabel = new Label(comentario.getAutorEmail() + ": " + comentario.getConteudo());
+                comentarioLabel.getStyleClass().add("comment-label");
+                comentarioLabel.setWrapText(true);
+                commentList.getChildren().add(comentarioLabel);
+            }
         }
-        HBox novoComentarioBox = new HBox(4);
+        HBox novoComentarioBox = new HBox(5);
         novoComentarioBox.setAlignment(Pos.CENTER_LEFT);
         TextField campoComentario = new TextField();
-        campoComentario.setPromptText("Adicionar comentário...");
-        campoComentario.setPrefWidth(220);
-        Button btnComentar = new Button("Comentar");
+        campoComentario.setPromptText("Escreva um comentário...");
+        HBox.setHgrow(campoComentario, Priority.ALWAYS);
+        Button btnComentar = new Button("Enviar");
         btnComentar.setOnAction(_ -> {
-            PostagensControll.acaoComentar(post, user.getAccountParticipante().getNome(), campoComentario);
+            PostagensControll.acaoComentar(post, user.getAccountParticipante().getEmail(), campoComentario);
             updatePostList();
         });
         novoComentarioBox.getChildren().addAll(campoComentario, btnComentar);
-        comentariosBox.getChildren().add(novoComentarioBox);
+        comentariosBox.getChildren().addAll(commentList, novoComentarioBox);
         return comentariosBox;
     }
 
-    private @NotNull Button getBtnEditar(Post post) {
-        Button btnEditar = new Button("Editar");
-        btnEditar.setOnAction(_ -> {
-            PostagensControll.acaoEditar(post);
-            updatePostList();
-        });
-        return btnEditar;
+    private void updatePostList() {
+        stage.getScene().setRoot(new PostagensView(stage).getView());
     }
-
-    private void updatePostList() {stage.getScene().setRoot(new PostagensView(stage).getView());}
-
 }

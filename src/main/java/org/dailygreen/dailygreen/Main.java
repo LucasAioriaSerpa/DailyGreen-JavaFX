@@ -77,7 +77,6 @@ public class Main extends Application {
         stage.getIcons().add(new Image(Objects.requireNonNull(
                 getClass().getResource("/dailygreen_icon-32x32.png")
         ).toExternalForm()));
-        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

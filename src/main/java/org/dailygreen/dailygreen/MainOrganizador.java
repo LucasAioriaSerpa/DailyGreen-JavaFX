@@ -15,7 +15,6 @@ public class MainOrganizador extends Application {
 
         stage.setTitle("Login - Organizador");
         stage.setScene(scene);
-        stage.setResizable(false);
         stage.show();
     }
 

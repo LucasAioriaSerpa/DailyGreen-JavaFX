@@ -22,7 +22,6 @@ public class PostagensMain extends Application {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/classPostagem.css")).toExternalForm());
         stage.setScene(scene);
         stage.setTitle("Pagina de postagem");
-        stage.setResizable(false);
         stage.show();
     }
     public static void main(String[] args) {launch(args);}
