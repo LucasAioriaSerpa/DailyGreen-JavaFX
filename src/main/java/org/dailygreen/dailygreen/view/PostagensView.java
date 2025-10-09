@@ -20,6 +20,8 @@ import org.dailygreen.dailygreen.util.DAT.DATuser;
 import org.dailygreen.dailygreen.util.DAT.EventoOrganizacaoDAT;
 import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
+import org.dailygreen.dailygreen.util.factory.IPostagensUIPanel;
+import org.dailygreen.dailygreen.util.factory.UIPanelFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -31,19 +33,14 @@ public class PostagensView {
     private Participante accountParticipante;
     private Organizacao accountOrganizacao;
     private final User user;
+    private final IPostagensUIPanel uiPanel;
 
     public PostagensView(Stage stage) {
         user = DATuser.getUser();
         this.stage = stage;
         this.layout = new VBox();
-        switch (user.getType()) {
-            case "participante" -> accountParticipante = user.getAccountParticipante();
-            case "organizador" -> accountOrganizacao = user.getAccountOrganizacao();
-        }
+        this.uiPanel = UIPanelFactory.getPanel(user);
         layout.getStyleClass().add("postagens-view");
-        layout.getStylesheets().add(Objects.requireNonNull(
-                getClass().getResource("/CSS/classPostagem.css")).toExternalForm()
-        );
         stage.setTitle("DailyGreen - Feed");
         showComponents();
     }
@@ -61,7 +58,8 @@ public class PostagensView {
         mainContainer.getStyleClass().add("main-container");
 
         // ? Seção Esquerda (Navegação)
-        VBox leftSection = createSection("left-section");
+        VBox leftSection = uiPanel.createLeftSection(stage);
+        HBox.setHgrow(leftSection, Priority.NEVER);
         Button btnPerfil = new Button("Meu Perfil");
         btnPerfil.getStyleClass().add("nav-button");
         btnPerfil.setOnAction(_ -> PostagensControll.goPerfil(stage, user.getAccountParticipante()));

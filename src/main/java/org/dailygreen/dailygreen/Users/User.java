@@ -8,7 +8,6 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     private String type;
     private String emailOrganizador;
-
     private Administrador accountAdministrador;
     private Participante accountParticipante;
     private Organizacao accountOrganizacao;

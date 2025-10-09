@@ -2,7 +2,8 @@ package org.dailygreen.dailygreen.Users;
 
 import org.dailygreen.dailygreen.util.Criptografia;
 
-import java.io.*;
+import java.io.Serial;
+import java.io.Serializable;
 
 public class Participante implements Serializable {
     @Serial
