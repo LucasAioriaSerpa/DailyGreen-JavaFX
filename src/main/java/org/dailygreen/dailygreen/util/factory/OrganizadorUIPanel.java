@@ -3,14 +3,17 @@ package org.dailygreen.dailygreen.util.factory;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
 public class OrganizadorUIPanel implements IPostagensUIPanel{
     @Override
-    public VBox createLeftSection(Stage stage) {
+    public VBox createLeftSection(Stage stage, User user) {
         VBox leftSection = new VBox();
 
         Button btnPerfilOrg = new Button("Perfil Organizador");
         btnPerfilOrg.getStyleClass().add("nav-button");
+        btnPerfilOrg.setOnAction(_ -> PostagensControll.goPerfil(stage, user.getAccountParticipante()));
 
         Button btnGerenciarEventos = new Button("Meus Eventos");
         btnGerenciarEventos.getStyleClass().add("nav-button");

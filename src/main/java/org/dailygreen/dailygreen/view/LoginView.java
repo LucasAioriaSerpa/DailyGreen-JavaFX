@@ -11,12 +11,13 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.util.controller.AdmController;
 import org.dailygreen.dailygreen.view.administrador.CadastroView;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class LoginView {
-    private VBox layout;
-    private Stage stage;
+    private final VBox layout;
+    private final Stage stage;
 
     public LoginView(Stage stage) {
         this.stage = stage;
@@ -53,14 +54,7 @@ public class LoginView {
         passwordField.getStyleClass().add("password-field");
         grid.add(passwordField, 0, 4);
 
-        Hyperlink linkToCadastro = new Hyperlink("Ainda não possui login? Cadastre-se aqui!");
-        linkToCadastro.setOnAction(_ -> {
-            CadastroView cadastroView = new CadastroView(stage);
-            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-            Scene scene = new Scene(cadastroView.getView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
-            scene.getStylesheets().add(getClass().getResource("/CSS/classAdm.css").toExternalForm());
-            stage.setScene(scene);
-        });
+        Hyperlink linkToCadastro = getHyperlink();
         linkToCadastro.getStyleClass().add("hyperlink");
 
         HBox linkToCadastroBox = new HBox(linkToCadastro);
@@ -78,6 +72,18 @@ public class LoginView {
         grid.add(buttonBox, 0, 6);
 
         layout.getChildren().add(grid);
+    }
+
+    private @NotNull Hyperlink getHyperlink() {
+        Hyperlink linkToCadastro = new Hyperlink("Ainda não possui login? Cadastre-se aqui!");
+        linkToCadastro.setOnAction(_ -> {
+            CadastroView cadastroView = new CadastroView(stage);
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Scene scene = new Scene(cadastroView.getView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/classAdm.css")).toExternalForm());
+            stage.setScene(scene);
+        });
+        return linkToCadastro;
     }
 
     public VBox getView(){

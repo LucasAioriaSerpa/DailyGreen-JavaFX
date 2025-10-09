@@ -4,13 +4,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAT.DATuser;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
-public class ParticippanteUIPanel implements IPostagensUIPanel {
+public class ParticipanteUIPanel implements IPostagensUIPanel {
     @Override
-    public VBox createLeftSection(Stage stage) {
-        User user = DATuser.getUser();
+    public VBox createLeftSection(Stage stage, User user) {
         VBox leftSection = createBaseSection("left-section");
 
         Button btnPerfil = new Button("Meu Perfil");

@@ -22,7 +22,6 @@ import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
 import org.dailygreen.dailygreen.util.factory.IPostagensUIPanel;
 import org.dailygreen.dailygreen.util.factory.UIPanelFactory;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -30,8 +29,6 @@ import java.util.Objects;
 public class PostagensView {
     private final Stage stage;
     private final VBox layout;
-    private Participante accountParticipante;
-    private Organizacao accountOrganizacao;
     private final User user;
     private final IPostagensUIPanel uiPanel;
 
@@ -41,6 +38,9 @@ public class PostagensView {
         this.layout = new VBox();
         this.uiPanel = UIPanelFactory.getPanel(user);
         layout.getStyleClass().add("postagens-view");
+        layout.getStylesheets().add(Objects.requireNonNull(
+                getClass().getResource("/CSS/classPostagem.css")
+        ).toExternalForm());
         stage.setTitle("DailyGreen - Feed");
         showComponents();
     }
@@ -58,17 +58,7 @@ public class PostagensView {
         mainContainer.getStyleClass().add("main-container");
 
         // ? Seção Esquerda (Navegação)
-        VBox leftSection = uiPanel.createLeftSection(stage);
-        HBox.setHgrow(leftSection, Priority.NEVER);
-        Button btnPerfil = new Button("Meu Perfil");
-        btnPerfil.getStyleClass().add("nav-button");
-        btnPerfil.setOnAction(_ -> PostagensControll.goPerfil(stage, user.getAccountParticipante()));
-
-        Button btnPostagens = new Button("Postagens");
-        btnPostagens.getStyleClass().add("nav-button-active");
-        leftSection.getChildren().addAll(btnPerfil, btnPostagens);
-        leftSection.setPrefWidth(220);
-        leftSection.setMinWidth(200);
+        VBox leftSection = uiPanel.createLeftSection(stage, user);
         HBox.setHgrow(leftSection, Priority.NEVER);
 
         // ? Seção Central (Postagens)
@@ -146,7 +136,7 @@ public class PostagensView {
         Button submitButton = new Button("Publicar");
         submitButton.setMaxWidth(Double.MAX_VALUE);
         submitButton.setOnAction(_ -> {
-            PostagensControll.acaoPostar(accountParticipante, titleField, descriptionArea);
+            PostagensControll.acaoPostar(user.getAccountParticipante(), titleField, descriptionArea);
             updatePostList();
         });
         postForm.getChildren().addAll(formTitle, titleField, descriptionArea, submitButton);
