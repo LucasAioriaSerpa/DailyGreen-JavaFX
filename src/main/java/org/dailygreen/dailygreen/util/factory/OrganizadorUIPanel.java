@@ -24,6 +24,12 @@ public class OrganizadorUIPanel implements IPostagensUIPanel{
         leftSection.getChildren().addAll(btnPerfilOrg, btnGerenciarEventos, btnPostagens);
         return leftSection;
     }
+
+    @Override
+    public VBox createCenterSection(Stage stage, User user) {
+        return null;
+    }
+
     public VBox createBaseSection(String styleClass) {
         VBox section = new VBox(15);
         section.getStyleClass().add(styleClass);

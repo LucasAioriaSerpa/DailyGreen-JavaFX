@@ -61,12 +61,13 @@
                 <version>3.13.0</version>
                 <configuration>
                     <release>${maven.compiler.release}</release>
-                    <compilerArgs>
-                        <arg>--add-exports</arg>
+                    <compilerArgs>--enable-preview
                         <arg>java.base/sun.security.action=ALL-UNNAMED</arg>
                         <arg>--add-opens</arg>
                         <arg>java.base/java.lang=ALL-UNNAMED</arg>
                     </compilerArgs>
+                    <source>24</source>
+                    <target>24</target>
                 </configuration>
             </plugin>
             <plugin>

@@ -1,10 +1,13 @@
 package org.dailygreen.dailygreen.util.factory;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.User;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
+import org.dailygreen.dailygreen.view.components.CreatePostForm;
 
 public class ParticipanteUIPanel implements IPostagensUIPanel {
     @Override
@@ -20,6 +23,20 @@ public class ParticipanteUIPanel implements IPostagensUIPanel {
 
         leftSection.getChildren().addAll(btnPerfil, btnPostagens);
         return leftSection;
+    }
+
+    @Override
+    public VBox createCenterSection(Stage stage, User user) {
+        VBox centerSectionContent = new VBox(20);
+        centerSectionContent.setPadding(new Insets(15));
+        centerSectionContent.getChildren().addAll(
+                CreatePostForm.createPostForm(),
+                CreatePostList.createPostList()
+        );
+        ScrollPane centerScrollPane = new ScrollPane(centerSectionContent);
+        centerScrollPane.getStyleClass().add("center-scroll-pane");
+
+        return null;
     }
 
     private VBox createBaseSection(String styleClass) {

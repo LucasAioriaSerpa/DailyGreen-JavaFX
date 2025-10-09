@@ -6,4 +6,5 @@ import org.dailygreen.dailygreen.Users.User;
 
 public interface IPostagensUIPanel {
     VBox createLeftSection(Stage stage, User user);
+    VBox createCenterSection(Stage stage, User user);
 }
