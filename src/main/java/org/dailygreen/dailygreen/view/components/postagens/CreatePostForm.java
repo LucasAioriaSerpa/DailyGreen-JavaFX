@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.view.components;
+package org.dailygreen.dailygreen.view.components.postagens;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,9 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.view.PostagensView;
 
 import static org.dailygreen.dailygreen.util.controller.PostagensControll.acaoPostar;
+import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;
 
 public class CreatePostForm {
     public static VBox createPostForm(Stage stage, User user) {
@@ -37,5 +37,4 @@ public class CreatePostForm {
         return postForm;
     }
 
-    private static void updatePostList(Stage stage) { stage.getScene().setRoot(new PostagensView(stage).getView()); }
 }

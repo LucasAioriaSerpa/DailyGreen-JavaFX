@@ -7,11 +7,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.User;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
-import org.dailygreen.dailygreen.view.components.CreatePostForm;
+import org.dailygreen.dailygreen.view.components.postagens.CreatePostForm;
+import org.dailygreen.dailygreen.view.components.postagens.CreatePostList;
 
 public class ParticipanteUIPanel implements IPostagensUIPanel {
     @Override
-    public VBox createLeftSection(Stage stage, User user) {
+    public VBox createLeftSection(Stage stage, User user, VBox layout) {
         VBox leftSection = createBaseSection("left-section");
 
         Button btnPerfil = new Button("Meu Perfil");
@@ -20,23 +21,22 @@ public class ParticipanteUIPanel implements IPostagensUIPanel {
 
         Button btnPostagens = new Button("Postagens");
         btnPostagens.getStyleClass().add("nav-button-active");
-
         leftSection.getChildren().addAll(btnPerfil, btnPostagens);
         return leftSection;
     }
 
     @Override
-    public VBox createCenterSection(Stage stage, User user) {
+    public ScrollPane createCenterSection(Stage stage, User user, VBox layout) {
         VBox centerSectionContent = new VBox(20);
         centerSectionContent.setPadding(new Insets(15));
         centerSectionContent.getChildren().addAll(
-                CreatePostForm.createPostForm(),
-                CreatePostList.createPostList()
+                CreatePostForm.createPostForm(stage, user),
+                CreatePostList.createPostList(stage, user, layout)
         );
         ScrollPane centerScrollPane = new ScrollPane(centerSectionContent);
         centerScrollPane.getStyleClass().add("center-scroll-pane");
-
-        return null;
+        centerScrollPane.setFitToWidth(true);
+        return centerScrollPane;
     }
 
     private VBox createBaseSection(String styleClass) {

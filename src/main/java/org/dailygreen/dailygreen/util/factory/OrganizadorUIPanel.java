@@ -1,6 +1,7 @@
 package org.dailygreen.dailygreen.util.factory;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Users.User;
@@ -8,7 +9,7 @@ import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
 public class OrganizadorUIPanel implements IPostagensUIPanel{
     @Override
-    public VBox createLeftSection(Stage stage, User user) {
+    public VBox createLeftSection(Stage stage, User user, VBox layout) {
         VBox leftSection = new VBox();
 
         Button btnPerfilOrg = new Button("Perfil Organizador");
@@ -26,7 +27,7 @@ public class OrganizadorUIPanel implements IPostagensUIPanel{
     }
 
     @Override
-    public VBox createCenterSection(Stage stage, User user) {
+    public ScrollPane createCenterSection(Stage stage, User user, VBox layout) {
         return null;
     }
 

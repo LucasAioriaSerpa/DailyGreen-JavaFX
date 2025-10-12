@@ -35,8 +35,6 @@ public class TelaOrganizador {
         this.stage = stage;
         this.email = email;
 
-
-
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
         layout.setAlignment(Pos.CENTER);

@@ -61,13 +61,12 @@
                 <version>3.13.0</version>
                 <configuration>
                     <release>${maven.compiler.release}</release>
-                    <compilerArgs>--enable-preview
-                        <arg>java.base/sun.security.action=ALL-UNNAMED</arg>
-                        <arg>--add-opens</arg>
-                        <arg>java.base/java.lang=ALL-UNNAMED</arg>
-                    </compilerArgs>
                     <source>24</source>
                     <target>24</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -78,8 +77,10 @@
                     <mainClass>org.dailygreen.dailygreen.Main</mainClass>
                     <options>
                         <option>--add-opens</option>
-                        <option>--enable-native-access=javafx.graphics</option>
                         <option>javafx.graphics/com.sun.glass.utils=ALL-UNNAMED</option>
+                        <option>--add-opens</option>
+                        <option>java.base/sun.security.action=ALL-UNNAMED</option>
+                        <option>--enable-native-access=javafx.graphics</option>
                         <option>--add-exports</option>
                         <option>java.base/sun.security.action=ALL-UNNAMED</option>
                     </options>

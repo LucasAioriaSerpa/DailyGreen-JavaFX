@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.view.components;
+package org.dailygreen.dailygreen.view.components.postagens;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Postagens.Post;
 import org.dailygreen.dailygreen.Users.Participante;
 import org.dailygreen.dailygreen.Users.User;
@@ -13,8 +14,12 @@ import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
 import java.util.ArrayList;
 
+import static org.dailygreen.dailygreen.view.components.postagens.CreateComentariosBox.createComentariosBox;
+import static org.dailygreen.dailygreen.view.components.postagens.CreateReactionsBox.createReactionsBox;
+import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;
+
 public class CreatePostCard {
-    public static VBox createPostCard(Post post, ArrayList<Participante> participanteList, ListView<VBox> postList, User user) {
+    public static VBox createPostCard(Stage stage, VBox layout, Post post, ArrayList<Participante> participanteList, ListView<VBox> postList, User user) {
         VBox postCard = new VBox(15);
         postCard.getStyleClass().add("post-card");
 
@@ -38,8 +43,8 @@ public class CreatePostCard {
         descriptionLabel.setWrapText(true);
 
         // ? Reações e Comentários
-        HBox reactionsBox = createReactionsBox(post);
-        VBox comentariosBox = createComentariosBox(post);
+        HBox reactionsBox = createReactionsBox(stage, post, user);
+        VBox comentariosBox = createComentariosBox(stage, post, user);
 
         postCard.getChildren().addAll(postHeader, descriptionLabel, reactionsBox, comentariosBox);
 
@@ -50,13 +55,13 @@ public class CreatePostCard {
             Button btnEditar = new Button("Editar");
             btnEditar.setOnAction(_ -> {
                 PostagensControll.acaoEditar(post);
-                updatePostList();
+                updatePostList(stage);
             });
             Button btnDeletar = new Button("Deletar");
             btnDeletar.getStyleClass().add("button-danger");
             btnDeletar.setOnAction(_ -> {
-                PostagensControll.acaoDeletarPost(post, postCard, postList, this);
-                updatePostList();
+                PostagensControll.acaoDeletarPost(post, postCard, postList, layout);
+                updatePostList(stage);
             });
             buttonBox.getChildren().addAll(btnEditar, btnDeletar);
             postCard.getChildren().add(buttonBox);

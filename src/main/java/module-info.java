@@ -4,7 +4,6 @@ module org.dailygreen.dailygreen {
     requires java.logging;
     requires java.desktop;
     requires org.jetbrains.annotations;
-    requires org.dailygreen.dailygreen;
 
     exports org.dailygreen.dailygreen;
     exports org.dailygreen.dailygreen.Users;

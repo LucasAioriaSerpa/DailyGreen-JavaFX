@@ -12,7 +12,6 @@ import org.dailygreen.dailygreen.Postagens.Reacao;
 import org.dailygreen.dailygreen.util.DAO.RecaoDAO;
 import org.dailygreen.dailygreen.util.DAT.DATpost;
 import org.dailygreen.dailygreen.Users.Participante;
-import org.dailygreen.dailygreen.view.PostagensView;
 import org.dailygreen.dailygreen.view.participante.PerfilViewParticipante;
 
 public class PostagensControll {
@@ -63,11 +62,11 @@ public class PostagensControll {
         });
     }
 
-    public static void acaoDeletarPost(Post post, VBox postCard, javafx.scene.control.ListView<VBox> postList, PostagensView view) {
+    public static void acaoDeletarPost(Post post, VBox postCard, ListView<VBox> postList, VBox view) {
         DATpost.removerPost(post.getID());
         postList.getItems().remove(postCard);
         postList.getItems().clear();
-        postList.getItems().addAll((VBox) view.getView().getChildren());
+        postList.getItems().addAll((VBox) view.getChildren());
     }
 
     public static void acaoPostar(Participante accountParticipante, TextField titleField, TextArea descriptionArea) {
