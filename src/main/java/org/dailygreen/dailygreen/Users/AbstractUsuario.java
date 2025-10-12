@@ -2,14 +2,14 @@ package org.dailygreen.dailygreen.Users;
 
 import java.io.Serial;
 
-public abstract class Usuario {
+public abstract class AbstractUsuario {
     @Serial
     private static final long serialVersionUID = 1L;
     private long ID;
     private String nome;
     private String email;
     private String password;
-    public Usuario(String nome, String email, String password) {
+    public AbstractUsuario(String nome, String email, String password) {
         this.nome = nome;
         this.email = email;
         this.password = password;
@@ -34,4 +34,16 @@ public abstract class Usuario {
                 ",  Senha='" + password + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        AbstractUsuario that = (AbstractUsuario) obj;
+        return this.ID == that.ID || this.email.equals(that.email) || this.password.equals(that.password);
+    }
+
+    @Override
+    public int hashCode() { return Long.hashCode(ID); }
+
 }

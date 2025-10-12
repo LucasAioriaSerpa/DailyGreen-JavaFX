@@ -4,7 +4,7 @@ import org.dailygreen.dailygreen.util.Criptografia;
 
 import java.io.Serializable;
 
-public class Participante extends Usuario implements Serializable {
+public class Participante extends AbstractUsuario implements Serializable {
     public Participante(String nome, String email, String password) throws Exception {
         super(nome, email, Criptografia.criptografar(
                 password,
@@ -21,4 +21,13 @@ public class Participante extends Usuario implements Serializable {
                 ",  Senha='" + getPassword() + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Participante that = (Participante) o;
+        return this.getID() == that.getID() || this.getEmail().equals(that.getEmail());
+    }
+
 }

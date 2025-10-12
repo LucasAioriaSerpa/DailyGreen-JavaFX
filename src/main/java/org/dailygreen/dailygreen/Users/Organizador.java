@@ -4,7 +4,7 @@ import org.dailygreen.dailygreen.util.Criptografia;
 
 import java.io.Serializable;
 
-public class Organizador extends Usuario implements Serializable {
+public class Organizador extends AbstractUsuario implements Serializable {
     private String nomeOrganizacao;
     private String CNPJ;
     public Organizador(String nome, String email, String password, String nomeOrganizacao, String CNPJ) throws Exception {
@@ -33,5 +33,8 @@ public class Organizador extends Usuario implements Serializable {
                 ",  Senha='" + getPassword() + '\'' +
                 '}';
     }
+
+    @Override
+    public int hashCode() { return CNPJ.hashCode(); }
 
 }
