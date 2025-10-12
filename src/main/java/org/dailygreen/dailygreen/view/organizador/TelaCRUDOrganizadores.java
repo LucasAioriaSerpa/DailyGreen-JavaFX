@@ -13,6 +13,7 @@ import org.dailygreen.dailygreen.Users.Organizador;
 import org.dailygreen.dailygreen.util.DAT.OrganizacaoDAT;
 
 import java.util.List;
+import java.util.Objects;
 
 public class TelaCRUDOrganizadores {
 
@@ -47,7 +48,9 @@ public class TelaCRUDOrganizadores {
         montarComponentes();
 
         scene = new Scene(layout, 900, 600);
-        scene.getStylesheets().add(getClass().getResource("/CSS/classPostagem.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(
+                getClass().getResource("/CSS/classPostagem.css")
+        ).toExternalForm());
 
         stage.setTitle("Gerenciar Conta de Organizador");
         stage.setScene(scene);
@@ -209,10 +212,10 @@ public class TelaCRUDOrganizadores {
             return;
         }
 
-        Organizador organizador = organizadores.get(0); // só 1 logado
+        Organizador organizador = organizadores.get(0);
         organizador.setEmail(email);
         organizador.setSenha(senha);
-        organizador.setCnpj(cnpj);
+        organizador.setCNPJ(cnpj);
 
         salvarOrganizadorLogado(organizador);
         tabela.refresh();
@@ -230,7 +233,6 @@ public class TelaCRUDOrganizadores {
         tabela.refresh();
         mostrarAlerta("Sucesso", "Conta excluída.", Alert.AlertType.INFORMATION);
 
-        // Volta pra tela de login após exclusão
         emailLogado = "";
         mostrarLogin();
     }

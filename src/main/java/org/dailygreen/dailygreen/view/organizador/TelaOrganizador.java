@@ -14,6 +14,7 @@ import org.dailygreen.dailygreen.util.DAT.DATuser;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TelaOrganizador {
 
@@ -28,7 +29,7 @@ public class TelaOrganizador {
     private Scene scene;
 
     public TelaOrganizador(Stage stage) {
-        this(stage, ""); // email vazio significa que está na tela de login
+        this(stage, "");
     }
 
     public TelaOrganizador(Stage stage, String email) {
@@ -42,7 +43,9 @@ public class TelaOrganizador {
         criarComponentes();
 
         scene = new Scene(layout, 900, 500);
-        scene.getStylesheets().add(getClass().getResource("/CSS/classAdm.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(
+                getClass().getResource("/CSS/classAdm.css")
+        ).toExternalForm());
 
         stage.setTitle("Login Organizador");
         stage.setScene(scene);

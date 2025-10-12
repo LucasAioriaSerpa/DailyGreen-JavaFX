@@ -40,9 +40,7 @@ public class MainController {
                 return;
             }
             iniciarInterfaceParticipante(stage);
-        } catch (Exception e) {
-            tratarErro(e, "NONE");
-        }
+        } catch (Exception e) { tratarErro(e, "NONE"); }
     }
     public static void btnOrganizador(Stage stage, String emailOrganizador) {
         try {
@@ -55,9 +53,7 @@ public class MainController {
             stage.setScene(scene);
             stage.show();
 
-        } catch (Exception e) {
-            tratarErro(e, "organizador");
-        }
+        } catch (Exception e) {  tratarErro(e, "organizador"); }
     }
     // Para abrir a tela de login do organizador (sem precisar do email)
     public static void btnOrganizadorLogin(Stage stage) {
@@ -69,18 +65,12 @@ public class MainController {
             stage.setTitle("Login - Organizador");
             stage.setScene(scene);
             stage.show();
-        } catch (Exception e) {
-            tratarErro(e, "organizador");
-        }
+        } catch (Exception e) { tratarErro(e, "organizador"); }
     }
 
-    // Para abrir a tela de CRUD do organizador (com email)
     public static void btnOrganizadorCRUD(Stage stage, String emailOrganizador) {
-        try {
-            new TelaCRUDOrganizadores(stage, emailOrganizador);
-        } catch (Exception e) {
-            tratarErro(e, "organizador");
-        }
+        try { new TelaCRUDOrganizadores(stage, emailOrganizador); }
+        catch (Exception e) { tratarErro(e, "organizador"); }
     }
 
     public static void btnGerenciarOrganizadores(Stage stage, String email) {
