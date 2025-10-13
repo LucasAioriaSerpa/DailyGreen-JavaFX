@@ -8,8 +8,7 @@ import javax.crypto.SecretKey;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.stage.Screen;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAT.DATuser;
+import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.util.Criptografia;
 
 import javafx.scene.Scene;
@@ -42,12 +41,12 @@ public class Main extends Application {
         btnUser.getStyleClass().add("btn-user");
         btnUser.getStyleClass().add("btn");
         btnUser.setOnAction(_ -> {MainController.btnUser(stage);});
-        Button btnOrganizador = new Button("Organizador");
-        btnOrganizador.getStyleClass().add("btn-organizador");
-        btnOrganizador.getStyleClass().add("btn");
-        btnOrganizador.setOnAction(_ -> {
-            MainController.btnOrganizadorLogin(stage);
-        });
+//        Button btnOrganizador = new Button("Organizador");
+//        btnOrganizador.getStyleClass().add("btn-organizador");
+//        btnOrganizador.getStyleClass().add("btn");
+//        btnOrganizador.setOnAction(_ -> {
+//            MainController.btnOrganizadorLogin(stage);
+//        });
         Image image = new Image(Objects.requireNonNull(
                 getClass().getResource("/IMAGES/BACKGROUNDS/florest-1.jpeg")).toExternalForm()
         );
@@ -61,7 +60,7 @@ public class Main extends Application {
         VBox root = new VBox(10, logo);
         root.getStyleClass().add("root");
         root.setBackground(new Background(bg));
-        HBox btnsBox = new HBox(10, btnAdm, btnUser, btnOrganizador);
+        HBox btnsBox = new HBox(10, btnAdm, btnUser);
         btnsBox.getStyleClass().add("btns");
         root.getChildren().add(btnsBox);
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
@@ -96,7 +95,7 @@ public class Main extends Application {
 
     private static boolean initializeUser() {
         if (!DATuser.check()) {
-            User user = new User("NONE");
+            User user = new User(null);
             DATuser.setUser(user);
             System.out.println("User created and saved successfully!");
             return false;

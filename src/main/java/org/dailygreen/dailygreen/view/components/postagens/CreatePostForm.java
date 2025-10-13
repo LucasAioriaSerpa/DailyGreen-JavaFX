@@ -6,7 +6,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.model.user.User;
 
 import static org.dailygreen.dailygreen.util.controller.PostagensControll.acaoPostar;
 import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;

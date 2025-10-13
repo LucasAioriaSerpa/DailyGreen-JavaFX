@@ -5,13 +5,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Postagens.Comentario;
-import org.dailygreen.dailygreen.util.DAO.ComentarioDAO;
-import org.dailygreen.dailygreen.Postagens.Post;
-import org.dailygreen.dailygreen.Postagens.Reacao;
-import org.dailygreen.dailygreen.util.DAO.RecaoDAO;
-import org.dailygreen.dailygreen.util.DAT.DATpost;
-import org.dailygreen.dailygreen.Users.Participante;
+import org.dailygreen.dailygreen.model.post.Comment;
+import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.model.post.Post;
+import org.dailygreen.dailygreen.model.post.Reaction;
 import org.dailygreen.dailygreen.view.participante.PerfilViewParticipante;
 
 public class PostagensControll {
@@ -26,8 +23,8 @@ public class PostagensControll {
         DATpost.adicionarPost(post);
     }
 
-    public static void goPerfil(Stage stage, Participante accountParticipante) {
-        stage.getScene().setRoot(new PerfilViewParticipante(stage, accountParticipante).getView());
+    public static void goPerfil(Stage stage, Participant accountParticipant) {
+        stage.getScene().setRoot(new PerfilViewParticipante(stage, accountParticipant).getView());
     }
 
     // --- NOVOS MÉTODOS DE AÇÃO DOS BOTÕES ---
@@ -35,13 +32,13 @@ public class PostagensControll {
     public static void acaoComentar(Post post, String autorEmail, TextField campoComentario) {
         String texto = campoComentario.getText().trim();
         if (!texto.isEmpty()) {
-            Comentario novoComentario = new Comentario(autorEmail, texto, post.getID());
-            ComentarioDAO.salvarComentario(novoComentario);
+            Comment novoComment = new Comment(autorEmail, texto, post.getID());
+            ComentarioDAO.salvarComentario(novoComment);
         }
     }
 
     public static void acaoReagir(Post post, String tipo, String email) {
-        RecaoDAO.salvarOuRemoverReacao(new Reacao(email, post.getID(), tipo));
+        RecaoDAO.salvarOuRemoverReacao(new Reaction(email, post.getID(), tipo));
     }
 
     public static void acaoEditar(Post post) {
@@ -69,7 +66,7 @@ public class PostagensControll {
         postList.getItems().addAll((VBox) view.getChildren());
     }
 
-    public static void acaoPostar(Participante accountParticipante, TextField titleField, TextArea descriptionArea) {
+    public static void acaoPostar(Participant accountParticipant, TextField titleField, TextArea descriptionArea) {
         String title = titleField.getText();
         String description = descriptionArea.getText();
         if (title.isBlank() || description.isBlank()) {
@@ -79,7 +76,7 @@ public class PostagensControll {
             alert.setContentText("Todos os campos devem ser preenchidos.");
             alert.showAndWait();
         } else {
-            sendPost(accountParticipante.getID(), title, description);
+            sendPost(accountParticipant.getID(), title, description);
         }
     }
 }

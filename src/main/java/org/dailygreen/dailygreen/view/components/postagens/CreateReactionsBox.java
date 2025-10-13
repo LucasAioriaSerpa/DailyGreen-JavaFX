@@ -4,9 +4,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Postagens.Post;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAO.RecaoDAO;
+import org.dailygreen.dailygreen.model.post.Post;
+import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
 import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;

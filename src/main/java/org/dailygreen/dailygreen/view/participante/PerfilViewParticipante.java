@@ -6,21 +6,19 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
+import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.view.PostagensView;
-import org.dailygreen.dailygreen.Users.Participante;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAT.DATuser;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class PerfilViewParticipante {
     private final BorderPane layout;
-    private final Participante participante;
+    private final Participant participant;
 
-    public PerfilViewParticipante(Stage stage, Participante participante) {
-        this.participante = participante;
+    public PerfilViewParticipante(Stage stage, Participant participant) {
+        this.participant = participant;
         this.layout = new BorderPane();
         layout.getStyleClass().add("main-screen");
         layout.getStylesheets().add(Objects.requireNonNull(
@@ -40,14 +38,14 @@ public class PerfilViewParticipante {
         fotoPerfil.getStyleClass().add("profile-photo");
         fotoPerfil.setPrefSize(80, 80);
 
-        Label letraInicial = new Label(participante.getNome().substring(0, 1).toUpperCase());
+        Label letraInicial = new Label(participant.getNome().substring(0, 1).toUpperCase());
         letraInicial.getStyleClass().add("profile-photo-text");
         fotoPerfil.getChildren().add(letraInicial);
 
-        Text nome = new Text(participante.getNome());
+        Text nome = new Text(participant.getNome());
         nome.getStyleClass().add("profile-name");
 
-        Text email = new Text(participante.getEmail());
+        Text email = new Text(participant.getEmail());
         email.getStyleClass().add("profile-email");
 
         VBox infoBox = new VBox(5, nome, email);
@@ -92,14 +90,14 @@ public class PerfilViewParticipante {
     }
 
     private void editarPerfil(Stage stage) {
-        EditarPerfilViewParticipante editarView = new EditarPerfilViewParticipante(stage, participante);
+        EditarPerfilViewParticipante editarView = new EditarPerfilViewParticipante(stage, participant);
         stage.getScene().setRoot(editarView.getView());
     }
 
     private void deletarConta(Stage stage) {
-        ArrayList<Participante> participantes = ParticipanteDAT.lerLista();
-        participantes.removeIf(p -> p.getEmail().equals(participante.getEmail()));
-        ParticipanteDAT.salvarLista(participantes);
+        ArrayList<Participant> participants = ParticipanteDAT.lerLista();
+        participants.removeIf(p -> p.getEmail().equals(participant.getEmail()));
+        ParticipanteDAT.salvarLista(participants);
         User user = DATuser.getUser();
         user.setLogged(false);
         user.setAccountParticipante(null);

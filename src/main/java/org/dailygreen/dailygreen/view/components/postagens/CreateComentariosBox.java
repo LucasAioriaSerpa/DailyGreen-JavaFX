@@ -8,10 +8,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Postagens.Comentario;
-import org.dailygreen.dailygreen.Postagens.Post;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAO.ComentarioDAO;
+import org.dailygreen.dailygreen.model.post.Comment;
+import org.dailygreen.dailygreen.model.post.Post;
+import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
 import java.util.ArrayList;
@@ -27,14 +26,14 @@ public class CreateComentariosBox {
         comentariosBox.getChildren().add(comentariosTitulo);
         VBox commentList = new VBox(5);
         commentList.getStyleClass().add("comment-list");
-        ArrayList<Comentario> comentarios = (ArrayList<Comentario>) ComentarioDAO.buscarPorPost(post.getID());
-        if (comentarios.isEmpty()) {
+        ArrayList<Comment> comments = (ArrayList<Comment>) ComentarioDAO.buscarPorPost(post.getID());
+        if (comments.isEmpty()) {
             Label noCommentsLabel = new Label("Nenhum comentário ainda.");
             noCommentsLabel.getStyleClass().add("no-comments-label");
             commentList.getChildren().add(noCommentsLabel);
         } else {
-            for (Comentario comentario : comentarios) {
-                Label comentarioLabel = new Label(comentario.getAutorEmail() + ": " + comentario.getConteudo());
+            for (Comment comment : comments) {
+                Label comentarioLabel = new Label(comment.getAutorEmail() + ": " + comment.getConteudo());
                 comentarioLabel.getStyleClass().add("comment-label");
                 comentarioLabel.setWrapText(true);
                 commentList.getChildren().add(comentarioLabel);

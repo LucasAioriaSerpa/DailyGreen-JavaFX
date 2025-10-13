@@ -7,17 +7,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Postagens.EventoOrganizacao;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAT.DATuser;
-import org.dailygreen.dailygreen.util.DAT.EventoOrganizacaoDAT;
+import org.dailygreen.dailygreen.model.event.EventAttendance;
+import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.util.factory.IPostagensUIPanel;
 import org.dailygreen.dailygreen.util.factory.UIPanelFactory;
 
 import java.util.Objects;
-
-import static org.dailygreen.dailygreen.view.components.postagens.CreatePostForm.createPostForm;
-import static org.dailygreen.dailygreen.view.components.postagens.CreatePostList.createPostList;
 
 public class PostagensView {
     private final Stage stage;
@@ -67,11 +62,11 @@ public class PostagensView {
         Label eventosLabel = new Label("Próximos Eventos");
         eventosLabel.getStyleClass().add("section-title");
 
-        ListView<EventoOrganizacao> eventosListView = new ListView<>();
+        ListView<EventAttendance> eventosListView = new ListView<>();
         eventosListView.getItems().addAll(EventoOrganizacaoDAT.lerLista());
         eventosListView.setCellFactory(_ -> new ListCell<>() {
             @Override
-            protected void updateItem(EventoOrganizacao evento, boolean empty) {
+            protected void updateItem(EventAttendance evento, boolean empty) {
                 super.updateItem(evento, empty);
                 if (empty || evento == null) {
                     setText(null);

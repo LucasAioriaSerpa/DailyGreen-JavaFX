@@ -6,10 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
-import org.dailygreen.dailygreen.Users.Participante;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAT.DATuser;
+import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.util.Criptografia;
 
 import java.util.Objects;
@@ -98,7 +96,7 @@ public class LoginViewParticipante {
             return;
         }
         try {
-            Participante participanteLogado = ParticipanteDAT.lerLista().stream()
+            Participant participantLogado = ParticipanteDAT.lerLista().stream()
                     .filter(p -> {
                         try {
                             boolean result = p.getEmail().equals(email) && Criptografia.descriptografar(p.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE())).equals(senha);
@@ -116,8 +114,8 @@ public class LoginViewParticipante {
                     .findFirst()
                     .orElse(null);
 
-            if (participanteLogado != null) {
-                abrirPerfil(participanteLogado);
+            if (participantLogado != null) {
+                abrirPerfil(participantLogado);
             } else {
                 lblStatus.setText("Email ou senha inválidos!");
                 lblStatus.setStyle("-fx-text-fill: red;");
@@ -128,12 +126,12 @@ public class LoginViewParticipante {
         }
     }
 
-    private void abrirPerfil(Participante participante) {
+    private void abrirPerfil(Participant participant) {
         User user = DATuser.getUser();
         user.setLogged(true);
-        user.setAccountParticipante(participante);
+        user.setAccountParticipante(participant);
         DATuser.setUser(user);
-        PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participante);
+        PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participant);
         stage.getScene().setRoot(perfilView.getView());
     }
 

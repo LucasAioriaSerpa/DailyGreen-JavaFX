@@ -7,9 +7,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Postagens.Post;
-import org.dailygreen.dailygreen.Users.Participante;
-import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.model.post.Post;
+import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
 import java.util.ArrayList;
@@ -19,14 +19,14 @@ import static org.dailygreen.dailygreen.view.components.postagens.CreateReaction
 import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;
 
 public class CreatePostCard {
-    public static VBox createPostCard(Stage stage, VBox layout, Post post, ArrayList<Participante> participanteList, ListView<VBox> postList, User user) {
+    public static VBox createPostCard(Stage stage, VBox layout, Post post, ArrayList<Participant> participantList, ListView<VBox> postList, User user) {
         VBox postCard = new VBox(15);
         postCard.getStyleClass().add("post-card");
 
         // ? Autor
-        String autorNome = participanteList.stream()
+        String autorNome = participantList.stream()
                 .filter(p -> p.getID() == post.getId_autor())
-                .map(Participante::getNome)
+                .map(Participant::getNome)
                 .findFirst()
                 .orElse("Autor Desconhecido");
 

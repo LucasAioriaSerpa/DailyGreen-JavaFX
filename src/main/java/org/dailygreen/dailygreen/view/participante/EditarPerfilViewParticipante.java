@@ -5,10 +5,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
-import org.dailygreen.dailygreen.Users.Participante;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAT.DATuser;
+import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.model.user.User;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -18,10 +16,10 @@ public class EditarPerfilViewParticipante {
     private TextField txtNome;
     private TextField txtEmail;
     private Label lblStatus;
-    private Participante participanteOriginal;
+    private Participant participantOriginal;
 
-    public EditarPerfilViewParticipante(Stage stage, Participante participante) {
-        this.participanteOriginal = participante;
+    public EditarPerfilViewParticipante(Stage stage, Participant participant) {
+        this.participantOriginal = participant;
         this.layout = new VBox(20);
         layout.getStyleClass().add("main-screen");
         layout.getStylesheets().add(Objects.requireNonNull(
@@ -40,10 +38,10 @@ public class EditarPerfilViewParticipante {
         grid.setVgap(10);
 
         Label lblNome = new Label("Nome:");
-        txtNome = new TextField(participanteOriginal.getNome());
+        txtNome = new TextField(participantOriginal.getNome());
         txtNome.setPromptText("Novo nome");
         Label lblEmail = new Label("Email:");
-        txtEmail = new TextField(participanteOriginal.getEmail());
+        txtEmail = new TextField(participantOriginal.getEmail());
         txtEmail.setPromptText("Novo email");
         grid.addRow(0, lblNome, txtNome);
         grid.addRow(1, lblEmail, txtEmail);
@@ -80,9 +78,9 @@ public class EditarPerfilViewParticipante {
         }
         try {
             // Atualiza na lista de participantes
-            ArrayList<Participante> lista = ParticipanteDAT.lerLista();
+            ArrayList<Participant> lista = ParticipanteDAT.lerLista();
             lista.stream()
-                    .filter(p -> p.getEmail().equals(participanteOriginal.getEmail()))
+                    .filter(p -> p.getEmail().equals(participantOriginal.getEmail()))
                     .findFirst()
                     .ifPresent(p -> {
                         p.setNome(novoNome);
@@ -90,10 +88,10 @@ public class EditarPerfilViewParticipante {
                     });
             ParticipanteDAT.salvarLista(lista);
             // Atualiza o participante original
-            participanteOriginal.setNome(novoNome);
-            participanteOriginal.setEmail(novoEmail);
+            participantOriginal.setNome(novoNome);
+            participantOriginal.setEmail(novoEmail);
             User user = DATuser.getUser();
-            user.setAccountParticipante(participanteOriginal);
+            user.setAccountParticipante(participantOriginal);
             DATuser.setUser(user);
             // Volta para a tela de perfil
             voltarParaPerfil(stage);
@@ -104,7 +102,7 @@ public class EditarPerfilViewParticipante {
     }
 
     private void voltarParaPerfil(Stage stage) {
-        PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participanteOriginal);
+        PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participantOriginal);
         stage.getScene().setRoot(perfilView.getView());
     }
 

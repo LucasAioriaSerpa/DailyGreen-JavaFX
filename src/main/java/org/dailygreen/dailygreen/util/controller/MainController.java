@@ -1,16 +1,13 @@
 package org.dailygreen.dailygreen.util.controller;
 
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.Main;
 import org.dailygreen.dailygreen.ParticipanteMain;
 import org.dailygreen.dailygreen.MainAdm;
-import org.dailygreen.dailygreen.view.organizador.TelaCRUDOrganizadores;
-import org.dailygreen.dailygreen.view.organizador.TelaOrganizador;
-import org.dailygreen.dailygreen.Users.Participante;
+import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.model.user.Role;
+import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.view.participante.PerfilViewParticipante;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAT.DATuser;
 
 import java.io.IOException;
 
@@ -24,74 +21,74 @@ public class MainController {
 
     public static void btnAdmin(Stage stage) {
         try {
-            inicializarUsuario("administrador");
+            inicializarUsuario(Role.ADMINISTRADOR);
             iniciarInterfaceAdministrador(stage);
         } catch (IOException ex) {
-            tratarErro(ex, "NONE");
+            tratarErro(ex, null);
         }
     }
 
     public static void btnUser(Stage stage) {
         try {
-            inicializarUsuario("participante");
+            inicializarUsuario(Role.PARTICIPANTE);
             user = DATuser.getUser();
             if (user.isLogged()) {
                 inicializarPerfil(stage, user.getAccountParticipante());
                 return;
             }
             iniciarInterfaceParticipante(stage);
-        } catch (Exception e) { tratarErro(e, "NONE"); }
+        } catch (Exception e) { tratarErro(e, null); }
     }
-    public static void btnOrganizador(Stage stage, String emailOrganizador) {
-        try {
-            inicializarUsuario("organizador");
+//    public static void btnOrganizador(Stage stage, String emailOrganizador) {
+//        try {
+//            inicializarUsuario("organizador");
+//
+//            TelaOrganizador tela = new TelaOrganizador(stage, emailOrganizador);
+//            Scene scene = new Scene(tela.getView(), 600, 400);
+//
+//            stage.setTitle("Login - Organizador");
+//            stage.setScene(scene);
+//            stage.show();
+//
+//        } catch (Exception e) {  tratarErro(e, "organizador"); }
+//    }
+//    // Para abrir a tela de login do organizador (sem precisar do email)
+//    public static void btnOrganizadorLogin(Stage stage) {
+//        try {
+//            inicializarUsuario("organizador");
+//            TelaOrganizador tela = new TelaOrganizador(stage); // construtor sem email
+//            Scene scene = new Scene(tela.getView(), 600, 400);
+//
+//            stage.setTitle("Login - Organizador");
+//            stage.setScene(scene);
+//            stage.show();
+//        } catch (Exception e) { tratarErro(e, "organizador"); }
+//    }
+//
+//    public static void btnOrganizadorCRUD(Stage stage, String emailOrganizador) {
+//        try { new TelaCRUDOrganizadores(stage, emailOrganizador); }
+//        catch (Exception e) { tratarErro(e, "organizador"); }
+//    }
+//
+//    public static void btnGerenciarOrganizadores(Stage stage, String email) {
+//        try {
+//            Profile profile = DATuser.getUser();
+//
+//            new TelaCRUDOrganizadores(stage, email);
+//        } catch (Exception e) {
+//            tratarErro(e, "organizador");
+//        }
+//    }
 
-            TelaOrganizador tela = new TelaOrganizador(stage, emailOrganizador);
-            Scene scene = new Scene(tela.getView(), 600, 400);
-
-            stage.setTitle("Login - Organizador");
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (Exception e) {  tratarErro(e, "organizador"); }
-    }
-    // Para abrir a tela de login do organizador (sem precisar do email)
-    public static void btnOrganizadorLogin(Stage stage) {
-        try {
-            inicializarUsuario("organizador");
-            TelaOrganizador tela = new TelaOrganizador(stage); // construtor sem email
-            Scene scene = new Scene(tela.getView(), 600, 400);
-
-            stage.setTitle("Login - Organizador");
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) { tratarErro(e, "organizador"); }
-    }
-
-    public static void btnOrganizadorCRUD(Stage stage, String emailOrganizador) {
-        try { new TelaCRUDOrganizadores(stage, emailOrganizador); }
-        catch (Exception e) { tratarErro(e, "organizador"); }
-    }
-
-    public static void btnGerenciarOrganizadores(Stage stage, String email) {
-        try {
-            User user = DATuser.getUser();
-
-            new TelaCRUDOrganizadores(stage, email);
-        } catch (Exception e) {
-            tratarErro(e, "organizador");
-        }
-    }
-
-    private static void inicializarUsuario(String tipo) {
+    private static void inicializarUsuario(Role tipo) {
         User user = DATuser.getUser();
-        user.setType(tipo);
+        user.setRole(tipo);
         DATuser.setUser(user);
     }
 
-    private static void tratarErro(Exception ex, String tipoUsuario) {
+    private static void tratarErro(Exception ex, Role tipoUsuario) {
         User user = DATuser.getUser();
-        user.setType(tipoUsuario);
+        user.setRole(tipoUsuario);
         DATuser.setUser(user);
         ex.printStackTrace();
         throw new RuntimeException(ex);
@@ -107,8 +104,8 @@ public class MainController {
         userPmain.start(stage);
     }
 
-    private static void inicializarPerfil(Stage stage, Participante participante) {
-        PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participante);
+    private static void inicializarPerfil(Stage stage, Participant participant) {
+        PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participant);
         stage.getScene().setRoot(perfilView.getView());
     }
 

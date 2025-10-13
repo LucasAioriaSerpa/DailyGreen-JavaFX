@@ -1,12 +1,13 @@
 package org.dailygreen.dailygreen.util.factory;
 
-import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.model.user.Role;
 
 public class UIPanelFactory {
     public static IPostagensUIPanel getPanel(User user) {
-        String userType = user.getType();
-        if ("participante".equals(userType)) { return new ParticipanteUIPanel(); }
-        else if ("organizador".equals(userType)) { return new OrganizadorUIPanel(); }
+        Role userType = user.getRole();
+        if (Role.PARTICIPANTE.equals(userType)) { return new ParticipanteUIPanel(); }
+        else if (Role.ORGANIZADOR.equals(userType)) { return new OrganizadorUIPanel(); }
         throw new IllegalArgumentException("Tipo de usuário desconhecido:" + userType);
     }
 }

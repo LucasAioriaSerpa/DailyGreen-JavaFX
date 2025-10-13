@@ -9,8 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
-import org.dailygreen.dailygreen.Users.Participante;
+import org.dailygreen.dailygreen.model.user.types.Participant;
 
 import java.util.List;
 import java.util.Objects;
@@ -46,9 +45,9 @@ public class ListaParticipantesView {
         listaContainer.setAlignment(Pos.CENTER);
 
         try {
-            List<Participante> participantes = ParticipanteDAT.lerLista();
+            List<Participant> participants = ParticipanteDAT.lerLista();
 
-            if (participantes.isEmpty()) {
+            if (participants.isEmpty()) {
                 listaContainer.getChildren().add(new Label("Nenhum participante cadastrado."));
             } else {
 
@@ -65,7 +64,7 @@ public class ListaParticipantesView {
                 listaContainer.getChildren().add(cabecalho);
 
 
-                for (Participante p : participantes) {
+                for (Participant p : participants) {
                     HBox linhaParticipante = new HBox(20);
                     linhaParticipante.setAlignment(Pos.CENTER);
 

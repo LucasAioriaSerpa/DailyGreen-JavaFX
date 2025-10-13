@@ -6,8 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
-import org.dailygreen.dailygreen.Users.Participante;
+import org.dailygreen.dailygreen.model.user.types.Participant;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -104,12 +103,12 @@ public class CadastroViewParticipante {
                 return;
             }
 
-            Participante novoParticipante = new Participante(
+            Participant novoParticipant = new Participant(
                     txtNome.getText(),
                     txtEmail.getText(),
                     txtSenha.getText()
             );
-            ParticipanteDAT.adicionarParticipante(novoParticipante);
+            ParticipanteDAT.adicionarParticipante(novoParticipant);
 
             lblStatus.setText("Cadastro realizado com sucesso!");
             lblStatus.setStyle("-fx-text-fill: green;");

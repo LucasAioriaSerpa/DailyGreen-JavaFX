@@ -5,8 +5,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Users.Participante;
-import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
+import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.view.participante.LoginViewParticipante;
 
 import java.util.Objects;
@@ -48,7 +47,7 @@ public class ParticipanteMain extends Application {
             // ParticipanteDAT.adicionarParticipante(p2);
 
             System.out.println("Participantes cadastrados:");
-            for (Participante p : ParticipanteDAT.lerLista()) {
+            for (Participant p : ParticipanteDAT.lerLista()) {
                 System.out.println(p);
             }
         } catch (Exception e) {

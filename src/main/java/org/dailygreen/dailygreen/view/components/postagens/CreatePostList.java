@@ -4,11 +4,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Postagens.Post;
-import org.dailygreen.dailygreen.Users.Participante;
-import org.dailygreen.dailygreen.Users.User;
-import org.dailygreen.dailygreen.util.DAT.DATpost;
-import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
+import org.dailygreen.dailygreen.model.post.Post;
+import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.model.user.User;
 
 import java.util.ArrayList;
 
@@ -19,9 +17,9 @@ public class CreatePostList {
         ListView<VBox> postList = new ListView<>();
         postList.getStyleClass().add("post-list");
         VBox.setVgrow(postList, Priority.ALWAYS);
-        ArrayList<Participante> participanteList = ParticipanteDAT.lerLista();
+        ArrayList<Participant> participantList = ParticipanteDAT.lerLista();
         for (Post post : DATpost.lerLista()) {
-            VBox postCard = createPostCard(stage, layout, post, participanteList, postList, user);
+            VBox postCard = createPostCard(stage, layout, post, participantList, postList, user);
             postList.getItems().add(postCard);
         }
         return postList;

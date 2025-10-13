@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.util.DAO.AdmDAO;
 import org.dailygreen.dailygreen.view.administrador.DenunciaView;
 import org.dailygreen.dailygreen.view.LoginView;
 

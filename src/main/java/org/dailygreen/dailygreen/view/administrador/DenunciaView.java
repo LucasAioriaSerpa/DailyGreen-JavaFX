@@ -10,8 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.util.DAO.DenunciaDAO;
-import org.dailygreen.dailygreen.Administrativo.Denuncia;
+import org.dailygreen.dailygreen.model.moderation.Report;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class DenunciaView {
     public void showComponents(){
         GridPane grid = new GridPane();
         grid.getStyleClass().add("denuncia-grid");
-        ObservableList<Denuncia> denuncias = FXCollections.observableArrayList();
+        ObservableList<Report> reports = FXCollections.observableArrayList();
 
 
         // HEADER | FILTRO
@@ -56,8 +55,8 @@ public class DenunciaView {
         btnBuscar.setOnAction(e -> {
             String tipo = filtro.getValue();
             String termo = campoPesquisa.getText();
-            List<Denuncia> filtradas = DenunciaDAO.filtrar(tipo, termo);
-            denuncias.setAll(filtradas);
+            List<Report> filtradas = DenunciaDAO.filtrar(tipo, termo);
+            reports.setAll(filtradas);
         });
         btnBuscar.getStyleClass().add("botao-filtrar");
 
@@ -79,41 +78,41 @@ public class DenunciaView {
 
         // TABELA DE DENUNCIAS
 
-        TableView<Denuncia> tableView = new TableView<>();
+        TableView<Report> tableView = new TableView<>();
         tableView.getStyleClass().add("table-view-denuncia");
 
-        TableColumn<Denuncia, String> id = new TableColumn<>("ID");
+        TableColumn<Report, String> id = new TableColumn<>("ID");
         id.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getId().toString()));
 
-        TableColumn<Denuncia, String> participante = new TableColumn<>("EMAIL DO PARTICIPANTE");
+        TableColumn<Report, String> participante = new TableColumn<>("EMAIL DO PARTICIPANTE");
         participante.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getParticipante()));
 
-        TableColumn<Denuncia, String> titulo = new TableColumn<>("TITULO");
+        TableColumn<Report, String> titulo = new TableColumn<>("TITULO");
         titulo.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getTitulo()));
 
-        TableColumn<Denuncia, String> motivo = new TableColumn<>("MOTIVO");
+        TableColumn<Report, String> motivo = new TableColumn<>("MOTIVO");
         motivo.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getMotivo()));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        TableColumn<Denuncia, String> data = new TableColumn<>("DATA REGISTRO");
+        TableColumn<Report, String> data = new TableColumn<>("DATA REGISTRO");
         data.setCellValueFactory(cell -> {
             LocalDate dataOriginal = cell.getValue().getData();
             String dataFormatada = dataOriginal.format(formatter);
             return new javafx.beans.property.SimpleStringProperty(dataFormatada);
         });
 
-        TableColumn<Denuncia, String> status = new TableColumn<>("STATUS");
+        TableColumn<Report, String> status = new TableColumn<>("STATUS");
         status.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getStatus()));
 
-        denuncias.addAll(DenunciaDAO.mostrar());
-        tableView.setItems(denuncias);
+        reports.addAll(DenunciaDAO.mostrar());
+        tableView.setItems(reports);
 
 
 
         // BOTÕES
 
-        TableColumn<Denuncia, Void> buttons = new TableColumn<>("DECISÃO");
-        buttons.setCellFactory(coluna -> new javafx.scene.control.TableCell<Denuncia, Void>(){
+        TableColumn<Report, Void> buttons = new TableColumn<>("DECISÃO");
+        buttons.setCellFactory(coluna -> new javafx.scene.control.TableCell<Report, Void>(){
             private final Button delete = new Button("EXCLUIR");
             private final Button suspend = new Button("SUSPENDER");
             private final Button ban = new Button("BANIR");
@@ -123,7 +122,7 @@ public class DenunciaView {
                 // BOTÃO EXCLUIR
 
                 delete.setOnAction(event -> {
-                    Denuncia denuncia = getTableView().getItems().get(getIndex());
+                    Report report = getTableView().getItems().get(getIndex());
 
                     // Alerta
                     Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
@@ -136,8 +135,8 @@ public class DenunciaView {
                     // Se confirmar
                     Optional<ButtonType> escolha = alerta.showAndWait();
                     if (escolha.isPresent() && escolha.get() == confirmar){
-                        DenunciaDAO.removerPorEmail(denuncia.getParticipante());
-                        denuncias.remove(denuncia);
+                        DenunciaDAO.removerPorEmail(report.getParticipante());
+                        reports.remove(report);
                     }
                 });
 
@@ -145,7 +144,7 @@ public class DenunciaView {
                 // BOTÃO SUSPENDER
 
                 suspend.setOnAction(event -> {
-                    Denuncia denuncia = getTableView().getItems().get(getIndex());
+                    Report report = getTableView().getItems().get(getIndex());
 
                     // Alerta
                     Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
@@ -157,9 +156,9 @@ public class DenunciaView {
 
                     Optional<ButtonType> escolha = alerta.showAndWait();
                     if (escolha.isPresent() && escolha.get() == confirmar){
-                        String email = denuncia.getParticipante();
-                        List<Denuncia> denuncias = new ArrayList<>(tableView.getItems());
-                        for (Denuncia d : denuncias){
+                        String email = report.getParticipante();
+                        List<Report> reports = new ArrayList<>(tableView.getItems());
+                        for (Report d : reports){
                             if (d.getParticipante().equalsIgnoreCase(email)){
                                 d.setStatus("Suspenso");
                                 d.setSuspenso(true);
@@ -167,7 +166,7 @@ public class DenunciaView {
                         }
 
                         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DenunciaDAO.REPORT_FILE))){
-                            oos.writeObject(denuncias);
+                            oos.writeObject(reports);
                         } catch (IOException e){
                             e.printStackTrace();
                         }
@@ -184,7 +183,7 @@ public class DenunciaView {
                 // BOTÃO BANIR
 
                 ban.setOnAction(event -> {
-                    Denuncia denuncia = getTableView().getItems().get(getIndex());
+                    Report report = getTableView().getItems().get(getIndex());
 
                     // Alerta
                     Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
@@ -196,9 +195,9 @@ public class DenunciaView {
 
                     Optional<ButtonType> escolha = alerta.showAndWait();
                     if (escolha.isPresent() && escolha.get() == confirmar){
-                        String email = denuncia.getParticipante();
-                        List<Denuncia> denuncias = new ArrayList<>(tableView.getItems());
-                        for (Denuncia d : denuncias){
+                        String email = report.getParticipante();
+                        List<Report> reports = new ArrayList<>(tableView.getItems());
+                        for (Report d : reports){
                             if (d.getParticipante().equalsIgnoreCase(email)){
                                 d.setStatus("Banido");
                                 d.setSuspenso(true);
@@ -206,7 +205,7 @@ public class DenunciaView {
                         }
 
                         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DenunciaDAO.REPORT_FILE))){
-                            oos.writeObject(denuncias);
+                            oos.writeObject(reports);
                         } catch (IOException e){
                             e.printStackTrace();
                         }
@@ -222,8 +221,8 @@ public class DenunciaView {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    Denuncia denuncia = getTableView().getItems().get(getIndex());
-                    if (denuncia.getSuspenso() || denuncia.getBanido()){
+                    Report report = getTableView().getItems().get(getIndex());
+                    if (report.getSuspenso() || report.getBanido()){
                         setGraphic(null);
                     } else {
                         setGraphic(buutonBox);

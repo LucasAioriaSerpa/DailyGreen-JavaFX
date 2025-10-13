@@ -14,9 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.util.controller.AdmController;
-import org.dailygreen.dailygreen.util.DAO.DenunciaDAO;
-import org.dailygreen.dailygreen.Administrativo.Denuncia;
-import org.dailygreen.dailygreen.util.DAT.ParticipanteDAT;
+import org.dailygreen.dailygreen.model.moderation.Report;
 
 import java.util.List;
 import java.util.Objects;
@@ -167,8 +165,8 @@ public class DenunciaFormView {
                     && motivoValue != null && !motivoValue.isEmpty())
 
             {
-                Denuncia denuncia = new Denuncia(participanteValue, tittuloValue, motivoValue);
-                DenunciaDAO.registrar(denuncia);
+                Report report = new Report(participanteValue, tittuloValue, motivoValue);
+                DenunciaDAO.registrar(report);
 
                 Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
                 DenunciaView denunciaView = new DenunciaView(stage);

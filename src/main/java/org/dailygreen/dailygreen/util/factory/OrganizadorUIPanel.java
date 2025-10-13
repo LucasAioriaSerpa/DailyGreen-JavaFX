@@ -4,7 +4,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Users.User;
+import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
 public class OrganizadorUIPanel implements IPostagensUIPanel{
