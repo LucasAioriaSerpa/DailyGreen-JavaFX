@@ -13,6 +13,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
+import org.dailygreen.dailygreen.repository.impl.ReportRepository;
 import org.dailygreen.dailygreen.util.controller.AdmController;
 import org.dailygreen.dailygreen.model.moderation.Report;
 
@@ -54,8 +56,8 @@ public class DenunciaFormView {
 
         ComboBox<String> listaParticipantes = new ComboBox<>();
         listaParticipantes.setEditable(true);
-        List<String> nomesParticipantes = ParticipanteDAT.lerLista().stream()
-                .map(p -> p.getEmail())
+        List<String> nomesParticipantes = new ParticipantJsonRepository().findAll().stream()
+                .map(p -> p.getNome())
                 .toList();
         listaParticipantes.getItems().addAll(nomesParticipantes);
 
@@ -166,7 +168,7 @@ public class DenunciaFormView {
 
             {
                 Report report = new Report(participanteValue, tittuloValue, motivoValue);
-                DenunciaDAO.registrar(report);
+                new ReportRepository().save(report);
 
                 Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
                 DenunciaView denunciaView = new DenunciaView(stage);

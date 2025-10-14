@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +46,7 @@ public class ListaParticipantesView {
         listaContainer.setAlignment(Pos.CENTER);
 
         try {
-            List<Participant> participants = ParticipanteDAT.lerLista();
+            List<Participant> participants = new ParticipantJsonRepository().findAll();
 
             if (participants.isEmpty()) {
                 listaContainer.getChildren().add(new Label("Nenhum participante cadastrado."));

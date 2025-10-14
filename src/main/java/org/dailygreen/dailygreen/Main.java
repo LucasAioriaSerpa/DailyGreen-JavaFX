@@ -2,82 +2,72 @@ package org.dailygreen.dailygreen;
 
 import java.io.File;
 import java.util.Objects;
-
 import javax.crypto.SecretKey;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.image.ImageView;
-import javafx.stage.Screen;
-import org.dailygreen.dailygreen.model.user.User;
-import org.dailygreen.dailygreen.util.Criptografia;
-
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.layout.*;
-import javafx.scene.image.Image;
-import javafx.scene.control.Button;
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
+import org.dailygreen.dailygreen.util.Criptografia;
 import org.dailygreen.dailygreen.util.controller.MainController;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        ImageView logo = new ImageView(
-                new Image(Objects.requireNonNull(
-                        getClass().getResource("/IMAGES/logo-dailygreen.png")).toExternalForm())
-        );
-        logo.setFitWidth(500);
-        logo.setPreserveRatio(true);
-        logo.setSmooth(true);
-        logo.setCache(true);
-        logo.getStyleClass().add("logo");
-        Button btnAdm = new Button("Administrador");
-        btnAdm.getStyleClass().add("btn-adm");
-        btnAdm.getStyleClass().add("btn");
-        btnAdm.setOnAction(_-> {
-            MainController.btnAdmin(stage);});
-        Button btnUser = new Button("Usuario");
-        btnUser.getStyleClass().add("btn-user");
-        btnUser.getStyleClass().add("btn");
-        btnUser.setOnAction(_ -> {MainController.btnUser(stage);});
-//        Button btnOrganizador = new Button("Organizador");
-//        btnOrganizador.getStyleClass().add("btn-organizador");
-//        btnOrganizador.getStyleClass().add("btn");
-//        btnOrganizador.setOnAction(_ -> {
-//            MainController.btnOrganizadorLogin(stage);
-//        });
-        Image image = new Image(Objects.requireNonNull(
-                getClass().getResource("/IMAGES/BACKGROUNDS/florest-1.jpeg")).toExternalForm()
-        );
-        BackgroundImage bg = new BackgroundImage(
-                image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT
-        );
-        VBox root = new VBox(10, logo);
-        root.getStyleClass().add("root");
-        root.setBackground(new Background(bg));
-        HBox btnsBox = new HBox(10, btnAdm, btnUser);
-        btnsBox.getStyleClass().add("btns");
-        root.getChildren().add(btnsBox);
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        Scene scene = new Scene(
-                root,
-                (int)(screenBounds.getWidth()/2),
-                (int)(screenBounds.getHeight()/2)
-        );
-        scene.getStylesheets().add(Objects.requireNonNull(
-                getClass().getResource("/CSS/classMain.css")
-        ).toExternalForm());
-        stage.setTitle("DailyGreen - Main-Page");
-        stage.getIcons().add(new Image(Objects.requireNonNull(
-                getClass().getResource("/dailygreen_icon-32x32.png")
-        ).toExternalForm()));
+        Scene scene = createMainScene(stage);
+        stage.setTitle("DailyGreen - Main Page");
+        stage.getIcons().add(loadImage("/dailygreen_icon-32x32.png"));
         stage.setScene(scene);
         stage.show();
+    }
+
+    private Scene createMainScene(Stage stage) {
+        VBox root = new VBox(10, createLogo(), createButtonBox(stage));
+        root.getStyleClass().add("root");
+        root.setBackground(new Background(new BackgroundImage(
+                loadImage("/IMAGES/BACKGROUNDS/florest-1.jpeg"),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT
+        )));
+        Rectangle2D screen = Screen.getPrimary().getVisualBounds();
+        Scene scene = new Scene(root, screen.getWidth() / 2, screen.getHeight() / 2);
+        scene.getStylesheets().add(getClass().getResource("/CSS/classMain.css").toExternalForm());
+        return scene;
+    }
+
+    private ImageView createLogo() {
+        ImageView logo = new ImageView(loadImage("/IMAGES/logo-dailygreen.png"));
+        logo.setFitWidth(500);
+        logo.setPreserveRatio(true);
+        logo.getStyleClass().add("logo");
+        return logo;
+    }
+
+    private HBox createButtonBox(Stage stage) {
+        Button btnAdm = createButton("Administrador", "btn-adm", _ -> MainController.btnAdmin(stage));
+        Button btnUser = createButton("Usuário", "btn-user", _ -> MainController.btnUser(stage));
+        HBox box = new HBox(10, btnAdm, btnUser);
+        box.getStyleClass().add("btns");
+        return box;
+    }
+
+    private Button createButton(String text, String styleClass, javafx.event.EventHandler<javafx.event.ActionEvent> action) {
+        Button btn = new Button(text);
+        btn.getStyleClass().addAll("btn", styleClass);
+        btn.setOnAction(action);
+        return btn;
+    }
+
+    private Image loadImage(String path) {
+        return new Image(Objects.requireNonNull(getClass().getResource(path)).toExternalForm());
     }
 
     private static void initializeSecurityKey() {
@@ -86,22 +76,28 @@ public class Main extends Application {
             if (!keyFile.exists()) {
                 SecretKey key = Criptografia.gerarChave();
                 Criptografia.salvarChaveEmArquivo(key, Criptografia.getARQUIVO_CHAVE());
-                System.out.println("Key created and saved successfully!");
-            } else {System.out.println("Existing key loaded successfully!");}
+                System.out.println("Nova chave criada e salva com sucesso!");
+            } else {
+                System.out.println("Chave existente carregada com sucesso!");
+            }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize security key: " + e.getMessage(), e);
+            System.err.println("Falha ao inicializar a chave de segurança: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private static boolean initializeUser() {
-        if (!DATuser.check()) {
-            User user = new User(null);
-            DATuser.setUser(user);
-            System.out.println("User created and saved successfully!");
-            return false;
+    private static void initializeUser() {
+        try {
+            if (new UserJsonRepository().checkOrCreateFile()) {
+                User user = new User(null);
+                new UserJsonRepository().save(user);
+                System.out.println("Arquivo de usuários carregado com sucesso!");
+            } else {
+                System.out.println("Arquivo de usuários criado com sucesso!");
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao inicializar usuário: " + e.getMessage());
         }
-        System.out.println("User loaded successfully!");
-        return true;
     }
 
     public static void main(String[] args) {

@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
 import org.dailygreen.dailygreen.view.participante.LoginViewParticipante;
 
 import java.util.Objects;
@@ -47,7 +48,7 @@ public class ParticipanteMain extends Application {
             // ParticipanteDAT.adicionarParticipante(p2);
 
             System.out.println("Participantes cadastrados:");
-            for (Participant p : ParticipanteDAT.lerLista()) {
+            for (Participant p : new ParticipantJsonRepository().findAll()) {
                 System.out.println(p);
             }
         } catch (Exception e) {

@@ -7,6 +7,7 @@ import org.dailygreen.dailygreen.MainAdm;
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.model.user.Role;
 import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
 import org.dailygreen.dailygreen.view.participante.PerfilViewParticipante;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class MainController {
     public static void btnUser(Stage stage) {
         try {
             inicializarUsuario(Role.PARTICIPANTE);
-            user = DATuser.getUser();
+            user = new UserJsonRepository().findAll().getFirst();
             if (user.isLogged()) {
                 inicializarPerfil(stage, user.getAccountParticipante());
                 return;
@@ -81,15 +82,15 @@ public class MainController {
 //    }
 
     private static void inicializarUsuario(Role tipo) {
-        User user = DATuser.getUser();
+        User user = new UserJsonRepository().findAll().getFirst();;
         user.setRole(tipo);
-        DATuser.setUser(user);
+        new UserJsonRepository().save(user);
     }
 
     private static void tratarErro(Exception ex, Role tipoUsuario) {
-        User user = DATuser.getUser();
+        User user = new UserJsonRepository().findAll().getFirst();;
         user.setRole(tipoUsuario);
-        DATuser.setUser(user);
+        new UserJsonRepository().save(user);
         ex.printStackTrace();
         throw new RuntimeException(ex);
     }

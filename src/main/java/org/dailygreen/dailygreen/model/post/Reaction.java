@@ -38,12 +38,8 @@ public class Reaction implements Serializable {
      * @param c Operação: '+' para adicionar a reação, '-' para remover.
      */
     public void setReaction(String reaction, char c) {
-        if (c == '+') {
-            this.tipo = reaction;
-        } else if (c == '-') {
-            this.tipo = "";
-        } else {
-            throw new IllegalArgumentException("Invalid operation: " + c);
-        }
+        if (c == '+') { this.tipo = reaction; }
+        else if (c == '-') { this.tipo = ""; }
+        else { throw new IllegalArgumentException("Invalid operation: " + c); }
     }
 }

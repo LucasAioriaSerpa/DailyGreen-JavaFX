@@ -8,9 +8,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
+import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
 import org.dailygreen.dailygreen.view.PostagensView;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class PerfilViewParticipante {
@@ -95,21 +96,21 @@ public class PerfilViewParticipante {
     }
 
     private void deletarConta(Stage stage) {
-        ArrayList<Participant> participants = ParticipanteDAT.lerLista();
-        participants.removeIf(p -> p.getEmail().equals(participant.getEmail()));
-        ParticipanteDAT.salvarLista(participants);
-        User user = DATuser.getUser();
-        user.setLogged(false);
+        new ParticipantJsonRepository().deleteByEmail(participant.getEmail());
+        User user = new UserJsonRepository().findByEmail(participant.getEmail());
         user.setAccountParticipante(null);
-        DATuser.setUser(user);
+        user.setLogged(false);
+        user.setRole(null);
+        new UserJsonRepository().update(user);
         voltarParaLogin(stage);
     }
 
     private void voltarParaLogin(Stage stage) {
-        User user = DATuser.getUser();
-        user.setLogged(false);
+        User user = new UserJsonRepository().findByEmail(participant.getEmail());
         user.setAccountParticipante(null);
-        DATuser.setUser(user);
+        user.setLogged(false);
+        user.setRole(null);
+        new UserJsonRepository().update(user);
         LoginViewParticipante loginView = new LoginViewParticipante(stage);
         stage.getScene().setRoot(loginView.getView());
     }

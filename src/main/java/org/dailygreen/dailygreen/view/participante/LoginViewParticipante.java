@@ -8,6 +8,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
+import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
 import org.dailygreen.dailygreen.util.Criptografia;
 
 import java.util.Objects;
@@ -96,14 +98,14 @@ public class LoginViewParticipante {
             return;
         }
         try {
-            Participant participantLogado = ParticipanteDAT.lerLista().stream()
+            Participant participantLogado = new ParticipantJsonRepository().findAll().stream()
                     .filter(p -> {
                         try {
                             boolean result = p.getEmail().equals(email) && Criptografia.descriptografar(p.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE())).equals(senha);
                             if (result) {
-                                User user = DATuser.getUser();
+                                User user = new UserJsonRepository().findAll().getFirst();
                                 user.setAccountParticipante(p);
-                                DATuser.setUser(user);
+                                new UserJsonRepository().update(user);
                             }
                             return result;
                         } catch (Exception ex) {
@@ -127,10 +129,10 @@ public class LoginViewParticipante {
     }
 
     private void abrirPerfil(Participant participant) {
-        User user = DATuser.getUser();
+        User user = new UserJsonRepository().findAll().getFirst();
         user.setLogged(true);
         user.setAccountParticipante(participant);
-        DATuser.setUser(user);
+        new UserJsonRepository().update(user);
         PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participant);
         stage.getScene().setRoot(perfilView.getView());
     }

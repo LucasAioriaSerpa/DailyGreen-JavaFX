@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.post.Post;
 import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.repository.impl.ReactionJsonRepository;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
 import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;
@@ -16,9 +17,9 @@ public class CreateReactionsBox {
         reactionsBox.setAlignment(Pos.CENTER_LEFT);
         reactionsBox.getStyleClass().add("reactions-box");
         String[] tipos = {"gostei", "parabens", "apoio", "amei", "genial"};
-        String tipoReacaoUsuario = RecaoDAO.buscarTipoReacaoUsuario(user.getAccountParticipante().getEmail(), post.getID());
+        String tipoReacaoUsuario = String.valueOf(new ReactionJsonRepository().findUserReactionType(user.getAccountParticipante().getEmail(), post.getID()));
         for (String tipo : tipos) {
-            long count = RecaoDAO.contarPorTipo(post.getID(), tipo);
+            long count = new ReactionJsonRepository().countByTarget(post.getID(), tipo);
             Button btn = new Button(tipo.substring(0, 1).toUpperCase() + tipo.substring(1) + " (" + count + ")");
             btn.getStyleClass().add("reaction-button");
             btn.getStyleClass().add("button-" + tipo);

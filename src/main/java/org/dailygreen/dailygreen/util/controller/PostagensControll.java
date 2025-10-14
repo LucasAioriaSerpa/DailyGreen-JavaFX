@@ -9,7 +9,12 @@ import org.dailygreen.dailygreen.model.post.Comment;
 import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.model.post.Post;
 import org.dailygreen.dailygreen.model.post.Reaction;
+import org.dailygreen.dailygreen.repository.impl.CommentJsonRepository;
+import org.dailygreen.dailygreen.repository.impl.PostJsonRepository;
+import org.dailygreen.dailygreen.repository.impl.ReactionJsonRepository;
 import org.dailygreen.dailygreen.view.participante.PerfilViewParticipante;
+
+import java.util.List;
 
 public class PostagensControll {
     public static void sendPost(long id_author , String title, String description) {
@@ -20,7 +25,7 @@ public class PostagensControll {
             System.out.println("Description cannot be empty");
         }
         Post post = new Post(id_author, title, description);
-        DATpost.adicionarPost(post);
+        new PostJsonRepository().save(post);
     }
 
     public static void goPerfil(Stage stage, Participant accountParticipant) {
@@ -33,13 +38,11 @@ public class PostagensControll {
         String texto = campoComentario.getText().trim();
         if (!texto.isEmpty()) {
             Comment novoComment = new Comment(autorEmail, texto, post.getID());
-            ComentarioDAO.salvarComentario(novoComment);
+            new CommentJsonRepository().save(novoComment);
         }
     }
 
-    public static void acaoReagir(Post post, String tipo, String email) {
-        RecaoDAO.salvarOuRemoverReacao(new Reaction(email, post.getID(), tipo));
-    }
+    public static void acaoReagir(Post post, String tipo, String email) { new ReactionJsonRepository().saveOrToggle(new Reaction(email, post.getID(), tipo)); }
 
     public static void acaoEditar(Post post) {
         TextInputDialog dialog = new TextInputDialog(post.getTitulo());
@@ -54,13 +57,14 @@ public class PostagensControll {
             descDialog.showAndWait().ifPresent(novaDesc -> {
                 post.setTitulo(novoTitulo);
                 post.setDescricao(novaDesc);
-                DATpost.atualizarPost(post.getID(), post);
+                new PostJsonRepository().update(post);
             });
         });
     }
 
     public static void acaoDeletarPost(Post post, VBox postCard, ListView<VBox> postList, VBox view) {
-        DATpost.removerPost(post.getID());
+        new PostJsonRepository().deleteById(post.getID());
+        for (Reaction reaction : new ReactionJsonRepository().findAll()) { if (reaction.getIdPost() == post.getID()) { new ReactionJsonRepository().delete(reaction.getAutorEmail(), reaction.getIdPost()); } }
         postList.getItems().remove(postCard);
         postList.getItems().clear();
         postList.getItems().addAll((VBox) view.getChildren());

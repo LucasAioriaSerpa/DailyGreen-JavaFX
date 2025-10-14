@@ -7,6 +7,8 @@ import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.post.Post;
 import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
+import org.dailygreen.dailygreen.repository.impl.PostJsonRepository;
 
 import java.util.ArrayList;
 
@@ -17,8 +19,8 @@ public class CreatePostList {
         ListView<VBox> postList = new ListView<>();
         postList.getStyleClass().add("post-list");
         VBox.setVgrow(postList, Priority.ALWAYS);
-        ArrayList<Participant> participantList = ParticipanteDAT.lerLista();
-        for (Post post : DATpost.lerLista()) {
+        ArrayList<Participant> participantList = (ArrayList<Participant>) new ParticipantJsonRepository().findAll();
+        for (Post post : new PostJsonRepository().findAll()) {
             VBox postCard = createPostCard(stage, layout, post, participantList, postList, user);
             postList.getItems().add(postCard);
         }

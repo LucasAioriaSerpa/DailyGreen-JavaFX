@@ -7,6 +7,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -97,24 +98,19 @@ public class CadastroViewParticipante {
                 lblStatus.setStyle("-fx-text-fill: red;");
                 return;
             }
-
             if (!validarEmail(txtEmail.getText())) {
                 mostrarErro("Por favor, insira um e-mail válido!");
                 return;
             }
-
             Participant novoParticipant = new Participant(
                     txtNome.getText(),
                     txtEmail.getText(),
                     txtSenha.getText()
             );
-            ParticipanteDAT.adicionarParticipante(novoParticipant);
-
+            new ParticipantJsonRepository().save(novoParticipant);
             lblStatus.setText("Cadastro realizado com sucesso!");
             lblStatus.setStyle("-fx-text-fill: green;");
-
-            ParticipanteDAT.lerLista().forEach(System.out::println); // Debug
-
+            new ParticipantJsonRepository().findAll().forEach(System.out::println);
         } catch (Exception e) {
             lblStatus.setText("Erro: " + e.getMessage());
             lblStatus.setStyle("-fx-text-fill: red;");

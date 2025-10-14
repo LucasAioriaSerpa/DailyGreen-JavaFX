@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.dailygreen.dailygreen.model.user.types.Administrator;
+import org.dailygreen.dailygreen.repository.impl.AdminJsonRepository;
 import org.dailygreen.dailygreen.view.administrador.DenunciaView;
 import org.dailygreen.dailygreen.view.LoginView;
 
@@ -13,7 +15,7 @@ import java.util.Objects;
 public class AdmController {
     static Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     public static void login(String email, String password, Stage stage) {
-        if (AdmDAO.validarLogin(email, password)){
+        if (new AdminJsonRepository().validateLogin(email, password)){
             showAlert("Login realizado com sucesso!", Alert.AlertType.INFORMATION);
 
             // APÓS O LOGIN, LEVA PARA A PÁGINA DE DENÚNCIA
@@ -31,7 +33,7 @@ public class AdmController {
             showAlert("As senhas estão divergentes!", Alert.AlertType.ERROR);
             return;
         }
-        boolean success = AdmDAO.salvarNovoAdm(email, password1);
+        boolean success = new AdminJsonRepository().save(new Administrator(email, password1));
         if (success) {
             showAlert("Cadastro realizado com sucesso!", Alert.AlertType.INFORMATION);
 

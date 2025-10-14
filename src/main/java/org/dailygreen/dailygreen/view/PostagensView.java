@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.event.EventAttendance;
 import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.repository.impl.EventJsonRepository;
+import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
 import org.dailygreen.dailygreen.util.factory.IPostagensUIPanel;
 import org.dailygreen.dailygreen.util.factory.UIPanelFactory;
 
@@ -21,7 +23,7 @@ public class PostagensView {
     private final IPostagensUIPanel uiPanel;
 
     public PostagensView(Stage stage) {
-        user = DATuser.getUser();
+        user = new UserJsonRepository().findAll().getFirst();
         this.stage = stage;
         this.layout = new VBox();
         this.uiPanel = UIPanelFactory.getPanel(user);
@@ -63,7 +65,7 @@ public class PostagensView {
         eventosLabel.getStyleClass().add("section-title");
 
         ListView<EventAttendance> eventosListView = new ListView<>();
-        eventosListView.getItems().addAll(EventoOrganizacaoDAT.lerLista());
+        eventosListView.getItems().addAll((EventAttendance) new EventJsonRepository().findAll());
         eventosListView.setCellFactory(_ -> new ListCell<>() {
             @Override
             protected void updateItem(EventAttendance evento, boolean empty) {

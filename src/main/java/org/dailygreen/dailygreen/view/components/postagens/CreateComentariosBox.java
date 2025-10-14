@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.post.Comment;
 import org.dailygreen.dailygreen.model.post.Post;
 import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.repository.impl.CommentJsonRepository;
 import org.dailygreen.dailygreen.util.controller.PostagensControll;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class CreateComentariosBox {
         comentariosBox.getChildren().add(comentariosTitulo);
         VBox commentList = new VBox(5);
         commentList.getStyleClass().add("comment-list");
-        ArrayList<Comment> comments = (ArrayList<Comment>) ComentarioDAO.buscarPorPost(post.getID());
+        ArrayList<Comment> comments = (ArrayList<Comment>) new CommentJsonRepository().findAllByPost(post.getID());
         if (comments.isEmpty()) {
             Label noCommentsLabel = new Label("Nenhum comentário ainda.");
             noCommentsLabel.getStyleClass().add("no-comments-label");

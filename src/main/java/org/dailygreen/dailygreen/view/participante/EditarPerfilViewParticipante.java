@@ -7,6 +7,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
+import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -78,7 +80,7 @@ public class EditarPerfilViewParticipante {
         }
         try {
             // Atualiza na lista de participantes
-            ArrayList<Participant> lista = ParticipanteDAT.lerLista();
+            ArrayList<Participant> lista = (ArrayList<Participant>) new ParticipantJsonRepository().findAll();
             lista.stream()
                     .filter(p -> p.getEmail().equals(participantOriginal.getEmail()))
                     .findFirst()
@@ -86,13 +88,13 @@ public class EditarPerfilViewParticipante {
                         p.setNome(novoNome);
                         p.setEmail(novoEmail);
                     });
-            ParticipanteDAT.salvarLista(lista);
+            new ParticipantJsonRepository().saveAll(lista);
             // Atualiza o participante original
             participantOriginal.setNome(novoNome);
             participantOriginal.setEmail(novoEmail);
-            User user = DATuser.getUser();
+            User user = new UserJsonRepository().findAll().getFirst();
             user.setAccountParticipante(participantOriginal);
-            DATuser.setUser(user);
+            new UserJsonRepository().update(user);
             // Volta para a tela de perfil
             voltarParaPerfil(stage);
         } catch (Exception e) {

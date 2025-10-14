@@ -29,6 +29,20 @@ public class PostJsonRepository extends BaseJsonRepository<Post> implements IPos
     }
 
     @Override
+    public boolean update(Post post) {
+        List<Post> posts = readAll();
+        for (int i = 0; i < posts.size(); i++) {
+            Post p = posts.get(i);
+            if (p.getID() == post.getID()) {
+                posts.set(i, post);
+                saveAll(posts);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean deleteById(Long id) {
         List<Post> posts = readAll();
         boolean removed = posts.removeIf(p -> p.getID() == id);
