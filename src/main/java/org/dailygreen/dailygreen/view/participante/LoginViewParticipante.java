@@ -1,28 +1,36 @@
 package org.dailygreen.dailygreen.view.participante;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import org.dailygreen.dailygreen.model.user.User;
-import org.dailygreen.dailygreen.model.user.types.Participant;
-import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
-import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
-import org.dailygreen.dailygreen.util.Cryptography;
-
 import java.util.Objects;
 
+import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+import org.dailygreen.dailygreen.util.Cryptography;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
 public class LoginViewParticipante {
-    private VBox layout;
-    private Stage stage;
+    private final VBox layout;
+    private final Stage stage;
     private TextField txtEmail;
     private PasswordField txtSenha;
     private Label lblStatus;
+    private final PersistenceFacade persistenceFacade;
 
     public LoginViewParticipante(Stage stage) {
         this.stage = stage;
+        this.persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
         layout.getStylesheets().add(Objects.requireNonNull(
@@ -98,14 +106,14 @@ public class LoginViewParticipante {
             return;
         }
         try {
-            Participant participantLogado = new ParticipantJsonRepository().findAll().stream()
+            Participant participantLogado = persistenceFacade.findAllParticipants().stream()
                     .filter(p -> {
                         try {
-                            boolean result = p.getEmail().equals(email) && Cryptography.descriptografar(Cryptography.descriptografar(p.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())).equals(senha);
+                            boolean result = p.getEmail().equals(email) && Cryptography.descriptografar(p.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())).equals(senha);
                             if (result) {
-                                User user = new UserJsonRepository().findAll().getFirst();
+                                User user = persistenceFacade.findAllUsers().getFirst();
                                 user.setAccountParticipante(p);
-                                new UserJsonRepository().update(user);
+                                persistenceFacade.updateUser(user);
                             }
                             return result;
                         } catch (Exception ex) {
@@ -129,10 +137,10 @@ public class LoginViewParticipante {
     }
 
     private void abrirPerfil(Participant participant) {
-        User user = new UserJsonRepository().findAll().getFirst();
+        User user = persistenceFacade.findAllUsers().getFirst();
         user.setLogged(true);
         user.setAccountParticipante(participant);
-        new UserJsonRepository().update(user);
+        persistenceFacade.updateUser(user);
         PerfilViewParticipante perfilView = new PerfilViewParticipante(stage, participant);
         stage.getScene().setRoot(perfilView.getView());
     }

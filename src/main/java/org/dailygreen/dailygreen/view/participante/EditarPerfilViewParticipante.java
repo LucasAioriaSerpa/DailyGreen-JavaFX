@@ -7,8 +7,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.model.user.User;
-import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
-import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -19,9 +19,11 @@ public class EditarPerfilViewParticipante {
     private TextField txtEmail;
     private Label lblStatus;
     private Participant participantOriginal;
+    private final PersistenceFacade persistenceFacade;
 
     public EditarPerfilViewParticipante(Stage stage, Participant participant) {
         this.participantOriginal = participant;
+        this.persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
         this.layout = new VBox(20);
         layout.getStyleClass().add("main-screen");
         layout.getStylesheets().add(Objects.requireNonNull(
@@ -80,7 +82,7 @@ public class EditarPerfilViewParticipante {
         }
         try {
             // Atualiza na lista de participantes
-            ArrayList<Participant> lista = (ArrayList<Participant>) new ParticipantJsonRepository().findAll();
+            ArrayList<Participant> lista = (ArrayList<Participant>) persistenceFacade.findAllParticipants();
             lista.stream()
                     .filter(p -> p.getEmail().equals(participantOriginal.getEmail()))
                     .findFirst()
@@ -88,13 +90,13 @@ public class EditarPerfilViewParticipante {
                         p.setNome(novoNome);
                         p.setEmail(novoEmail);
                     });
-            new ParticipantJsonRepository().saveAll(lista);
+            persistenceFacade.saveAllParticipants(lista);
             // Atualiza o participante original
             participantOriginal.setNome(novoNome);
             participantOriginal.setEmail(novoEmail);
-            User user = new UserJsonRepository().findAll().getFirst();
+            User user = persistenceFacade.findAllUsers().getFirst();
             user.setAccountParticipante(participantOriginal);
-            new UserJsonRepository().update(user);
+            persistenceFacade.updateUser(user);
             // Volta para a tela de perfil
             voltarParaPerfil(stage);
         } catch (Exception e) {

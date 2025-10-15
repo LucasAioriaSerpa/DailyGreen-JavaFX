@@ -1,5 +1,12 @@
 package org.dailygreen.dailygreen.view.participante;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -9,18 +16,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.model.user.types.Participant;
-import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
-
-import java.util.List;
-import java.util.Objects;
 
 public class ListaParticipantesView {
     private VBox layout;
     private Stage stage;
+    private final PersistenceFacade persistenceFacade;
 
     public ListaParticipantesView(Stage stage) {
         this.stage = stage;
+        this.persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
         layout.getStylesheets().add(Objects.requireNonNull(
@@ -46,7 +50,7 @@ public class ListaParticipantesView {
         listaContainer.setAlignment(Pos.CENTER);
 
         try {
-            List<Participant> participants = new ParticipantJsonRepository().findAll();
+            List<Participant> participants = persistenceFacade.findAllParticipants();
 
             if (participants.isEmpty()) {
                 listaContainer.getChildren().add(new Label("Nenhum participante cadastrado."));

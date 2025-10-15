@@ -1,5 +1,15 @@
 package org.dailygreen.dailygreen.view.components.postagens;
 
+import java.util.ArrayList;
+
+import org.dailygreen.dailygreen.controller.MainFeedController;
+import org.dailygreen.dailygreen.model.post.Comment;
+import org.dailygreen.dailygreen.model.post.Post;
+import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,17 +18,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.model.post.Comment;
-import org.dailygreen.dailygreen.model.post.Post;
-import org.dailygreen.dailygreen.model.user.User;
-import org.dailygreen.dailygreen.repository.impl.CommentJsonRepository;
-import org.dailygreen.dailygreen.controller.MainFeedController;
-
-import java.util.ArrayList;
-
-import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;
 
 public class CreateComentariosBox {
+    private static final PersistenceFacade persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
+    
     public static VBox createComentariosBox(Stage stage, Post post, User user) {
         VBox comentariosBox = new VBox(8);
         comentariosBox.getStyleClass().add("comentarios-box");
@@ -27,7 +30,7 @@ public class CreateComentariosBox {
         comentariosBox.getChildren().add(comentariosTitulo);
         VBox commentList = new VBox(5);
         commentList.getStyleClass().add("comment-list");
-        ArrayList<Comment> comments = (ArrayList<Comment>) new CommentJsonRepository().findAllByPost(post.getID());
+        ArrayList<Comment> comments = (ArrayList<Comment>) persistenceFacade.findCommentsByPost(post.getID());
         if (comments.isEmpty()) {
             Label noCommentsLabel = new Label("Nenhum comentário ainda.");
             noCommentsLabel.getStyleClass().add("no-comments-label");

@@ -2,7 +2,15 @@ package org.dailygreen.dailygreen.application;
 
 import java.io.File;
 import java.util.Objects;
+
 import javax.crypto.SecretKey;
+
+import org.dailygreen.dailygreen.controller.MainController;
+import org.dailygreen.dailygreen.model.user.Role;
+import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+import org.dailygreen.dailygreen.util.Cryptography;
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
@@ -10,14 +18,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.model.user.Role;
-import org.dailygreen.dailygreen.model.user.User;
-import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
-import org.dailygreen.dailygreen.util.Cryptography;
-import org.dailygreen.dailygreen.controller.MainController;
 
 public class MainApplication extends Application {
 
@@ -87,12 +96,17 @@ public class MainApplication extends Application {
 
     private static void initializeUser() {
         try {
-            if (new UserJsonRepository().checkOrCreateFile()) {
+            PersistenceFacade persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
+            if (persistenceFacade.initializePersistence()) {
                 User user = new User(Role.USERNOTLOGGED);
-                new UserJsonRepository().save(user);
+                persistenceFacade.saveUser(user);
                 System.out.println("Arquivo de usuários carregado com sucesso!");
-            } else { System.out.println("Arquivo de usuários criado com sucesso!"); }
-        } catch (Exception e) { System.err.println("Erro ao inicializar usuário: " + e.getMessage()); }
+            } else { 
+                System.out.println("Arquivo de usuários criado com sucesso!"); 
+            }
+        } catch (Exception e) { 
+            System.err.println("Erro ao inicializar usuário: " + e.getMessage()); 
+        }
     }
 
     static void main(String[] args) {

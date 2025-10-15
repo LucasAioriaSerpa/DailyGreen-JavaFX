@@ -6,6 +6,9 @@ import org.dailygreen.dailygreen.model.post.Comment;
 import org.dailygreen.dailygreen.model.post.Post;
 import org.dailygreen.dailygreen.model.post.Reaction;
 import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.model.user.types.Administrator;
+import org.dailygreen.dailygreen.model.user.types.Organizator;
+import org.dailygreen.dailygreen.model.user.types.Participant;
 
 /**
  * Factory para criar instâncias da PersistenceFacade com diferentes configurações.
@@ -41,7 +44,10 @@ public class PersistenceFacadeFactory {
             new InMemoryPersistenceImplementor<>("events"),
             new InMemoryPersistenceImplementor<>("comments"),
             new InMemoryPersistenceImplementor<>("reactions"),
-            new InMemoryPersistenceImplementor<>("reports")
+            new InMemoryPersistenceImplementor<>("reports"),
+            new InMemoryPersistenceImplementor<>("admins"),
+            new InMemoryPersistenceImplementor<>("participants"),
+            new InMemoryPersistenceImplementor<>("organizators")
         );
     }
     
@@ -69,6 +75,9 @@ public class PersistenceFacadeFactory {
      * @param commentImpl Implementação para comentários
      * @param reactionImpl Implementação para reações
      * @param reportImpl Implementação para denúncias
+     * @param adminImpl Implementação para administradores
+     * @param participantImpl Implementação para participantes
+     * @param organizatorImpl Implementação para organizadores
      * @return PersistenceFacade com implementações personalizadas
      */
     public static PersistenceFacade createCustomPersistenceFacade(
@@ -77,7 +86,10 @@ public class PersistenceFacadeFactory {
             PersistenceImplementor<Event> eventImpl,
             PersistenceImplementor<Comment> commentImpl,
             PersistenceImplementor<Reaction> reactionImpl,
-            PersistenceImplementor<Report> reportImpl) {
-        return new PersistenceFacadeImpl(userImpl, postImpl, eventImpl, commentImpl, reactionImpl, reportImpl);
+            PersistenceImplementor<Report> reportImpl,
+            PersistenceImplementor<Administrator> adminImpl,
+            PersistenceImplementor<Participant> participantImpl,
+            PersistenceImplementor<Organizator> organizatorImpl) {
+        return new PersistenceFacadeImpl(userImpl, postImpl, eventImpl, commentImpl, reactionImpl, reportImpl, adminImpl, participantImpl, organizatorImpl);
     }
 }

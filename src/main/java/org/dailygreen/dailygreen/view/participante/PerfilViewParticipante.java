@@ -1,25 +1,32 @@
 package org.dailygreen.dailygreen.view.participante;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import java.util.Objects;
+
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.model.user.types.Participant;
-import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
-import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
 import org.dailygreen.dailygreen.view.feed.PostagensView;
 
-import java.util.Objects;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class PerfilViewParticipante {
     private final BorderPane layout;
     private final Participant participant;
+    private final PersistenceFacade persistenceFacade;
 
     public PerfilViewParticipante(Stage stage, Participant participant) {
         this.participant = participant;
+        this.persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
         this.layout = new BorderPane();
         layout.getStyleClass().add("main-screen");
         layout.getStylesheets().add(Objects.requireNonNull(
@@ -96,21 +103,25 @@ public class PerfilViewParticipante {
     }
 
     private void deletarConta(Stage stage) {
-        new ParticipantJsonRepository().deleteByEmail(participant.getEmail());
-        User user = new UserJsonRepository().findByEmail(participant.getEmail());
-        user.setAccountParticipante(null);
-        user.setLogged(false);
-        user.setRole(null);
-        new UserJsonRepository().update(user);
+        persistenceFacade.deleteParticipantByEmail(participant.getEmail());
+        User user = persistenceFacade.findUserByEmail(participant.getEmail()).orElse(null);
+        if (user != null) {
+            user.setAccountParticipante(null);
+            user.setLogged(false);
+            user.setRole(null);
+            persistenceFacade.updateUser(user);
+        }
         voltarParaLogin(stage);
     }
 
     private void voltarParaLogin(Stage stage) {
-        User user = new UserJsonRepository().findByEmail(participant.getEmail());
-        user.setAccountParticipante(null);
-        user.setLogged(false);
-        user.setRole(null);
-        new UserJsonRepository().update(user);
+        User user = persistenceFacade.findUserByEmail(participant.getEmail()).orElse(null);
+        if (user != null) {
+            user.setAccountParticipante(null);
+            user.setLogged(false);
+            user.setRole(null);
+            persistenceFacade.updateUser(user);
+        }
         LoginViewParticipante loginView = new LoginViewParticipante(stage);
         stage.getScene().setRoot(loginView.getView());
     }

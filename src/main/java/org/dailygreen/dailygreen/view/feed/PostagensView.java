@@ -1,29 +1,35 @@
 package org.dailygreen.dailygreen.view.feed;
 
+import java.util.Objects;
+
+import org.dailygreen.dailygreen.Factory.mainFeed.IPostagensUIPanel;
+import org.dailygreen.dailygreen.Factory.mainFeed.UIPanelFactory;
+import org.dailygreen.dailygreen.model.event.EventAttendance;
+import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.model.event.EventAttendance;
-import org.dailygreen.dailygreen.model.user.User;
-import org.dailygreen.dailygreen.repository.impl.EventJsonRepository;
-import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
-import org.dailygreen.dailygreen.Factory.mainFeed.IPostagensUIPanel;
-import org.dailygreen.dailygreen.Factory.mainFeed.UIPanelFactory;
-
-import java.util.Objects;
 
 public class PostagensView {
     private final Stage stage;
     private final VBox layout;
     private final User user;
     private final IPostagensUIPanel uiPanel;
+    private final PersistenceFacade persistenceFacade;
 
     public PostagensView(Stage stage) {
-        user = new UserJsonRepository().findAll().getFirst();
+        this.persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
+        user = persistenceFacade.findAllUsers().getFirst();
         this.stage = stage;
         this.layout = new VBox();
         this.uiPanel = UIPanelFactory.getPanel(user);
@@ -63,7 +69,7 @@ public class PostagensView {
         eventosLabel.getStyleClass().add("section-title");
 
         ListView<EventAttendance> eventosListView = new ListView<>();
-        eventosListView.getItems().addAll((EventAttendance) new EventJsonRepository().findAll());
+        eventosListView.getItems().addAll(persistenceFacade.findAllEventAttendances());
         eventosListView.setCellFactory(_ -> new ListCell<>() {
             @Override
             protected void updateItem(EventAttendance evento, boolean empty) {

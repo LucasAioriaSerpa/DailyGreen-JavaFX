@@ -39,9 +39,7 @@ public class EventPersistenceBridge extends AbstractPersistenceBridge<Event> {
             
             // Gerar ID se necessário
             if (event.getID() == 0) {
-                // Event não tem setId, então vamos usar o ID do Post pai
-                // Como Event herda de Post, vamos usar o método do Post
-                // Por enquanto, vamos assumir que o ID será definido externamente
+                event.setID(generateNewId());
             }
             
             events.add(event);

@@ -6,8 +6,6 @@ import java.util.logging.Logger;
 
 import org.dailygreen.dailygreen.model.user.User;
 
-import static org.dailygreen.dailygreen.repository.impl.UserJsonRepository.getString;
-
 /**
  * Bridge concreto para operações de persistência de usuários.
  * Implementa operações específicas de usuário usando o padrão Bridge.
@@ -124,6 +122,10 @@ public class UserPersistenceBridge extends AbstractPersistenceBridge<User> {
     }
     
     private String extractEmail(User user) {
-        return getString(user);
+        if (user == null) return null;
+        if (user.getAccountAdministrador() != null) return user.getAccountAdministrador().getEmail();
+        if (user.getAccountParticipante() != null) return user.getAccountParticipante().getEmail();
+        if (user.getAccountOrganizator() != null) return user.getAccountOrganizator().getEmail();
+        return null;
     }
 }

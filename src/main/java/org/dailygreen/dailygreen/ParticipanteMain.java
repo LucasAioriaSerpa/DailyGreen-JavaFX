@@ -1,15 +1,17 @@
 package org.dailygreen.dailygreen;
 
+import java.util.Objects;
+
+import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+import org.dailygreen.dailygreen.view.participante.LoginViewParticipante;
+
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.model.user.types.Participant;
-import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
-import org.dailygreen.dailygreen.view.participante.LoginViewParticipante;
-
-import java.util.Objects;
 
 public class ParticipanteMain extends Application {
 
@@ -48,7 +50,8 @@ public class ParticipanteMain extends Application {
             // ParticipanteDAT.adicionarParticipante(p2);
 
             System.out.println("Participantes cadastrados:");
-            for (Participant p : new ParticipantJsonRepository().findAll()) {
+            PersistenceFacade persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
+            for (Participant p : persistenceFacade.findAllParticipants()) {
                 System.out.println(p);
             }
         } catch (Exception e) {

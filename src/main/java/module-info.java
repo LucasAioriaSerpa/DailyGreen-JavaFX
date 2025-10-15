@@ -21,10 +21,6 @@ module org.dailygreen.dailygreen {
     opens org.dailygreen.dailygreen.model.post                  to javafx.base, javafx.graphics;
     exports org.dailygreen.dailygreen.model.event;
     opens org.dailygreen.dailygreen.model.event                 to javafx.base, javafx.graphics;
-    exports org.dailygreen.dailygreen.repository;
-    opens org.dailygreen.dailygreen.repository                  to javafx.graphics;
-    exports org.dailygreen.dailygreen.repository.impl;
-    opens org.dailygreen.dailygreen.repository.impl             to javafx.graphics;
     exports org.dailygreen.dailygreen.application;
     opens org.dailygreen.dailygreen.application to javafx.base, javafx.graphics;
     exports org.dailygreen.dailygreen.view.common;

@@ -1,21 +1,25 @@
 package org.dailygreen.dailygreen.controller;
 
+import java.util.Objects;
+
+import org.dailygreen.dailygreen.model.user.types.Administrator;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+import org.dailygreen.dailygreen.view.admin.DenunciaView;
+import org.dailygreen.dailygreen.view.common.LoginView;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.model.user.types.Administrator;
-import org.dailygreen.dailygreen.repository.impl.AdminJsonRepository;
-import org.dailygreen.dailygreen.view.admin.DenunciaView;
-import org.dailygreen.dailygreen.view.common.LoginView;
-
-import java.util.Objects;
 
 public class AdmController {
     static Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+    private static final PersistenceFacade persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
+    
     public static void login(String email, String password, Stage stage) {
-        if (new AdminJsonRepository().validateLogin(email, password)){
+        if (persistenceFacade.validateAdminLogin(email, password)){
             showAlert("Login realizado com sucesso!", Alert.AlertType.INFORMATION);
 
             // APÓS O LOGIN, LEVA PARA A PÁGINA DE DENÚNCIA
@@ -33,7 +37,7 @@ public class AdmController {
             showAlert("As senhas estão divergentes!", Alert.AlertType.ERROR);
             return;
         }
-        boolean success = new AdminJsonRepository().save(new Administrator(email, password1));
+        boolean success = persistenceFacade.saveAdmin(new Administrator(email, password1));
         if (success) {
             showAlert("Cadastro realizado com sucesso!", Alert.AlertType.INFORMATION);
 

@@ -1,7 +1,10 @@
 package org.dailygreen.dailygreen.persistence;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.dailygreen.dailygreen.model.post.Comment;
 
@@ -29,8 +32,6 @@ public class CommentPersistenceBridge extends AbstractPersistenceBridge<Comment>
         
         try {
             List<Comment> comments = readAll();
-            
-            // Comment não tem ID próprio, então apenas adicionamos
             comments.add(comment);
             saveAll(comments);
             logger.info("Comentário salvo com sucesso para post ID: " + comment.getIdPost());
@@ -39,5 +40,78 @@ public class CommentPersistenceBridge extends AbstractPersistenceBridge<Comment>
             logger.severe("Erro ao salvar comentário: " + e.getMessage());
             return false;
         }
+    }
+    
+    public boolean update(Comment comment) {
+        if (comment == null) {
+            logger.warning("Tentativa de atualizar comentário nulo");
+            return false;
+        }
+        
+        try {
+            List<Comment> comments = readAll();
+            boolean updated = false;
+            
+            for (int i = 0; i < comments.size(); i++) {
+                Comment c = comments.get(i);
+                if (c.getAutorEmail().equals(comment.getAutorEmail()) && c.getIdPost() == comment.getIdPost()) {
+                    comments.set(i, comment);
+                    updated = true;
+                    break;
+                }
+            }
+            
+            if (updated) {
+                saveAll(comments);
+                logger.info("Comentário atualizado para post ID: " + comment.getIdPost());
+                return true;
+            } else {
+                logger.warning("Comentário não encontrado para atualização");
+                return false;
+            }
+        } catch (Exception e) {
+            logger.severe("Erro ao atualizar comentário: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean delete(Comment comment) {
+        if (comment == null) {
+            logger.warning("Tentativa de deletar comentário nulo");
+            return false;
+        }
+        
+        try {
+            List<Comment> comments = readAll();
+            boolean removed = comments.removeIf(c -> 
+                c.getAutorEmail().equals(comment.getAutorEmail()) && 
+                c.getIdPost() == comment.getIdPost()
+            );
+            
+            if (removed) {
+                saveAll(comments);
+                logger.info("Comentário removido para post ID: " + comment.getIdPost());
+            } else {
+                logger.warning("Comentário não encontrado para remoção");
+            }
+            
+            return removed;
+        } catch (Exception e) {
+            logger.severe("Erro ao deletar comentário: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public Optional<Comment> findByPost(long postId) {
+        List<Comment> comments = readAll();
+        return comments.stream()
+                .filter(c -> c.getIdPost() == postId)
+                .max(Comparator.comparing(Comment::getData));
+    }
+    
+    public List<Comment> findAllByPost(long postId) {
+        return readAll().stream()
+                .filter(c -> c.getIdPost() == postId)
+                .collect(Collectors.toList());
     }
 }

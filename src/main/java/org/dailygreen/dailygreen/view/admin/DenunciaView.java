@@ -1,32 +1,42 @@
 package org.dailygreen.dailygreen.view.admin;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
+
+import org.dailygreen.dailygreen.model.moderation.Report;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.model.moderation.Report;
-import org.dailygreen.dailygreen.repository.impl.ReportRepository;
-
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
 
 public class DenunciaView {
     private final VBox layout;
     private final Stage stage;
-    private final ReportRepository reportRepository;
+    private final PersistenceFacade persistenceFacade;
     private final ObservableList<Report> reports;
 
     public DenunciaView(Stage stage) {
         this.stage = stage;
         this.layout = new VBox();
-        this.reportRepository = new ReportRepository();
+        this.persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
         this.reports = FXCollections.observableArrayList();
         layout.getStyleClass().add("denuncia-view");
         stage.setTitle("Lista de Denúncias");
@@ -51,7 +61,7 @@ public class DenunciaView {
         btnBuscar.setOnAction(e -> {
             String tipo = filtro.getValue();
             String termo = campoPesquisa.getText();
-            List<Report> filtradas = reportRepository.findByFilter(tipo, termo);
+            List<Report> filtradas = persistenceFacade.findReportsByFilter(tipo, termo);
             reports.setAll(filtradas);
         });
 
@@ -64,7 +74,7 @@ public class DenunciaView {
         grid.add(filtros, 0, 0);
 
         TableView<Report> tableView = criarTabelaDenuncias();
-        reports.setAll(reportRepository.findAll());
+        reports.setAll(persistenceFacade.findAllReports());
         tableView.setItems(reports);
 
         grid.add(tableView, 0, 1);
@@ -107,7 +117,7 @@ public class DenunciaView {
 
                 delete.setOnAction(e -> confirmarAcao("Excluir denúncia", "Deseja realmente excluir esta denúncia?", () -> {
                     Report report = getTableView().getItems().get(getIndex());
-                    reportRepository.delete(report);
+                    persistenceFacade.deleteReport(report);
                     tableView.getItems().remove(report);
                 }));
 
@@ -161,7 +171,7 @@ public class DenunciaView {
         report.setStatus(status);
         report.setSuspenso(suspenso);
         report.setBanido(banido);
-        reportRepository.update(report);
+        persistenceFacade.updateReport(report);
     }
 
     private void abrirFormularioDenuncia() {

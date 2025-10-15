@@ -1,16 +1,23 @@
 package org.dailygreen.dailygreen.view.participante;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import org.dailygreen.dailygreen.model.user.types.Participant;
-import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
-
 import java.util.Objects;
 import java.util.regex.Pattern;
+
+import org.dailygreen.dailygreen.model.user.types.Participant;
+import org.dailygreen.dailygreen.persistence.PersistenceFacade;
+import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class CadastroViewParticipante {
     private VBox layout;
@@ -18,12 +25,14 @@ public class CadastroViewParticipante {
     private TextField txtEmail;
     private PasswordField txtSenha;
     private Label lblStatus;
+    private final PersistenceFacade persistenceFacade;
 
     private static final String EMAIL_REGEX =
             "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
 
     public CadastroViewParticipante(Stage stage) {
+        this.persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
         this.layout = new VBox();
         layout.getStyleClass().add("main-screen");
         layout.getStylesheets().add(Objects.requireNonNull(
@@ -107,10 +116,10 @@ public class CadastroViewParticipante {
                     txtEmail.getText(),
                     txtSenha.getText()
             );
-            new ParticipantJsonRepository().save(novoParticipant);
+            persistenceFacade.saveParticipant(novoParticipant);
             lblStatus.setText("Cadastro realizado com sucesso!");
             lblStatus.setStyle("-fx-text-fill: green;");
-            new ParticipantJsonRepository().findAll().forEach(System.out::println);
+            persistenceFacade.findAllParticipants().forEach(System.out::println);
         } catch (Exception e) {
             lblStatus.setText("Erro: " + e.getMessage());
             lblStatus.setStyle("-fx-text-fill: red;");

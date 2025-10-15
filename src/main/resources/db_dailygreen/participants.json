@@ -1,0 +1,26 @@
+[
+  {
+    "ID": 1,
+    "nome": "jooj",
+    "email": "jooj@gmail.com",
+    "password": "FO1y3ZF7THrQJBOYuL2Ws6yYi+YwzZZX7V8cZdEUUytELZb0F0ONS4rNRTeHYUuiTu9TA3McUc75Wojj+pzFbA\u003d\u003d"
+  },
+  {
+    "ID": 2,
+    "nome": "Isabel",
+    "email": "isabel@gmail.com",
+    "password": "3WPhgz9acAvGcxd3EzFbf4C8nubFQ1rf1DlcgdUtKt6beS28TV0IW24kKX4vnV1CVHJEZiGsqb9Z4OJgXdai2g\u003d\u003d"
+  },
+  {
+    "ID": 0,
+    "nome": "Cleiton",
+    "email": "cleiton@gmail.com",
+    "password": "J2n2ofx5iUHqqCDzWe7AQHxryEDkqcu4ws2Hzw6N0iM\u003d"
+  },
+  {
+    "ID": 0,
+    "nome": "Josue",
+    "email": "josue@gmail.com",
+    "password": "2i001LfAgOxUSOEEuyDFmxYnzqxV0jgprMsOflGI8rs\u003d"
+  }
+]
