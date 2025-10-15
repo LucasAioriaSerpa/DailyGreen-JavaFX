@@ -27,7 +27,6 @@ import com.google.gson.GsonBuilder;
  * @param <T> Tipo da entidade a ser persistida
  */
 public class JsonPersistenceImplementor<T> implements PersistenceImplementor<T> {
-    
     private static final Logger logger = Logger.getLogger(JsonPersistenceImplementor.class.getName());
     
     private final String dataFilePath;
@@ -76,7 +75,6 @@ public class JsonPersistenceImplementor<T> implements PersistenceImplementor<T> 
         String writeDataFile = "[]";
         String writeIdFile = "0";
         boolean exists = true;
-        
         try {
             Files.createDirectories(Paths.get(dataFilePath).getParent());
             File dataFile = new File(dataFilePath);
@@ -89,7 +87,6 @@ public class JsonPersistenceImplementor<T> implements PersistenceImplementor<T> 
                     logger.info("Arquivo de dados criado: " + dataFilePath);
                 }
             }
-            
             File idFile = new File(idFilePath);
             if (!idFile.exists()) {
                 if (idFile.createNewFile()) {

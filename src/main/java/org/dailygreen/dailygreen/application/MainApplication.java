@@ -95,6 +95,7 @@ public class MainApplication extends Application {
     }
 
     private static void initializeUser() {
+        System.out.println("Inicializando arquivo de usuários...");
         try {
             PersistenceFacade persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
             if (persistenceFacade.initializePersistence()) {
@@ -109,7 +110,7 @@ public class MainApplication extends Application {
         }
     }
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         initializeSecurityKey();
         initializeUser();
         launch(args);

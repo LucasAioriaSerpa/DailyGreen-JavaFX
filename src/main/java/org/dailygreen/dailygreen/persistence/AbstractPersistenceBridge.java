@@ -9,9 +9,7 @@ import java.util.List;
  * @param <T> Tipo da entidade a ser persistida
  */
 public abstract class AbstractPersistenceBridge<T> {
-    
     protected final PersistenceImplementor<T> implementor;
-    
     protected AbstractPersistenceBridge(PersistenceImplementor<T> implementor) {
         this.implementor = implementor;
     }
@@ -36,9 +34,7 @@ public abstract class AbstractPersistenceBridge<T> {
      * Verifica se o arquivo existe, criando-o se necessário
      * @return true se o arquivo já existia, false se foi criado
      */
-    protected boolean checkOrCreateFile() {
-        return implementor.checkOrCreateFile();
-    }
+    protected boolean checkOrCreateFile() { return implementor.checkOrCreateFile(); }
     
     /**
      * Gera um novo ID único
