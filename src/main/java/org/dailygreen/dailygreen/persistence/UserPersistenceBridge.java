@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import org.dailygreen.dailygreen.model.user.Role;
 import org.dailygreen.dailygreen.model.user.User;
 
 /**
@@ -27,6 +28,7 @@ public class UserPersistenceBridge extends AbstractPersistenceBridge<User> {
     }
     
     public boolean save(User user) {
+        System.out.println("Salvando usuário: " + user);
         if (user == null) {
             logger.warning("Tentativa de salvar usuário nulo");
             return false;
@@ -44,6 +46,7 @@ public class UserPersistenceBridge extends AbstractPersistenceBridge<User> {
         }
         try {
             users.add(user);
+            System.out.println("Lista de usuários antes de salvar: " + users);
             saveAll(users);
             logger.info("Usuário salvo com sucesso: " + email);
             return true;
@@ -103,6 +106,7 @@ public class UserPersistenceBridge extends AbstractPersistenceBridge<User> {
     
     private String extractEmail(User user) {
         if (user == null) return null;
+        if (user.getRole() == Role.USERNOTLOGGED) return "NotLogged";
         if (user.getAccountAdministrador() != null) return user.getAccountAdministrador().getEmail();
         if (user.getAccountParticipante() != null) return user.getAccountParticipante().getEmail();
         if (user.getAccountOrganizator() != null) return user.getAccountOrganizator().getEmail();

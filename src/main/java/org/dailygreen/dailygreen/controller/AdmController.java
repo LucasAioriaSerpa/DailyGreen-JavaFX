@@ -1,10 +1,12 @@
 package org.dailygreen.dailygreen.controller;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import org.dailygreen.dailygreen.model.user.types.Administrator;
 import org.dailygreen.dailygreen.persistence.PersistenceFacade;
 import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
+import org.dailygreen.dailygreen.util.Cryptography;
 import org.dailygreen.dailygreen.view.admin.DenunciaView;
 import org.dailygreen.dailygreen.view.common.LoginView;
 
@@ -18,8 +20,8 @@ public class AdmController {
     static Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     private static final PersistenceFacade persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
     
-    public static void login(String email, String password, Stage stage) {
-        if (persistenceFacade.validateAdminLogin(email, password)){
+    public static void login(String email, String password, Stage stage) throws Exception {
+        if (persistenceFacade.validateAdminLogin(email, password)) {
             showAlert("Login realizado com sucesso!", Alert.AlertType.INFORMATION);
 
             // APÓS O LOGIN, LEVA PARA A PÁGINA DE DENÚNCIA
@@ -27,9 +29,7 @@ public class AdmController {
             Scene scene = new Scene(denunciaView.getDenunciaView(), (int)(screenBounds.getWidth()/2), (int)(screenBounds.getHeight()/2));
             scene.getStylesheets().add(Objects.requireNonNull(AdmController.class.getResource("/CSS/classAdm.css")).toExternalForm());
             stage.setScene(scene);
-        } else {
-            showAlert("Email ou senha inválidos!", Alert.AlertType.ERROR);
-        }
+        } else { showAlert("Email ou senha inválidos!", Alert.AlertType.ERROR); }
     }
 
     public static void cadastrar(String email, String password1, String password2, Stage stage) throws Exception {
@@ -37,7 +37,7 @@ public class AdmController {
             showAlert("As senhas estão divergentes!", Alert.AlertType.ERROR);
             return;
         }
-        boolean success = persistenceFacade.saveAdmin(new Administrator(email, password1));
+        boolean success = persistenceFacade.saveAdmin(new Administrator(email, Cryptography.criptografar(password1, Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE()))));
         if (success) {
             showAlert("Cadastro realizado com sucesso!", Alert.AlertType.INFORMATION);
 

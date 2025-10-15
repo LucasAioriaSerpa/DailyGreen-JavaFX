@@ -98,8 +98,14 @@ public class MainApplication extends Application {
         System.out.println("Inicializando arquivo de usuários...");
         try {
             PersistenceFacade persistenceFacade = PersistenceFacadeFactory.createJsonPersistenceFacade();
-            if (persistenceFacade.initializePersistence()) {
+            persistenceFacade.initializePersistence();
+            if (persistenceFacade.findAllUsers().isEmpty()) {
+                System.out.println("Arquivo de usuários já existe. Verificando usuário padrão...");
                 User user = new User(Role.USERNOTLOGGED);
+                user.setLogged(false);
+                user.setAccountParticipante(null);
+                user.setAccountOrganizator(null);
+                user.setAccountAdministrador(null);
                 persistenceFacade.saveUser(user);
                 System.out.println("Arquivo de usuários carregado com sucesso!");
             } else { 

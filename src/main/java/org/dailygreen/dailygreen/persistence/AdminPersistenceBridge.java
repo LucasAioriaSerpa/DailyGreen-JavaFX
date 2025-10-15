@@ -1,10 +1,12 @@
 package org.dailygreen.dailygreen.persistence;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.dailygreen.dailygreen.model.user.types.Administrator;
+import org.dailygreen.dailygreen.util.Cryptography;
 
 /**
  * Bridge concreto para operações de persistência de administradores.
@@ -88,20 +90,16 @@ public class AdminPersistenceBridge extends AbstractPersistenceBridge<Administra
         }
     }
     
-    public boolean validateLogin(String email, String password) {
+    public boolean validateLogin(String email, String password) throws Exception {
         if (email == null || email.trim().isEmpty()) {
             logger.warning("Tentativa de validar login com email nulo ou vazio");
             return false;
         }
-        
         Optional<Administrator> admin = findByEmail(email);
         if (admin.isPresent()) {
-            boolean valid = admin.get().getPassword().equals(password);
-            if (valid) {
-                logger.info("Login de administrador válido: " + email);
-            } else {
-                logger.warning("Senha incorreta para administrador: " + email);
-            }
+            boolean valid = Cryptography.descriptografar(admin.get().getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())).equals(password);
+            if (valid) { logger.info("Login de administrador válido: " + email); }
+            else { logger.warning("Senha incorreta para administrador: " + email); }
             return valid;
         } else {
             logger.warning("Administrador não encontrado para login: " + email);

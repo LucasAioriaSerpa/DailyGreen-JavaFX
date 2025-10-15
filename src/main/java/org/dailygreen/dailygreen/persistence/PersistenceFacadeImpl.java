@@ -1,5 +1,6 @@
 package org.dailygreen.dailygreen.persistence;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -24,11 +25,11 @@ import com.google.gson.reflect.TypeToken;
  * para abstrair as implementações específicas de armazenamento.
  */
 public class PersistenceFacadeImpl implements PersistenceFacade {
-    
     private static final Logger logger = Logger.getLogger(PersistenceFacadeImpl.class.getName());
-    
+
     // Configurações de arquivos
     private static final String USERS_FILE = "src/main/resources/db_dailygreen/users.json";
+    private static final String USERS_ID_FILE = "src/main/resources/db_dailygreen/users_id.txt";
     private static final String POSTS_FILE = "src/main/resources/db_dailygreen/posts.json";
     private static final String POSTS_ID_FILE = "src/main/resources/db_dailygreen/posts_last_id.txt";
     private static final String EVENTS_FILE = "src/main/resources/db_dailygreen/events.json";
@@ -56,40 +57,22 @@ public class PersistenceFacadeImpl implements PersistenceFacade {
     private final AdminPersistenceBridge adminBridge;
     private final ParticipantPersistenceBridge participantBridge;
     private final OrganizatorPersistenceBridge organizatorBridge;
-    
+
     public PersistenceFacadeImpl() {
         // Inicializar implementações Bridge com JsonPersistenceImplementor
-        this.userBridge = new UserPersistenceBridge(
-            new JsonPersistenceImplementor<>(USERS_FILE, "", new TypeToken<List<User>>(){}.getType())
-        );
-        this.postBridge = new PostPersistenceBridge(
-            new JsonPersistenceImplementor<>(POSTS_FILE, POSTS_ID_FILE, new TypeToken<List<Post>>(){}.getType())
-        );
-        this.eventBridge = new EventPersistenceBridge(
-            new JsonPersistenceImplementor<>(EVENTS_FILE, EVENTS_ID_FILE, new TypeToken<List<Event>>(){}.getType())
-        );
-        this.commentBridge = new CommentPersistenceBridge(
-            new JsonPersistenceImplementor<>(COMMENTS_FILE, COMMENTS_ID_FILE, new TypeToken<List<Comment>>(){}.getType())
-        );
-        this.reactionBridge = new ReactionPersistenceBridge(
-            new JsonPersistenceImplementor<>(REACTIONS_FILE, REACTIONS_ID_FILE, new TypeToken<List<Reaction>>(){}.getType())
-        );
-        this.reportBridge = new ReportPersistenceBridge(
-            new JsonPersistenceImplementor<>(REPORTS_FILE, REPORTS_ID_FILE, new TypeToken<List<Report>>(){}.getType())
-        );
-        this.adminBridge = new AdminPersistenceBridge(
-            new JsonPersistenceImplementor<>(ADMINS_FILE, ADMINS_ID_FILE, new TypeToken<List<Administrator>>(){}.getType())
-        );
-        this.participantBridge = new ParticipantPersistenceBridge(
-            new JsonPersistenceImplementor<>(PARTICIPANTS_FILE, PARTICIPANTS_ID_FILE, new TypeToken<List<Participant>>(){}.getType())
-        );
-        this.organizatorBridge = new OrganizatorPersistenceBridge(
-            new JsonPersistenceImplementor<>(ORGANIZATORS_FILE, ORGANIZATORS_ID_FILE, new TypeToken<List<Organizator>>(){}.getType())
-        );
+        this.userBridge = new UserPersistenceBridge(new JsonPersistenceImplementor<>(USERS_FILE, USERS_ID_FILE, new TypeToken<List<User>>(){}.getType()));
+        this.postBridge = new PostPersistenceBridge(new JsonPersistenceImplementor<>(POSTS_FILE, POSTS_ID_FILE, new TypeToken<List<Post>>(){}.getType()));
+        this.eventBridge = new EventPersistenceBridge(new JsonPersistenceImplementor<>(EVENTS_FILE, EVENTS_ID_FILE, new TypeToken<List<Event>>(){}.getType()));
+        this.commentBridge = new CommentPersistenceBridge( new JsonPersistenceImplementor<>(COMMENTS_FILE, COMMENTS_ID_FILE, new TypeToken<List<Comment>>(){}.getType()) );
+        this.reactionBridge = new ReactionPersistenceBridge( new JsonPersistenceImplementor<>(REACTIONS_FILE, REACTIONS_ID_FILE, new TypeToken<List<Reaction>>(){}.getType()) );
+        this.reportBridge = new ReportPersistenceBridge( new JsonPersistenceImplementor<>(REPORTS_FILE, REPORTS_ID_FILE, new TypeToken<List<Report>>(){}.getType()) );
+        this.adminBridge = new AdminPersistenceBridge( new JsonPersistenceImplementor<>(ADMINS_FILE, ADMINS_ID_FILE, new TypeToken<List<Administrator>>(){}.getType()) );
+        this.participantBridge = new ParticipantPersistenceBridge( new JsonPersistenceImplementor<>(PARTICIPANTS_FILE, PARTICIPANTS_ID_FILE, new TypeToken<List<Participant>>(){}.getType()) );
+        this.organizatorBridge = new OrganizatorPersistenceBridge( new JsonPersistenceImplementor<>(ORGANIZATORS_FILE, ORGANIZATORS_ID_FILE, new TypeToken<List<Organizator>>(){}.getType()) );
     }
-    
-    // Construtor alternativo para permitir diferentes implementações
-    public PersistenceFacadeImpl(PersistenceImplementor<User> userImpl,
+
+    public PersistenceFacadeImpl(
+                                PersistenceImplementor<User> userImpl,
                                 PersistenceImplementor<Post> postImpl,
                                 PersistenceImplementor<Event> eventImpl,
                                 PersistenceImplementor<Comment> commentImpl,
@@ -166,7 +149,7 @@ public class PersistenceFacadeImpl implements PersistenceFacade {
     }
     
     @Override
-    public boolean validateAdminLogin(String email, String password) {
+    public boolean validateAdminLogin(String email, String password) throws Exception {
         return adminBridge.validateLogin(email, password);
     }
     

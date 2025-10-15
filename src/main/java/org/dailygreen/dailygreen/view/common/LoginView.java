@@ -63,7 +63,8 @@ public class LoginView {
 
         Button loginButton = new Button("ENTRAR");
         loginButton.setOnAction(_ -> {
-            AdmController.login(emailField.getText(), passwordField.getText(), stage);
+            try { AdmController.login(emailField.getText(), passwordField.getText(), stage); }
+            catch (Exception e) { throw new RuntimeException(e); }
         });
         loginButton.getStyleClass().add("button");
 

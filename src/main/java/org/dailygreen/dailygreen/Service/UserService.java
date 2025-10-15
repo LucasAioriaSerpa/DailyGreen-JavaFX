@@ -46,17 +46,10 @@ public class UserService {
             
             // Criar objeto User para persistência
             User user = new User(role);
-            if (newUser instanceof Participant) {
-                user.setAccountParticipante((Participant) newUser);
-            } else if (newUser instanceof Organizator) {
-                user.setAccountOrganizator((Organizator) newUser);
-            }
-            
+            if (newUser instanceof Participant) { user.setAccountParticipante((Participant) newUser); }
+            else if (newUser instanceof Organizator) { user.setAccountOrganizator((Organizator) newUser); }
             boolean saved = persistenceFacade.saveUser(user);
-            if (!saved) {
-                throw new Exception("Falha ao salvar usuário no sistema");
-            }
-            
+            if (!saved) { throw new Exception("Falha ao salvar usuário no sistema"); }
             logger.info("Usuário registrado com sucesso: " + email);
         } catch (Exception e) {
             logger.severe("Erro ao registrar usuário: " + e.getMessage());

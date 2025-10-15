@@ -99,7 +99,7 @@ public interface PersistenceFacade {
      * @param password Senha do administrador
      * @return true se login válido, false caso contrário
      */
-    boolean validateAdminLogin(String email, String password);
+    boolean validateAdminLogin(String email, String password) throws Exception;
     
     // ========== OPERAÇÕES DE PARTICIPANTE ==========
     
