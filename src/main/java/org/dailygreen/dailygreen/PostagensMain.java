@@ -5,7 +5,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.view.PostagensView;
+import org.dailygreen.dailygreen.view.feed.PostagensView;
 
 import java.util.Objects;
 

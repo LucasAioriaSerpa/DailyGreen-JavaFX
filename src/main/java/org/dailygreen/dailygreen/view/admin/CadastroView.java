@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.view.administrador;
+package org.dailygreen.dailygreen.view.admin;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.controller.AdmController;
-import org.dailygreen.dailygreen.view.LoginView;
+import org.dailygreen.dailygreen.view.common.LoginView;
 
 import java.util.Objects;
 

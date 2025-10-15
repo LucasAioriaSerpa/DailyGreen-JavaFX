@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.view.administrador;
+package org.dailygreen.dailygreen.view.admin;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.moderation.Report;
 import org.dailygreen.dailygreen.repository.impl.ReportRepository;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;

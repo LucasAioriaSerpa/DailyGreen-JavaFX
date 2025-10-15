@@ -101,7 +101,7 @@ public class LoginViewParticipante {
             Participant participantLogado = new ParticipantJsonRepository().findAll().stream()
                     .filter(p -> {
                         try {
-                            boolean result = p.getEmail().equals(email) && Cryptography.descriptografar(p.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())).equals(senha);
+                            boolean result = p.getEmail().equals(email) && Cryptography.descriptografar(Cryptography.descriptografar(p.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())).equals(senha);
                             if (result) {
                                 User user = new UserJsonRepository().findAll().getFirst();
                                 user.setAccountParticipante(p);

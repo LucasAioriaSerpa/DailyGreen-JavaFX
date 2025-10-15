@@ -1,7 +1,7 @@
 package org.dailygreen.dailygreen.controller;
 
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.Main;
+import org.dailygreen.dailygreen.application.MainApplication;
 import org.dailygreen.dailygreen.MainAdm;
 import org.dailygreen.dailygreen.ParticipanteMain;
 import org.dailygreen.dailygreen.model.user.Role;
@@ -16,7 +16,7 @@ import java.util.List;
 public class MainController {
     private static User user;
 
-    public static void mostrarTelaPrincipal(Stage stage) { new Main().start(stage); }
+    public static void mostrarTelaPrincipal(Stage stage) { new MainApplication().start(stage); }
 
     public static void btnAdmin(Stage stage) {
         try {

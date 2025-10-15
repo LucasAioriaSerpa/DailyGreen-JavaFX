@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.util.factory;
+package org.dailygreen.dailygreen.Factory.mainFeed;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

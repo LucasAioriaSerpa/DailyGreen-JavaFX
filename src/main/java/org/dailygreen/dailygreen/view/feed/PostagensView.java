@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.view;
+package org.dailygreen.dailygreen.view.feed;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,8 +11,8 @@ import org.dailygreen.dailygreen.model.event.EventAttendance;
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.repository.impl.EventJsonRepository;
 import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
-import org.dailygreen.dailygreen.util.factory.IPostagensUIPanel;
-import org.dailygreen.dailygreen.util.factory.UIPanelFactory;
+import org.dailygreen.dailygreen.Factory.mainFeed.IPostagensUIPanel;
+import org.dailygreen.dailygreen.Factory.mainFeed.UIPanelFactory;
 
 import java.util.Objects;
 
@@ -28,9 +28,7 @@ public class PostagensView {
         this.layout = new VBox();
         this.uiPanel = UIPanelFactory.getPanel(user);
         layout.getStyleClass().add("postagens-view");
-        layout.getStylesheets().add(Objects.requireNonNull(
-                getClass().getResource("/CSS/classPostagem.css")
-        ).toExternalForm());
+        layout.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/classPostagem.css")).toExternalForm());
         stage.setTitle("DailyGreen - Feed");
         showComponents();
     }

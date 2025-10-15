@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.view.administrador;
+package org.dailygreen.dailygreen.view.admin;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

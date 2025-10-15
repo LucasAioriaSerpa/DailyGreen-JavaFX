@@ -7,8 +7,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.types.Administrator;
 import org.dailygreen.dailygreen.repository.impl.AdminJsonRepository;
-import org.dailygreen.dailygreen.view.administrador.DenunciaView;
-import org.dailygreen.dailygreen.view.LoginView;
+import org.dailygreen.dailygreen.view.admin.DenunciaView;
+import org.dailygreen.dailygreen.view.common.LoginView;
 
 import java.util.Objects;
 

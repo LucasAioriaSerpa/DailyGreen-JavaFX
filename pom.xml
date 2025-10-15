@@ -84,7 +84,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>org.dailygreen.dailygreen.Main</mainClass>
+                    <mainClass>org.dailygreen.dailygreen.application.MainApplication</mainClass>
                     <options>
                         <option>--add-opens</option>
                         <option>javafx.graphics/com.sun.glass.utils=ALL-UNNAMED</option>

@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.view;
+package org.dailygreen.dailygreen.view.common;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.controller.AdmController;
-import org.dailygreen.dailygreen.view.administrador.CadastroView;
+import org.dailygreen.dailygreen.view.admin.CadastroView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

@@ -8,15 +8,13 @@ module org.dailygreen.dailygreen {
     requires com.fasterxml.jackson.databind;
 
     exports org.dailygreen.dailygreen;
-    exports org.dailygreen.dailygreen.view;
-    exports org.dailygreen.dailygreen.view.administrador;
+    exports org.dailygreen.dailygreen.view.admin;
     exports org.dailygreen.dailygreen.controller;
 
     opens org.dailygreen.dailygreen.model.user                  to com.google.gson;
     opens org.dailygreen.dailygreen.model.user.types            to com.google.gson;
     opens org.dailygreen.dailygreen                             to javafx.base, javafx.graphics;
-    opens org.dailygreen.dailygreen.view                        to javafx.base, javafx.graphics;
-    opens org.dailygreen.dailygreen.view.administrador          to javafx.graphics;
+    opens org.dailygreen.dailygreen.view.admin to javafx.graphics;
     opens org.dailygreen.dailygreen.util                        to javafx.base, javafx.graphics;
     opens org.dailygreen.dailygreen.controller to javafx.base, javafx.graphics;
     exports org.dailygreen.dailygreen.model.post;
@@ -27,4 +25,10 @@ module org.dailygreen.dailygreen {
     opens org.dailygreen.dailygreen.repository                  to javafx.graphics;
     exports org.dailygreen.dailygreen.repository.impl;
     opens org.dailygreen.dailygreen.repository.impl             to javafx.graphics;
+    exports org.dailygreen.dailygreen.application;
+    opens org.dailygreen.dailygreen.application to javafx.base, javafx.graphics;
+    exports org.dailygreen.dailygreen.view.common;
+    opens org.dailygreen.dailygreen.view.common to javafx.base, javafx.graphics;
+    exports org.dailygreen.dailygreen.view.feed;
+    opens org.dailygreen.dailygreen.view.feed to javafx.base, javafx.graphics;
 }

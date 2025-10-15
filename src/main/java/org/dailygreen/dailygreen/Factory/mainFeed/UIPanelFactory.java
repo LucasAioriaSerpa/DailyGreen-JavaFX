@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.util.factory;
+package org.dailygreen.dailygreen.Factory.mainFeed;
 
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.model.user.Role;

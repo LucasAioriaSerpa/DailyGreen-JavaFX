@@ -10,7 +10,7 @@ import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
 import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
-import org.dailygreen.dailygreen.view.PostagensView;
+import org.dailygreen.dailygreen.view.feed.PostagensView;
 
 import java.util.Objects;
 

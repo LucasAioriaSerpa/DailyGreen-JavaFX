@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import org.dailygreen.dailygreen.view.LoginView;
+import org.dailygreen.dailygreen.view.common.LoginView;
 
 import java.io.IOException;
 
