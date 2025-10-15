@@ -16,19 +16,24 @@ public class AdminJsonRepository extends BaseJsonRepository<Administrator> imple
 
     public AdminJsonRepository() { super(FILE_PATH, ID_FILE_PATH, LIST_TYPE); }
 
-    @Override public List<Administrator> findAll() { return readAll(); }
+    @Override
+    public List<Administrator> findAll() { return readAll(); }
 
-    @Override public Administrator findByEmail(String email) { return readAll().stream().filter(a -> a.getEmail().equalsIgnoreCase(email)).findFirst().orElse(null); }
+    @Override
+    public Administrator findByEmail(String email) { return readAll().stream().filter(a -> a.getEmail().equalsIgnoreCase(email)).findFirst().orElse(null); }
 
     @Override
     public boolean save(Administrator admin) {
         List<Administrator> admins = readAll();
         if (admins.stream().anyMatch(a -> a.getEmail().equalsIgnoreCase(admin.getEmail()))) { return false; }
         try {
-            String encrypted = Cryptography.criptografar(admin.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE()));
+            String encrypted = Cryptography.criptografar(
+                    admin.getPassword(),
+                    Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())
+            );
             admin.setPassword(encrypted);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Erro ao criptografar a senha do administrador: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, "Erro ao criptografar senha do administrador.", e);
             return false;
         }
         admin.setID(generateNewId());
@@ -50,13 +55,15 @@ public class AdminJsonRepository extends BaseJsonRepository<Administrator> imple
         List<Administrator> admins = readAll();
         return admins.stream().anyMatch(admin -> {
             try {
-                String decrypted = Cryptography.descriptografar(admin.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE()));
+                String decrypted = Cryptography.descriptografar(
+                        admin.getPassword(),
+                        Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())
+                );
                 return admin.getEmail().equalsIgnoreCase(email) && decrypted.equals(password);
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "Erro ao validar senha do administrador: " + e.getMessage(), e);
+                logger.log(Level.SEVERE, "Erro ao validar senha do administrador.", e);
                 return false;
             }
         });
     }
-
 }

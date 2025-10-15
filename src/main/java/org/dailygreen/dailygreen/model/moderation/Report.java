@@ -31,7 +31,7 @@ public class Report implements Serializable {
         this.motivo = motivo;
     }
 
-    public Report(Integer id, String titulo, String motivo, String participante, LocalDate data, String stauts, boolean suspenso, boolean banido) {
+    public Report(Integer id, String titulo, String motivo, String participante, LocalDate data, String status, boolean suspenso, boolean banido) {
         this.id = id;
         this.titulo = titulo;
         this.motivo = motivo;
