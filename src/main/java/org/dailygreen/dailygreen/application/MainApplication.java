@@ -95,7 +95,7 @@ public class MainApplication extends Application {
         } catch (Exception e) { System.err.println("Erro ao inicializar usuário: " + e.getMessage()); }
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         initializeSecurityKey();
         initializeUser();
         launch(args);

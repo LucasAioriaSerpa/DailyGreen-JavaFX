@@ -1,1 +1,6 @@
-[]
+[
+  {
+    "role": "USERNOTLOGGED",
+    "isLogged": false
+  }
+]

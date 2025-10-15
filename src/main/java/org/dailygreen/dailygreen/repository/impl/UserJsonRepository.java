@@ -1,12 +1,17 @@
 package org.dailygreen.dailygreen.repository.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import org.dailygreen.dailygreen.model.user.Role;
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.repository.IUserRepositoty;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +21,13 @@ import java.util.logging.Logger;
 public class UserJsonRepository implements IUserRepositoty {
     private static final Logger logger = Logger.getLogger(UserJsonRepository.class.getName());
     private static final String FILE_PATH = "src/main/resources/db_dailygreen/users.json";
-    private final ObjectMapper mapper = new ObjectMapper();
 
-    private String extractEmail(User user) {
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Type userListType = new TypeToken<List<User>>() {}.getType();
+
+    private String extractEmail(User user) { return getString(user); }
+
+    public static String getString(User user) {
         if (user == null) return null;
         if (user.getAccountAdministrador() != null) return user.getAccountAdministrador().getEmail();
         if (user.getAccountParticipante() != null) return user.getAccountParticipante().getEmail();
@@ -33,13 +42,12 @@ public class UserJsonRepository implements IUserRepositoty {
             criarArquivoVazio();
             return new ArrayList<>();
         }
-        try {
-            byte[] jsonData = Files.readAllBytes(file.toPath());
-            if (jsonData.length == 0) {
+        try (FileReader reader = new FileReader(file)) {
+            if (file.length() == 0) {
                 logger.warning("Arquivo JSON vazio, retornando lista vazia.");
                 return new ArrayList<>();
             }
-            return mapper.readValue(jsonData, new TypeReference<>() {});
+            return gson.fromJson(reader, userListType);
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Erro ao ler o arquivo JSON de usuários.", e);
             return new ArrayList<>();
@@ -50,16 +58,24 @@ public class UserJsonRepository implements IUserRepositoty {
         try {
             File file = new File(FILE_PATH);
             file.getParentFile().mkdirs();
-            mapper.writerWithDefaultPrettyPrinter().writeValue(file, users); }
-        catch (IOException e) { logger.log(Level.SEVERE, "Erro ao salvar o arquivo JSON de usuários.", e); }
+            try (FileWriter writer = new FileWriter(file)) { gson.toJson(users, writer); }
+        } catch (IOException e) { logger.log(Level.SEVERE, "Erro ao salvar o arquivo JSON de usuários.", e); }
     }
 
     private void criarArquivoVazio() {
         try {
             File file = new File(FILE_PATH);
             file.getParentFile().mkdirs();
-            mapper.writeValue(file, new ArrayList<User>()); }
-        catch (IOException e) { logger.log(Level.SEVERE, "Erro ao criar arquivo JSON vazio de usuários.", e); }
+            User user = new User(Role.USERNOTLOGGED);
+            user.setLogged(false);
+            user.setAccountAdministrador(null);
+            user.setAccountParticipante(null);
+            user.setAccountOrganizator(null);
+            List<User> initialList = new ArrayList<>();
+            initialList.add(user);
+            try (FileWriter writer = new FileWriter(file)) { gson.toJson(initialList, writer); }
+            logger.info("Arquivo JSON inicial criado com usuário USERNOTLOGGED.");
+        } catch (IOException e) { logger.log(Level.SEVERE, "Erro ao criar arquivo JSON vazio de usuários.", e); }
     }
 
     public boolean checkOrCreateFile() {
@@ -75,7 +91,12 @@ public class UserJsonRepository implements IUserRepositoty {
     public List<User> findAll() { return readAll(); }
 
     @Override
-    public User findByEmail(String email) { return readAll().stream().filter(u -> email.equalsIgnoreCase(extractEmail(u))).findFirst().orElse(null); }
+    public User findByEmail(String email) {
+        return readAll().stream()
+                .filter(u -> email.equalsIgnoreCase(extractEmail(u)))
+                .findFirst()
+                .orElse(null);
+    }
 
     @Override
     public boolean save(User user) {
@@ -128,9 +149,7 @@ public class UserJsonRepository implements IUserRepositoty {
         if (removed) {
             saveAll(users);
             logger.info("Usuário removido: " + email);
-        } else {
-            logger.warning("Nenhum usuário encontrado para remoção: " + email);
-        }
+        } else { logger.warning("Nenhum usuário encontrado para remoção: " + email); }
         return removed;
     }
 

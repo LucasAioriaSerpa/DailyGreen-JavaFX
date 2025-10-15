@@ -2,98 +2,86 @@ package org.dailygreen.dailygreen.repository.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BaseJsonRepository<T> {
+public abstract class BaseJsonRepository<T> {
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     protected final Logger logger = Logger.getLogger(getClass().getName());
-    protected final String dataFilePath;
-    protected final String idFilePath;
-    protected final Gson gson;
+    private final String filePath;
+    private final String idFilePath;
     private final Type listType;
-    private final AtomicLong lastId;
 
-    protected BaseJsonRepository(String dataFilePath, String idFilePath, Type listType) {
-        this.dataFilePath = dataFilePath;
+    protected BaseJsonRepository(String filePath, String idFilePath, Type listType) {
+        this.filePath = filePath;
         this.idFilePath = idFilePath;
         this.listType = listType;
-        this.gson = new GsonBuilder().setPrettyPrinting().create();
-        this.lastId = new AtomicLong(loadLastId());
+        checkOrCreateFile();
     }
 
-    public boolean checkOrCreateFile() {
-        String writeDataFile = "[]";
-        String writeIdFile = "0";
-        boolean exists = true;
-        try {
-            Files.createDirectories(Paths.get(dataFilePath).getParent());
-            File dataFile = new File(dataFilePath);
-            if (!dataFile.exists()) {
-                if (dataFile.createNewFile()) {
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(dataFile))) { writer.write(writeDataFile);  }
-                    exists = false;
-                    logger.info("Arquivo de dados criado: " + dataFilePath);
-                }
-            }
-            File idfile = new File(idFilePath);
-            if (!idfile.exists()) {
-                if (idfile.createNewFile()) {
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(idFilePath))) { writer.write(writeIdFile); }
-                    exists = false;
-                    logger.info("Arquivo de ID criado: " + idFilePath);
-                }
-            }
-        } catch (IOException e) { logger.log(Level.SEVERE, "Erro ao verificar/criar arquivos JSON", e); }
-        return exists;
-    }
-
-    public List<T> readAll() {
-        File file = new File(dataFilePath);
-        if (!file.exists()) { return new ArrayList<>(); }
-        try (Reader reader = new FileReader(file)) {
-            List<T> data = gson.fromJson(reader, listType);
-            return (data != null) ? data : new ArrayList<>();
+    protected List<T> readAll() {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            logger.warning("Arquivo não encontrado: " + filePath + " — criando novo...");
+            criarArquivoVazio();
+            return new ArrayList<>();
+        }
+        try (FileReader reader = new FileReader(file)) {
+            if (file.length() == 0) return new ArrayList<>();
+            List<T> list = gson.fromJson(reader, listType);
+            return list != null ? list : new ArrayList<>();
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Erro ao ler JSON: " + dataFilePath, e);
+            logger.log(Level.SEVERE, "Erro ao ler arquivo JSON: " + filePath, e);
             return new ArrayList<>();
         }
     }
 
-    public void saveAll(List<T> list) {
+    public void saveAll(List<T> data) {
         try {
-            Files.createDirectories(Paths.get(dataFilePath).getParent());
-            try (Writer writer = new FileWriter(dataFilePath)) { gson.toJson(list, writer); }
-        } catch (IOException e) { logger.log(Level.SEVERE, "Erro ao salvar JSON: " + dataFilePath, e); }
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+            try (FileWriter writer = new FileWriter(file)) { gson.toJson(data, writer); }
+        } catch (IOException e) { logger.log(Level.SEVERE, "Erro ao salvar JSON: " + filePath, e); }
     }
 
-    private long loadLastId() {
-        File file = new File(idFilePath);
-        if (file.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) { return Long.parseLong(reader.readLine()); }
-            catch (IOException | NumberFormatException ignored) {}
+    protected void criarArquivoVazio() {
+        try {
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+            try (FileWriter writer = new FileWriter(file)) { gson.toJson(new ArrayList<>(), writer); }
+            logger.info("Arquivo criado: " + filePath);
+        } catch (IOException e) { logger.log(Level.SEVERE, "Erro ao criar arquivo JSON vazio: " + filePath, e); }
+    }
+
+    protected boolean checkOrCreateFile() {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            criarArquivoVazio();
+            return false;
         }
-        return 0L;
+        return true;
     }
 
-    protected synchronized long generateNewId() {
-        long newId = lastId.incrementAndGet();
-        saveLastId();
-        return newId;
-    }
-
-    private void saveLastId() {
+    protected synchronized int generateNewId() {
+        File idFile = new File(idFilePath);
+        idFile.getParentFile().mkdirs();
         try {
-            Files.createDirectories(Paths.get(idFilePath).getParent());
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(idFilePath))) { writer.write(Long.toString(lastId.get())); }
-        } catch (IOException e) { logger.log(Level.SEVERE, "Erro ao salvar JSON: " + idFilePath, e);}
+            int lastId = 0;
+            if (idFile.exists()) {
+                String content = Files.readString(idFile.toPath()).trim();
+                if (!content.isEmpty()) lastId = Integer.parseInt(content);
+            }
+            int newId = lastId + 1;
+            Files.writeString(idFile.toPath(), String.valueOf(newId));
+            return newId;
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Erro ao gerar novo ID: " + idFilePath, e);
+            return 1;
+        }
     }
-
 }
