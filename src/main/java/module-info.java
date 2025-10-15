@@ -11,8 +11,8 @@ module org.dailygreen.dailygreen {
     exports org.dailygreen.dailygreen.view.admin;
     exports org.dailygreen.dailygreen.controller;
 
-    opens org.dailygreen.dailygreen.model.user                  to com.google.gson;
-    opens org.dailygreen.dailygreen.model.user.types            to com.google.gson;
+    opens org.dailygreen.dailygreen.model.user to com.google.gson, com.fasterxml.jackson.databind;
+    opens org.dailygreen.dailygreen.model.user.types to com.google.gson, com.fasterxml.jackson.databind;
     opens org.dailygreen.dailygreen                             to javafx.base, javafx.graphics;
     opens org.dailygreen.dailygreen.view.admin to javafx.graphics;
     opens org.dailygreen.dailygreen.util                        to javafx.base, javafx.graphics;
