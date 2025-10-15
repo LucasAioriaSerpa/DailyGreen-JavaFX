@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.util.controller;
+package org.dailygreen.dailygreen.controller;
 
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
@@ -14,9 +14,7 @@ import org.dailygreen.dailygreen.repository.impl.PostJsonRepository;
 import org.dailygreen.dailygreen.repository.impl.ReactionJsonRepository;
 import org.dailygreen.dailygreen.view.participante.PerfilViewParticipante;
 
-import java.util.List;
-
-public class PostagensControll {
+public class MainFeedController {
     public static void sendPost(long id_author , String title, String description) {
         if (title == null || title.isEmpty()) {
             System.out.println("Title cannot be empty");

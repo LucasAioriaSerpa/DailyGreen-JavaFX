@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dailygreen.dailygreen.util.controller.AdmController;
+import org.dailygreen.dailygreen.controller.AdmController;
 import org.dailygreen.dailygreen.view.LoginView;
 
 import java.util.Objects;

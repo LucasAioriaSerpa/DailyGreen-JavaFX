@@ -13,10 +13,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.dailygreen.dailygreen.model.user.Role;
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
-import org.dailygreen.dailygreen.util.Criptografia;
-import org.dailygreen.dailygreen.util.controller.MainController;
+import org.dailygreen.dailygreen.util.Cryptography;
+import org.dailygreen.dailygreen.controller.MainController;
 
 public class Main extends Application {
 
@@ -72,10 +73,10 @@ public class Main extends Application {
 
     private static void initializeSecurityKey() {
         try {
-            File keyFile = new File(Criptografia.getARQUIVO_CHAVE());
+            File keyFile = new File(Cryptography.getARQUIVO_CHAVE());
             if (!keyFile.exists()) {
-                SecretKey key = Criptografia.gerarChave();
-                Criptografia.salvarChaveEmArquivo(key, Criptografia.getARQUIVO_CHAVE());
+                SecretKey key = Cryptography.gerarChave();
+                Cryptography.salvarChaveEmArquivo(key, Cryptography.getARQUIVO_CHAVE());
                 System.out.println("Nova chave criada e salva com sucesso!");
             } else {
                 System.out.println("Chave existente carregada com sucesso!");
@@ -89,7 +90,7 @@ public class Main extends Application {
     private static void initializeUser() {
         try {
             if (new UserJsonRepository().checkOrCreateFile()) {
-                User user = new User(null);
+                User user = new User(Role.USERNOTLOGGED);
                 new UserJsonRepository().save(user);
                 System.out.println("Arquivo de usuários carregado com sucesso!");
             } else {

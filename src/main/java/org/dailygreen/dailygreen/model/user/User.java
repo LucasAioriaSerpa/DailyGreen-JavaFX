@@ -11,12 +11,19 @@ public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private Role role;
-    private String emailOrganizador;
     private Administrator accountAdministrator;
     private Participant accountParticipant;
     private Organizator accountOrganizator;
     private boolean isLogged = false;
-    public User(Role role){ this.role = role; }
+
+    public User(Role role) {
+        this.role = role;
+        if (role == Role.USERNOTLOGGED) {
+            this.accountAdministrator = null;
+            this.accountParticipant = null;
+            this.accountOrganizator = null;
+        }
+    }
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
@@ -33,10 +40,4 @@ public class User implements Serializable {
     public boolean isLogged() {return isLogged;}
     public void setLogged(boolean logged) {isLogged = logged;}
 
-    public String getEmailOrganizador() {
-        return emailOrganizador;
-    }
-    public void setEmailOrganizador(String emailOrganizador) {
-        this.emailOrganizador = emailOrganizador;
-    }
 }

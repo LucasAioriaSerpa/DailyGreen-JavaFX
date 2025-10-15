@@ -6,7 +6,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.User;
-import org.dailygreen.dailygreen.util.controller.PostagensControll;
+import org.dailygreen.dailygreen.controller.MainFeedController;
 import org.dailygreen.dailygreen.view.components.postagens.CreatePostForm;
 import org.dailygreen.dailygreen.view.components.postagens.CreatePostList;
 
@@ -17,7 +17,7 @@ public class ParticipanteUIPanel implements IPostagensUIPanel {
 
         Button btnPerfil = new Button("Meu Perfil");
         btnPerfil.getStyleClass().add("nav-button");
-        btnPerfil.setOnAction(_ -> PostagensControll.goPerfil(stage, user.getAccountParticipante()));
+        btnPerfil.setOnAction(_ -> MainFeedController.goPerfil(stage, user.getAccountParticipante()));
 
         Button btnPostagens = new Button("Postagens");
         btnPostagens.getStyleClass().add("nav-button-active");

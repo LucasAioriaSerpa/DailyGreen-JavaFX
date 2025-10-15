@@ -17,7 +17,7 @@ import java.util.Base64;
  * <p>- Para criptografar, recebe um texto do tipo String e chave em SecretKey.</p> <br>
  * <p>- Para descriptografar, recebe a criptografia em String e chave em SecretKey.</p>
  */
-public class Criptografia {
+public class Cryptography {
     private static final String ARQUIVO_CHAVE = "src/main/resources/key.aes";
 
     // ? GETTER ARQUIVO_CHAVE

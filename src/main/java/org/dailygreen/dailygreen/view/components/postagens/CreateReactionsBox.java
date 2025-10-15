@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.post.Post;
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.repository.impl.ReactionJsonRepository;
-import org.dailygreen.dailygreen.util.controller.PostagensControll;
+import org.dailygreen.dailygreen.controller.MainFeedController;
 
 import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;
 
@@ -27,7 +27,7 @@ public class CreateReactionsBox {
                 btn.getStyleClass().add("selected");
             }
             btn.setOnAction(_ -> {
-                PostagensControll.acaoReagir(post, tipo, user.getAccountParticipante().getEmail());
+                MainFeedController.acaoReagir(post, tipo, user.getAccountParticipante().getEmail());
                 updatePostList(stage);
             });
             reactionsBox.getChildren().add(btn);

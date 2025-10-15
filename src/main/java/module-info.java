@@ -10,13 +10,15 @@ module org.dailygreen.dailygreen {
     exports org.dailygreen.dailygreen;
     exports org.dailygreen.dailygreen.view;
     exports org.dailygreen.dailygreen.view.administrador;
-    exports org.dailygreen.dailygreen.util.controller;
+    exports org.dailygreen.dailygreen.controller;
 
+    opens org.dailygreen.dailygreen.model.user                  to com.google.gson;
+    opens org.dailygreen.dailygreen.model.user.types            to com.google.gson;
     opens org.dailygreen.dailygreen                             to javafx.base, javafx.graphics;
     opens org.dailygreen.dailygreen.view                        to javafx.base, javafx.graphics;
     opens org.dailygreen.dailygreen.view.administrador          to javafx.graphics;
     opens org.dailygreen.dailygreen.util                        to javafx.base, javafx.graphics;
-    opens org.dailygreen.dailygreen.util.controller             to javafx.base, javafx.graphics;
+    opens org.dailygreen.dailygreen.controller to javafx.base, javafx.graphics;
     exports org.dailygreen.dailygreen.model.post;
     opens org.dailygreen.dailygreen.model.post                  to javafx.base, javafx.graphics;
     exports org.dailygreen.dailygreen.model.event;

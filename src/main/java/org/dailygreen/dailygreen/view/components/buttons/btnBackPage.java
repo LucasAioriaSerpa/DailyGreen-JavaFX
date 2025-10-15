@@ -3,7 +3,7 @@ package org.dailygreen.dailygreen.view.components.buttons;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-import static org.dailygreen.dailygreen.util.controller.MainController.mostrarTelaPrincipal;
+import static org.dailygreen.dailygreen.controller.MainController.mostrarTelaPrincipal;
 
 public class btnBackPage {
     public static Button btnBackMenu(Stage stage) {

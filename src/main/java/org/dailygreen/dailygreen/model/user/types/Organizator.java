@@ -1,7 +1,7 @@
 package org.dailygreen.dailygreen.model.user.types;
 
 import org.dailygreen.dailygreen.model.user.AbstractUser;
-import org.dailygreen.dailygreen.util.Criptografia;
+import org.dailygreen.dailygreen.util.Cryptography;
 
 import java.io.Serializable;
 
@@ -11,9 +11,9 @@ public class Organizator extends AbstractUser implements Serializable {
     public Organizator(String nome, String email, String password, String nomeOrganizacao, String CNPJ) throws Exception {
         this.nomeOrganizacao = nomeOrganizacao;
         this.CNPJ = CNPJ;
-        super(nome, email, Criptografia.criptografar(
+        super(nome, email, Cryptography.criptografar(
                 password,
-                Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()))
+                Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE()))
         );
     }
 

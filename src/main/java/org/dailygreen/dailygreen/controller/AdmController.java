@@ -1,4 +1,4 @@
-package org.dailygreen.dailygreen.util.controller;
+package org.dailygreen.dailygreen.controller;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;

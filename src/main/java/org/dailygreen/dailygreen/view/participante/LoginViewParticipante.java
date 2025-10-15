@@ -10,7 +10,7 @@ import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
 import org.dailygreen.dailygreen.repository.impl.UserJsonRepository;
-import org.dailygreen.dailygreen.util.Criptografia;
+import org.dailygreen.dailygreen.util.Cryptography;
 
 import java.util.Objects;
 
@@ -101,7 +101,7 @@ public class LoginViewParticipante {
             Participant participantLogado = new ParticipantJsonRepository().findAll().stream()
                     .filter(p -> {
                         try {
-                            boolean result = p.getEmail().equals(email) && Criptografia.descriptografar(p.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE())).equals(senha);
+                            boolean result = p.getEmail().equals(email) && Cryptography.descriptografar(p.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())).equals(senha);
                             if (result) {
                                 User user = new UserJsonRepository().findAll().getFirst();
                                 user.setAccountParticipante(p);

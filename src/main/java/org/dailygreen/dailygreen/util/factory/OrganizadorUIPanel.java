@@ -5,7 +5,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.User;
-import org.dailygreen.dailygreen.util.controller.PostagensControll;
+import org.dailygreen.dailygreen.controller.MainFeedController;
 
 public class OrganizadorUIPanel implements IPostagensUIPanel{
     @Override
@@ -14,7 +14,7 @@ public class OrganizadorUIPanel implements IPostagensUIPanel{
 
         Button btnPerfilOrg = new Button("Perfil Organizador");
         btnPerfilOrg.getStyleClass().add("nav-button");
-        btnPerfilOrg.setOnAction(_ -> PostagensControll.goPerfil(stage, user.getAccountParticipante()));
+        btnPerfilOrg.setOnAction(_ -> MainFeedController.goPerfil(stage, user.getAccountParticipante()));
 
         Button btnGerenciarEventos = new Button("Meus Eventos");
         btnGerenciarEventos.getStyleClass().add("nav-button");

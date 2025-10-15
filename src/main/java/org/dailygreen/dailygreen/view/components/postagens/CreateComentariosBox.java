@@ -12,7 +12,7 @@ import org.dailygreen.dailygreen.model.post.Comment;
 import org.dailygreen.dailygreen.model.post.Post;
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.repository.impl.CommentJsonRepository;
-import org.dailygreen.dailygreen.util.controller.PostagensControll;
+import org.dailygreen.dailygreen.controller.MainFeedController;
 
 import java.util.ArrayList;
 
@@ -47,7 +47,7 @@ public class CreateComentariosBox {
         HBox.setHgrow(campoComentario, Priority.ALWAYS);
         Button btnComentar = new Button("Enviar");
         btnComentar.setOnAction(_ -> {
-            PostagensControll.acaoComentar(post, user.getAccountParticipante().getEmail(), campoComentario);
+            MainFeedController.acaoComentar(post, user.getAccountParticipante().getEmail(), campoComentario);
             updatePostList(stage);
         });
         novoComentarioBox.getChildren().addAll(campoComentario, btnComentar);

@@ -30,13 +30,15 @@ public class BaseJsonRepository<T> {
     }
 
     public boolean checkOrCreateFile() {
+        String writeDataFile = "[]";
+        String writeIdFile = "0";
         boolean exists = true;
         try {
             Files.createDirectories(Paths.get(dataFilePath).getParent());
             File dataFile = new File(dataFilePath);
             if (!dataFile.exists()) {
                 if (dataFile.createNewFile()) {
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(dataFile))) { writer.write("[]"); }
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(dataFile))) { writer.write(writeDataFile);  }
                     exists = false;
                     logger.info("Arquivo de dados criado: " + dataFilePath);
                 }
@@ -44,7 +46,7 @@ public class BaseJsonRepository<T> {
             File idfile = new File(idFilePath);
             if (!idfile.exists()) {
                 if (idfile.createNewFile()) {
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(idFilePath))) { writer.write("0"); }
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(idFilePath))) { writer.write(writeIdFile); }
                     exists = false;
                     logger.info("Arquivo de ID criado: " + idFilePath);
                 }

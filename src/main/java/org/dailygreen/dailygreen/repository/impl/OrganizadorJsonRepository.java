@@ -3,7 +3,7 @@ package org.dailygreen.dailygreen.repository.impl;
 import com.google.gson.reflect.TypeToken;
 import org.dailygreen.dailygreen.model.user.types.Organizator;
 import org.dailygreen.dailygreen.repository.IOrganizadorRepository;
-import org.dailygreen.dailygreen.util.Criptografia;
+import org.dailygreen.dailygreen.util.Cryptography;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -25,7 +25,7 @@ public class OrganizadorJsonRepository extends BaseJsonRepository<Organizator> i
         List<Organizator> organizators = readAll();
         if (organizators.stream().anyMatch(o -> o.getEmail().equalsIgnoreCase(organizator.getEmail()))) { return false; }
         try {
-            String encrypted = Criptografia.criptografar(organizator.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()));
+            String encrypted = Cryptography.criptografar(organizator.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE()));
             organizator.setPassword(encrypted);
         } catch (Exception e) {
             logger.log(java.util.logging.Level.SEVERE, "Erro ao salvar o organizador: " + e.getMessage(), e);
@@ -50,7 +50,7 @@ public class OrganizadorJsonRepository extends BaseJsonRepository<Organizator> i
         List<Organizator> organizators = readAll();
         return organizators.stream().anyMatch(o -> {
            try {
-               String decrypted = Criptografia.descriptografar(o.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()));
+               String decrypted = Cryptography.descriptografar(o.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE()));
                return o.getEmail().equalsIgnoreCase(email) && decrypted.equals(password);
            } catch (Exception e) {
                logger.log(java.util.logging.Level.SEVERE, "Erro ao validar senha do organizador: " + e.getMessage(), e);

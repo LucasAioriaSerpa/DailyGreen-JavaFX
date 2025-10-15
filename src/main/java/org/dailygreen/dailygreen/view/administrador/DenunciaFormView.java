@@ -15,7 +15,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.repository.impl.ParticipantJsonRepository;
 import org.dailygreen.dailygreen.repository.impl.ReportRepository;
-import org.dailygreen.dailygreen.util.controller.AdmController;
+import org.dailygreen.dailygreen.controller.AdmController;
 import org.dailygreen.dailygreen.model.moderation.Report;
 
 import java.util.List;

@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.user.User;
 
-import static org.dailygreen.dailygreen.util.controller.PostagensControll.acaoPostar;
+import static org.dailygreen.dailygreen.controller.MainFeedController.acaoPostar;
 import static org.dailygreen.dailygreen.view.components.postagens.UpdatePostList.updatePostList;
 
 public class CreatePostForm {

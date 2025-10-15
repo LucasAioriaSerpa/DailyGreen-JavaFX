@@ -1,15 +1,15 @@
 package org.dailygreen.dailygreen.model.user.types;
 
 import org.dailygreen.dailygreen.model.user.AbstractUser;
-import org.dailygreen.dailygreen.util.Criptografia;
+import org.dailygreen.dailygreen.util.Cryptography;
 
 import java.io.Serializable;
 
 public class Participant extends AbstractUser implements Serializable {
     public Participant(String nome, String email, String password) throws Exception {
-        super(nome, email, Criptografia.criptografar(
+        super(nome, email, Cryptography.criptografar(
                 password,
-                Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()))
+                Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE()))
         );
     }
     @Override

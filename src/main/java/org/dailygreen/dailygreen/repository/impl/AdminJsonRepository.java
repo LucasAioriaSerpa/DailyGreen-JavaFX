@@ -3,7 +3,7 @@ package org.dailygreen.dailygreen.repository.impl;
 import com.google.gson.reflect.TypeToken;
 import org.dailygreen.dailygreen.model.user.types.Administrator;
 import org.dailygreen.dailygreen.repository.IAdminRepository;
-import org.dailygreen.dailygreen.util.Criptografia;
+import org.dailygreen.dailygreen.util.Cryptography;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -25,7 +25,7 @@ public class AdminJsonRepository extends BaseJsonRepository<Administrator> imple
         List<Administrator> admins = readAll();
         if (admins.stream().anyMatch(a -> a.getEmail().equalsIgnoreCase(admin.getEmail()))) { return false; }
         try {
-            String encrypted = Criptografia.criptografar(admin.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()));
+            String encrypted = Cryptography.criptografar(admin.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE()));
             admin.setPassword(encrypted);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Erro ao criptografar a senha do administrador: " + e.getMessage(), e);
@@ -50,7 +50,7 @@ public class AdminJsonRepository extends BaseJsonRepository<Administrator> imple
         List<Administrator> admins = readAll();
         return admins.stream().anyMatch(admin -> {
             try {
-                String decrypted = Criptografia.descriptografar(admin.getPassword(), Criptografia.lerChaveDeArquivo(Criptografia.getARQUIVO_CHAVE()));
+                String decrypted = Cryptography.descriptografar(admin.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE()));
                 return admin.getEmail().equalsIgnoreCase(email) && decrypted.equals(password);
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Erro ao validar senha do administrador: " + e.getMessage(), e);

@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import org.dailygreen.dailygreen.model.post.Post;
 import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.model.user.User;
-import org.dailygreen.dailygreen.util.controller.PostagensControll;
+import org.dailygreen.dailygreen.controller.MainFeedController;
 
 import java.util.ArrayList;
 
@@ -54,13 +54,13 @@ public class CreatePostCard {
             buttonBox.getStyleClass().add("action-buttons");
             Button btnEditar = new Button("Editar");
             btnEditar.setOnAction(_ -> {
-                PostagensControll.acaoEditar(post);
+                MainFeedController.acaoEditar(post);
                 updatePostList(stage);
             });
             Button btnDeletar = new Button("Deletar");
             btnDeletar.getStyleClass().add("button-danger");
             btnDeletar.setOnAction(_ -> {
-                PostagensControll.acaoDeletarPost(post, postCard, postList, layout);
+                MainFeedController.acaoDeletarPost(post, postCard, postList, layout);
                 updatePostList(stage);
             });
             buttonBox.getChildren().addAll(btnEditar, btnDeletar);
