@@ -8,6 +8,9 @@ import javax.crypto.SecretKey;
 import org.dailygreen.dailygreen.controller.MainController;
 import org.dailygreen.dailygreen.model.user.Role;
 import org.dailygreen.dailygreen.model.user.User;
+import org.dailygreen.dailygreen.model.user.types.Administrator;
+import org.dailygreen.dailygreen.model.user.types.Organizator;
+import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.persistence.PersistenceFacade;
 import org.dailygreen.dailygreen.persistence.PersistenceFacadeFactory;
 import org.dailygreen.dailygreen.util.Cryptography;
@@ -103,9 +106,9 @@ public class MainApplication extends Application {
                 System.out.println("Arquivo de usuários já existe. Verificando usuário padrão...");
                 User user = new User(Role.USERNOTLOGGED);
                 user.setLogged(false);
-                user.setAccountParticipante(null);
-                user.setAccountOrganizator(null);
-                user.setAccountAdministrador(null);
+                user.setAccountParticipante(new Participant("null", "null", "null"));
+                user.setAccountOrganizator(new Organizator("null", "null", "null", "null", "null"));
+                user.setAccountAdministrador(new Administrator("null", "null"));
                 persistenceFacade.saveUser(user);
                 System.out.println("Arquivo de usuários carregado com sucesso!");
             } else { 

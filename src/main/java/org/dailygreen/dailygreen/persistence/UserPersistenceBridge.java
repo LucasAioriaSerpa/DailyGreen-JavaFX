@@ -69,6 +69,7 @@ public class UserPersistenceBridge extends AbstractPersistenceBridge<User> {
         List<User> users = readAll();
         boolean updated = false;
         for (int i = 0; i < users.size(); i++) {
+            System.out.println("Verificando usuário: " + extractEmail(users.get(i)));
             if (email.equalsIgnoreCase(extractEmail(users.get(i)))) {
                 users.set(i, user);
                 updated = true;
@@ -103,13 +104,13 @@ public class UserPersistenceBridge extends AbstractPersistenceBridge<User> {
         Optional<User> user = findByEmail(email);
         return user.isPresent() && user.get().isLogged();
     }
-    
+
     private String extractEmail(User user) {
         if (user == null) return null;
-        if (user.getRole() == Role.USERNOTLOGGED) return "NotLogged";
         if (user.getAccountAdministrador() != null) return user.getAccountAdministrador().getEmail();
         if (user.getAccountParticipante() != null) return user.getAccountParticipante().getEmail();
         if (user.getAccountOrganizator() != null) return user.getAccountOrganizator().getEmail();
-        return null;
+        return "NotLogged";
     }
+
 }

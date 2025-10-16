@@ -2,6 +2,7 @@ package org.dailygreen.dailygreen.view.participante;
 
 import java.util.Objects;
 
+import org.dailygreen.dailygreen.model.user.Role;
 import org.dailygreen.dailygreen.model.user.User;
 import org.dailygreen.dailygreen.model.user.types.Participant;
 import org.dailygreen.dailygreen.persistence.PersistenceFacade;
@@ -111,9 +112,16 @@ public class LoginViewParticipante {
                         try {
                             boolean result = p.getEmail().equals(email) && Cryptography.descriptografar(p.getPassword(), Cryptography.lerChaveDeArquivo(Cryptography.getARQUIVO_CHAVE())).equals(senha);
                             if (result) {
-                                User user = persistenceFacade.findAllUsers().getFirst();
-                                user.setAccountParticipante(p);
-                                persistenceFacade.updateUser(user);
+                                User user = persistenceFacade.findAllUsers().stream()
+                                        .filter(u -> u.getAccountParticipante() == null)
+                                        .findFirst()
+                                        .orElse(null);
+                                if (user != null) {
+                                    user.setRole(Role.PARTICIPANTE);
+                                    user.setLogged(true);
+                                    user.setAccountParticipante(p);
+                                    persistenceFacade.updateUser(user);
+                                }
                             }
                             return result;
                         } catch (Exception ex) {

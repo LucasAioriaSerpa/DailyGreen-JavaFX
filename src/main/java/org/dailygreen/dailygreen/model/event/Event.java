@@ -1,5 +1,6 @@
 package org.dailygreen.dailygreen.model.event;
 
+import com.google.gson.annotations.SerializedName;
 import org.dailygreen.dailygreen.model.post.Post;
 
 import java.io.Serial;
@@ -10,6 +11,7 @@ public class Event extends Post implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private final long id_post = super.getSerialVersionUID();
+    @SerializedName("eventID")
     private long ID;
     private Date dataHoraInicio;
     private Date dataHoraFim;

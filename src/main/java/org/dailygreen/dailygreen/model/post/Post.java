@@ -1,5 +1,7 @@
 package org.dailygreen.dailygreen.model.post;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.List;
 public class Post implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    @SerializedName("postID")
     private long ID;
     private final long id_autor;
     private String titulo;
