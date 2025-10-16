@@ -42,3 +42,5 @@ build/
 .src/main/resources/db_dailygreen/*
 src/main/resources/key.aes
 src/main/resources/user.dat
+*.json
+*.txt

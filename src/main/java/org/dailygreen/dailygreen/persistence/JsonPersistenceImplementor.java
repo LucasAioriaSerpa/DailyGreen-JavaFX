@@ -11,6 +11,9 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,6 +22,9 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 
 /**
  * Implementação concreta do PersistenceImplementor usando arquivos JSON.
@@ -39,8 +45,35 @@ public class JsonPersistenceImplementor<T> implements PersistenceImplementor<T> 
         this.dataFilePath = dataFilePath;
         this.idFilePath = idFilePath;
         this.listType = listType;
-        this.gson = new GsonBuilder().setPrettyPrinting().create();
+        this.gson = createGsonWithDateAdapters();
         this.lastId = new AtomicLong(loadLastId());
+    }
+    
+    /**
+     * Cria uma instância do Gson com adaptadores personalizados para tipos de data/hora.
+     * Isso resolve problemas de reflexão com módulos Java (Java 9+) ao serializar LocalDate e LocalDateTime.
+     */
+    private Gson createGsonWithDateAdapters() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                // Adapter para LocalDate
+                .registerTypeAdapter(LocalDate.class, 
+                    (JsonSerializer<LocalDate>) (date, type, context) -> 
+                        new JsonPrimitive(date.format(dateFormatter)))
+                .registerTypeAdapter(LocalDate.class,
+                    (JsonDeserializer<LocalDate>) (json, type, context) -> 
+                        LocalDate.parse(json.getAsString(), dateFormatter))
+                // Adapter para LocalDateTime
+                .registerTypeAdapter(LocalDateTime.class,
+                    (JsonSerializer<LocalDateTime>) (dateTime, type, context) -> 
+                        new JsonPrimitive(dateTime.format(dateTimeFormatter)))
+                .registerTypeAdapter(LocalDateTime.class,
+                    (JsonDeserializer<LocalDateTime>) (json, type, context) -> 
+                        LocalDateTime.parse(json.getAsString(), dateTimeFormatter))
+                .create();
     }
 
     @Override
